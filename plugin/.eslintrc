@@ -1,0 +1,27 @@
+{
+  "root": true,
+  "env": {
+    "node": true,
+    "browser": true
+  },
+  "extends": [
+    "sanity",
+    "sanity/typescript",
+    "sanity/react",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended",
+    "plugin:react/jsx-runtime"
+  ],
+  "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "react/require-default-props": "off",
+    "react/jsx-handler-names": "off",
+    "react/no-unused-prop-types": "off",
+    "no-shadow": "off",
+    "func-name-matching": "off",
+    "no-use-before-define": "off",
+    "no-nested-ternary": "off",
+    "no-empty-function": "off"
+  }
+}

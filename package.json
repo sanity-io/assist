@@ -1,0 +1,29 @@
+{
+  "name": "@sanity/assist-root",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "plugin",
+    "studio"
+  ],
+  "scripts": {
+    "compile": "npm run compile --workspaces --if-present",
+    "deploy": "cd studio && npm run deploy",
+    "dev": "cd studio && npm run dev",
+    "format": "prettier --write --cache --ignore-unknown .",
+    "lint": "npm run lint --workspaces",
+    "prepare": "husky install",
+    "prepublishOnly": "npm run prepublishOnly --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.3",
+    "@commitlint/config-conventional": "^17.6.3",
+    "eslint": "^8.41.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "prettier": "^2.8.8",
+    "prettier-plugin-packagejson": "^2.4.3"
+  }
+}
