@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2](https://github.com/sanity-io/assist/compare/v1.0.1...v1.0.2) (2023-06-27)
+
+### Bug Fixes
+
+- field instruction item should no longer be created twice in React strict mode ([b64d95b](https://github.com/sanity-io/assist/commit/b64d95bb1de406def510306f586f2da7aeced70e))
+
 ## [1.0.1](https://github.com/sanity-io/assist/compare/v1.0.0...v1.0.1) (2023-06-27)
 
 ### Bug Fixes
