@@ -122,19 +122,7 @@ function serializeMember(
     name: name,
     type: typeName,
     title: type.title,
-    values:
-      type.jsonType === 'string' && type?.options?.list
-        ? type?.options?.list.map((v) => (typeof v === 'string' ? v : v.value ?? `${v.title}`))
-        : undefined,
-    of: 'of' in type && type.name === 'array' ? arrayOf(type, schema, options) : undefined,
-    to:
-      'to' in type && type.name === 'reference'
-        ? refToTypeNames(type as ReferenceSchemaType)
-        : undefined,
-    fields:
-      'fields' in type && inlineTypes.includes(typeName)
-        ? serializeFields(schema, type, options)
-        : undefined,
+    ...getBaseFields(schema, type, typeName, options),
   })
 }
 
