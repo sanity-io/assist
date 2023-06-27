@@ -15,6 +15,7 @@
     "lint": "npm run lint --workspaces",
     "prepare": "husky install",
     "prepublishOnly": "npm run prepublishOnly --workspaces --if-present",
+    "release": "npm run release --workspaces --if-present",
     "test": "npm run test --workspaces --if-present"
   },
   "devDependencies": {
