@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.3](https://github.com/sanity-io/assist/compare/v1.0.2...v1.0.3) (2023-06-27)
+
+### Bug Fixes
+
+- field instructions not being correctly initialized ([a92c6bc](https://github.com/sanity-io/assist/commit/a92c6bcc417ac4e15e6d8b63b83bac47c4718603))
+
 ## [1.0.2](https://github.com/sanity-io/assist/compare/v1.0.1...v1.0.2) (2023-06-27)
 
 ### Bug Fixes
