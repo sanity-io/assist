@@ -91,9 +91,9 @@ export function AssistDocumentForm(props: ObjectInputProps) {
     }
   }, [title, documentSchema, onChange, id])
 
-  const fieldMissing = fields?.find((f) => f._key !== pathKey)
+  const fieldExists = fields?.some((f) => f._key === pathKey)
   useEffect(() => {
-    if (onChangeCalled.current || !fieldMissing || activePath || !pathKey) {
+    if (onChangeCalled.current || fieldExists || activePath || !pathKey) {
       return
     }
     onChange([
@@ -111,7 +111,7 @@ export function AssistDocumentForm(props: ObjectInputProps) {
       ),
     ])
     onChangeCalled.current = true
-  }, [activePath, onChange, pathKey, fieldMissing])
+  }, [activePath, onChange, pathKey, fieldExists])
 
   const {onPathOpen, ...formCallbacks} = useFormCallbacks()
 

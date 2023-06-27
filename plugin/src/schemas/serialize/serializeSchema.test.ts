@@ -75,6 +75,18 @@ describe('serializeSchema', () => {
     ])
   })
 
+  test('should not serialize slug type', () => {
+    const schema = Schema.compile({
+      name: 'test',
+      types: mockStudioTypes,
+    })
+
+    const serializedTypes = serializeSchema(schema, {leanFormat: true})
+
+    //everything excluded directly or indirectly
+    expect(serializedTypes).toEqual([])
+  })
+
   test('should not serialize excluded fields or types or types with every member excluded', () => {
     const options: AssistOptions = {aiWritingAssistance: {exclude: true}}
 
