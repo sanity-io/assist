@@ -7,7 +7,7 @@ import {
   AssistField,
   instructionParam,
 } from '../../types'
-import {useEffect, useMemo} from 'react'
+import {useEffect, useMemo, useRef} from 'react'
 import {
   FormCallbacksProvider,
   FormCallbacksValue,
@@ -38,6 +38,9 @@ export function AssistDocumentForm(props: ObjectInputProps) {
   const value = props.value as AssistDocument | undefined
   const id = value?._id
   const fields = value?.fields
+
+  // need this to not fire onChange twice in React strict mode
+  const onChangeCalled = useRef(false)
 
   const targetDocumentType = useMemo(() => {
     if (!id) {
@@ -88,8 +91,9 @@ export function AssistDocumentForm(props: ObjectInputProps) {
     }
   }, [title, documentSchema, onChange, id])
 
+  const fieldMissing = fields?.find((f) => f._key !== pathKey)
   useEffect(() => {
-    if (activePath || !pathKey) {
+    if (onChangeCalled.current || !fieldMissing || activePath || !pathKey) {
       return
     }
     onChange([
@@ -106,7 +110,8 @@ export function AssistDocumentForm(props: ObjectInputProps) {
         ['fields', -1]
       ),
     ])
-  }, [activePath, onChange, pathKey])
+    onChangeCalled.current = true
+  }, [activePath, onChange, pathKey, fieldMissing])
 
   const {onPathOpen, ...formCallbacks} = useFormCallbacks()
 
