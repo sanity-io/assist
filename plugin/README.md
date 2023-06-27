@@ -28,6 +28,8 @@ Free your team to do more of what they’re great at (and less busy work) with t
 
 You create the instructions; Sanity AI Assist does the rest. [Learn more about writing instructions in the Sanity documentation](https://www.sanity.io/guides/getting-started-with-ai-assist-instructions?utm_source=github.com&utm_medium=organic_social&utm_campaign=ai-assist&utm_content=).
 
+[Read the release announcement here.](https://www.sanity.io/blog/sanity-ai-assist-announcement?utm_source=github.com&utm_medium=organic_social&utm_campaign=ai-assist&utm_content=)
+
 <img width="1019" alt="Screenshot showing Sanity AI Assist instructions for a title field in the Sanity Studio document editor" src="https://github.com/sanity-io/sanity/assets/835514/4d895477-c6d7-4da0-be25-c73e109edbdb">
 
 ## Installation
@@ -35,8 +37,10 @@ You create the instructions; Sanity AI Assist does the rest. [Learn more about w
 In your Studio project folder, install the following plugin dependency:
 
 ```sh
-npm install @sanity/assist
+npm install @sanity/assist sanity@latest
 ```
+
+This plugin requires `sanity` version `3.13.0` or greater.
 
 ## Setup
 

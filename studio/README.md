@@ -1,7 +1,5 @@
-# Config studio
+# Sanity AI Assist Test studio
 
-A bit of a messy setup but:
+@sanity/assist doubles as both source for the studio AND as a standalone package.
 
-* ai-assistance-plugin doubles as both source for the studio AND as a standalone package.
-
-To publish the plugin run `npm publish` from ai-assistance-plugin
+To test, run `npm run dev` from repo root.
