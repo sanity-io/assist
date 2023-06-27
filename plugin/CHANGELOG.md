@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/sanity-io/assist/compare/v1.0.3...v1.0.4) (2023-06-27)
+
+### Bug Fixes
+
+- schema options are now handles the same for types and fields ([172667d](https://github.com/sanity-io/assist/commit/172667d5dc74bc4d3a2ac27005d61cbeaff8f73a))
+
 ## [1.0.3](https://github.com/sanity-io/assist/compare/v1.0.2...v1.0.3) (2023-06-27)
 
 ### Bug Fixes
