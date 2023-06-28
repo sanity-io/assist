@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.6](https://github.com/sanity-io/assist/compare/v1.0.5...v1.0.6) (2023-06-28)
+
+### Bug Fixes
+
+- inspector sometimes not being initialized correctly ([4a687a0](https://github.com/sanity-io/assist/commit/4a687a00f733d292740b2f98019480a658007563))
+
 ## [1.0.5](https://github.com/sanity-io/assist/compare/v1.0.4...v1.0.5) (2023-06-28)
 
 ### Bug Fixes
