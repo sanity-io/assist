@@ -39,9 +39,6 @@ export function AssistDocumentForm(props: ObjectInputProps) {
   const id = value?._id
   const fields = value?.fields
 
-  // need this to not fire onChange twice in React strict mode
-  const onChangeCalled = useRef(false)
-
   const targetDocumentType = useMemo(() => {
     if (!id) {
       return undefined
@@ -91,27 +88,7 @@ export function AssistDocumentForm(props: ObjectInputProps) {
     }
   }, [title, documentSchema, onChange, id])
 
-  const fieldExists = fields?.some((f) => f._key === pathKey)
-  useEffect(() => {
-    if (onChangeCalled.current || fieldExists || activePath || !pathKey) {
-      return
-    }
-    onChange([
-      setIfMissing([], ['fields']),
-      insert(
-        [
-          typed<AssistField>({
-            _key: pathKey,
-            _type: assistFieldTypeName,
-            path: pathKey,
-          }),
-        ],
-        'after',
-        ['fields', -1]
-      ),
-    ])
-    onChangeCalled.current = true
-  }, [activePath, onChange, pathKey, fieldExists])
+  const fieldExists = !!fields?.some((f) => f._key === pathKey)
 
   const {onPathOpen, ...formCallbacks} = useFormCallbacks()
 
@@ -144,6 +121,13 @@ export function AssistDocumentForm(props: ObjectInputProps) {
   return (
     <SelectedFieldContextProvider value={context}>
       <Stack space={5}>
+        <FieldsInitializer
+          key={pathKey}
+          pathKey={pathKey}
+          activePath={activePath}
+          fieldExists={fieldExists}
+          onChange={onChange}
+        />
         {instruction && <BackToInstructionListLink />}
 
         {activePath && (
@@ -190,4 +174,41 @@ function useSelectedSchema(
     }
     return currentSchema
   }, [documentSchema, fieldPath])
+}
+
+function FieldsInitializer({
+  pathKey,
+  activePath,
+  fieldExists,
+  onChange,
+}: {
+  pathKey?: string
+  activePath?: Path
+  fieldExists: boolean
+  onChange: ObjectInputProps['onChange']
+}) {
+  // need this to not fire onChange twice in React strict mode
+  const initialized = useRef(false)
+  useEffect(() => {
+    if (initialized.current || fieldExists || activePath || !pathKey) {
+      return
+    }
+    onChange([
+      setIfMissing([], ['fields']),
+      insert(
+        [
+          typed<AssistField>({
+            _key: pathKey,
+            _type: assistFieldTypeName,
+            path: pathKey,
+          }),
+        ],
+        'after',
+        ['fields', -1]
+      ),
+    ])
+    initialized.current = true
+  }, [activePath, onChange, pathKey, fieldExists])
+
+  return null
 }
