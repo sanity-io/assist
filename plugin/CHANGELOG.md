@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.5](https://github.com/sanity-io/assist/compare/v1.0.4...v1.0.5) (2023-06-28)
+
+### Bug Fixes
+
+- **docs:** caveat section on the limits of LLMs ([3d807f9](https://github.com/sanity-io/assist/commit/3d807f9d06373dd4c6da1bee15842eb6851a4ef0))
+
 ## [1.0.4](https://github.com/sanity-io/assist/compare/v1.0.3...v1.0.4) (2023-06-27)
 
 ### Bug Fixes
