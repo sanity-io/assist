@@ -188,6 +188,15 @@ import {contextDocumentTypeName} from '@sanity/assist'
 S.documentTypeListItem(contextDocumentTypeName)
 ```
 
+## Caveats
+
+Large Language Models (LLMs) are a new technology. Constraints and limitations are still being explored, 
+but some common caveats to the field that you may run into using AI Assist are:
+
+* Limits to instruction length: Long instructions on deep content structures may exhaust model context
+* Timeouts: To be able to write structured content, we're using the largest language models - long-running results may time out or intermittently fail
+* Limited capacity: The underlying LLM APIs used by AI Assist are resource constrained
+
 ## License
 
 [MIT](LICENSE) © Sanity
