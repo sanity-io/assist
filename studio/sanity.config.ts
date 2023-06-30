@@ -10,7 +10,7 @@ console.log(pluginApiHost)
 
 export default defineConfig({
   name: 'default',
-  title: 'AI PoC',
+  title: 'Sanity AI Assist',
 
   projectId,
   dataset,
