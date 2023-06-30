@@ -110,13 +110,12 @@ export function AlphaMigration() {
       toast.push({
         title: `Converted instructions to new format.`,
         status: 'success',
-        description: 'Pending feature name',
         closable: true,
       })
     } catch (e: any) {
       console.error(e)
       toast.push({
-        title: `An error occured`,
+        title: `An error occurred`,
         status: 'error',
         closable: true,
       })
