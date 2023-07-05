@@ -23,6 +23,8 @@ export interface FieldRef {
   icon: ComponentType
 }
 
+const maxDepth = 4
+
 export function getTypeIcon(schemaType: SchemaType) {
   let t: SchemaType | undefined = schemaType
 
@@ -57,7 +59,14 @@ export function getFieldRefsWithDocument(schemaType: ObjectSchemaType): FieldRef
   ]
 }
 
-export function getFieldRefs(schemaType: ObjectSchemaType, parent?: FieldRef): FieldRef[] {
+export function getFieldRefs(
+  schemaType: ObjectSchemaType,
+  parent?: FieldRef,
+  depth = 0
+): FieldRef[] {
+  if (depth >= maxDepth) {
+    return []
+  }
   return schemaType.fields
     .filter((f) => !f.name.startsWith('_'))
     .flatMap((field) => {
@@ -70,7 +79,8 @@ export function getFieldRefs(schemaType: ObjectSchemaType, parent?: FieldRef): F
         schemaType: field.type,
         icon: getTypeIcon(field.type),
       }
-      const fields = field.type.jsonType === 'object' ? getFieldRefs(field.type, fieldRef) : []
+      const fields =
+        field.type.jsonType === 'object' ? getFieldRefs(field.type, fieldRef, depth + 1) : []
 
       if (!isAssistSupported(field.type)) {
         return fields
