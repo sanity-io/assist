@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.8](https://github.com/sanity-io/assist/compare/v1.0.7...v1.0.8) (2023-07-05)
+
+### Bug Fixes
+
+- now only show field refs 4 levels deep ([2a00a4b](https://github.com/sanity-io/assist/commit/2a00a4b66703b51ab18d8045ed07d62e44723c4f))
+
 ## [1.0.7](https://github.com/sanity-io/assist/compare/v1.0.6...v1.0.7) (2023-06-30)
 
 ### Bug Fixes
