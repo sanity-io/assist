@@ -28,7 +28,9 @@ function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
 export const assistFieldActions: DocumentFieldAction = {
   name: 'sanity-assist-actions',
   useAction(props) {
-    const assistSupported = useAssistSupported(props.path, props.schemaType)
+    const {schemaType} = props
+    const assistSupported = useAssistSupported(props.path, schemaType)
+
     const isDocumentLevel = props.path.length === 0
 
     const {
@@ -47,7 +49,7 @@ export const assistFieldActions: DocumentFieldAction = {
       // conditional hook _should_ be safe here since the logical path will be stable
       isDocumentLevel
         ? // eslint-disable-next-line react-hooks/rules-of-hooks
-          useAssistDocumentContextValue(props.documentId, props.schemaType as ObjectSchemaType)
+          useAssistDocumentContextValue(props.documentId, schemaType as ObjectSchemaType)
         : // eslint-disable-next-line react-hooks/rules-of-hooks
           useAssistDocumentContext()
 

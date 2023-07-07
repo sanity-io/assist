@@ -6,30 +6,40 @@ export function isSchemaAssistEnabled(type: SchemaType) {
   return !(type.options as AssistOptions | undefined)?.aiWritingAssistance?.exclude
 }
 
-export function isAssistSupported(type: SchemaType) {
+export function isAssistSupported(type: SchemaType, allowReadonlyHidden = false) {
   if (!isSchemaAssistEnabled(type)) {
     return false
   }
 
-  if (isUnsupportedType(type)) {
+  if (isDisabled(type, allowReadonlyHidden)) {
     return false
   }
 
   if (type.jsonType === 'array') {
-    const unsupportedArray = type.of.every((t) => isUnsupportedType(t))
+    const unsupportedArray = type.of.every((t) => isDisabled(t, allowReadonlyHidden))
     return !unsupportedArray
   }
 
   if (type.jsonType === 'object') {
-    const unsupportedObject = type.fields.every((field) => isUnsupportedType(field.type))
+    const unsupportedObject = type.fields.every((field) =>
+      isDisabled(field.type, allowReadonlyHidden)
+    )
     return !unsupportedObject
   }
   return true
 }
 
-function isUnsupportedType(type: SchemaType) {
+function isDisabled(type: SchemaType, allowReadonlyHidden: boolean) {
+  const readonlyHidden = !!type.readOnly || !!type.hidden
   return (
     !isSchemaAssistEnabled(type) ||
+    isUnsupportedType(type) ||
+    (!allowReadonlyHidden && readonlyHidden)
+  )
+}
+
+function isUnsupportedType(type: SchemaType) {
+  return (
     type.jsonType === 'number' ||
     type.name === 'sanity.imageCrop' ||
     type.name === 'sanity.imageHotspot' ||

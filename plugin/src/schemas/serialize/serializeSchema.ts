@@ -29,6 +29,7 @@ export function serializeSchema(schema: Schema, options?: Options): SerializedSc
     .filter((t) => !(hiddenTypes.includes(t) || t.startsWith('sanity.')))
     .map((t) => schema.get(t))
     .filter((t): t is SchemaType => !!t)
+    .filter((t) => !t.hidden && !t.readOnly)
     .map((t) => getSchemaStub(t, schema, options))
     .filter((t) => {
       if ('to' in t && t.to && !t.to.length) {
@@ -106,6 +107,7 @@ function serializeFields(
   return schemaType.fields
     .filter((f) => !['sanity.imageHotspot', 'sanity.imageCrop'].includes(f.type?.name ?? ''))
     .filter((f) => isAssistSupported(f.type))
+    .filter((f) => !f.type.hidden && !f.type.readOnly)
     .map((field) => serializeMember(schema, field.type, field.name, options))
 }
 

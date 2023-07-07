@@ -374,5 +374,41 @@ export const mockArticle = defineType({
         }),
       ],
     }),
+    defineField({
+      type: 'image',
+      name: 'inlineImage',
+      title: 'Image (inline type)',
+      fields: [
+        defineField({
+          type: 'string',
+          name: 'altText',
+          title: 'Alt text',
+        }),
+      ],
+      options: {
+        imagePromptField: 'altText',
+      },
+    }),
+    defineField({
+      type: 'object',
+      name: 'inlineObject',
+      title: 'Inline object',
+      fields: [
+        defineField({
+          type: 'string',
+          name: 'readOnly',
+          readOnly: true,
+        }),
+        defineField({
+          type: 'string',
+          name: 'hidden',
+          hidden: true,
+        }),
+        defineField({
+          type: 'string',
+          name: 'Write',
+        }),
+      ],
+    }),
   ],
 })

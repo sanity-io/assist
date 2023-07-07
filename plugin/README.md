@@ -160,6 +160,9 @@ The following types are not supported, and behave as excluded types:
 * [Image](https://www.sanity.io/docs/image-type) (supported when image has custom fields)
 * [File](https://www.sanity.io/docs/file-type) (never supported, even when file has custom fields)
 
+Types and fields with `hidden` or `readonly` with a truthy value (`true` or `function`) are not supported.
+(Hidden and readOnly fields can be referenced in instructions still)
+
 Fields with these types will not be changed by the assistant, do not have AI Assist actions, and cannot be referenced in instructions.
 
 Objects where all fields are excluded or unsupported and arrays where all member types are excluded or unsupported

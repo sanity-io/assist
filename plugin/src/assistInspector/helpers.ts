@@ -82,7 +82,7 @@ export function getFieldRefs(
       const fields =
         field.type.jsonType === 'object' ? getFieldRefs(field.type, fieldRef, depth + 1) : []
 
-      if (!isAssistSupported(field.type)) {
+      if (!isAssistSupported(field.type, true)) {
         return fields
       }
       return [fieldRef, ...fields]

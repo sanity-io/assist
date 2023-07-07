@@ -391,4 +391,30 @@ describe('serializeSchema', () => {
       {name: 'list', title: 'String', type: 'string', values: ['a', 'b']},
     ])
   })
+
+  test('should exclude truthy hidden and readonly', () => {
+    const schema = Schema.compile({
+      name: 'test',
+      types: [
+        {
+          type: 'document',
+          name: 'article',
+          fields: [
+            {type: 'string', name: 'title', hidden: () => true},
+            {type: 'some', name: 'some'},
+          ],
+        },
+        defineType({
+          type: 'object',
+          name: 'some',
+          readOnly: true,
+          fields: [{type: 'string', name: 'title'}],
+        }),
+      ],
+    })
+
+    const serializedTypes = serializeSchema(schema, {leanFormat: true})
+
+    expect(serializedTypes).toEqual([])
+  })
 })
