@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.9](https://github.com/sanity-io/assist/compare/v1.0.8...v1.0.9) (2023-07-07)
+
+### Bug Fixes
+
+- truthy hidden and readOnly fields should not be assistable ([1a33e01](https://github.com/sanity-io/assist/commit/1a33e01b604f997f24eeb11fc1984ed13da05c4e))
+
 ## [1.0.8](https://github.com/sanity-io/assist/compare/v1.0.7...v1.0.8) (2023-07-05)
 
 ### Bug Fixes
