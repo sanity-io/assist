@@ -5,6 +5,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.10](https://github.com/sanity-io/assist/compare/v1.0.9...v1.0.10) (2023-07-14)
+
+### Bug Fixes
+
+- **deps:** date-fns is now a listed dependency ([c713aac](https://github.com/sanity-io/assist/commit/c713aacb6a75aad03e5368e824784820ef3989b3))
+- **deps:** reduced bundle size ([c663cda](https://github.com/sanity-io/assist/commit/c663cda230e0c18b4b388bac9a4f8422bb292d6f))
+
 ## [1.0.9](https://github.com/sanity-io/assist/compare/v1.0.8...v1.0.9) (2023-07-07)
 
 ### Bug Fixes
