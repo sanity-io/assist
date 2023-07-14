@@ -1,7 +1,7 @@
 // eslint-disable-next-line react/no-unused-prop-types
 import {FormNodePresence} from 'sanity'
 import {Card, Flex, Text, Tooltip} from '@sanity/ui'
-import {Delay} from '../components/Delay'
+import {FadeInContent} from '../components/FadeInContent'
 import {AssistAvatar} from './AssistAvatar'
 
 export function AiFieldPresence(props: {presence: FormNodePresence}) {
@@ -17,11 +17,9 @@ export function AiFieldPresence(props: {presence: FormNodePresence}) {
           </Card>
         }
       >
-        <div>
-          <Delay durationMs={200} ms={250}>
-            <AssistAvatar state="active" />
-          </Delay>
-        </div>
+        <FadeInContent durationMs={300}>
+          <AssistAvatar state="active" />
+        </FadeInContent>
       </Tooltip>
     </Card>
   )
