@@ -5,6 +5,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.11](https://github.com/sanity-io/assist/compare/v1.0.10...v1.0.11) (2023-07-14)
+
+### Bug Fixes
+
+- **deps:** react-is is now a direct dependency ([af125fa](https://github.com/sanity-io/assist/commit/af125fa91796422510fefb1a9751a7cb3769f2ff))
+- **deps:** react-is is now a direct dependency ([111b080](https://github.com/sanity-io/assist/commit/111b080d57b410da550d57ed0b29394d2eda4e81))
+
 ## [1.0.10](https://github.com/sanity-io/assist/compare/v1.0.9...v1.0.10) (2023-07-14)
 
 ### Bug Fixes
