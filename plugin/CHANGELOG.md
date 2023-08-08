@@ -5,6 +5,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.12](https://github.com/sanity-io/assist/compare/v1.0.11...v1.0.12) (2023-08-08)
+
+### Bug Fixes
+
+- assist inspector should no longer crash in sanity 3.14.5 ([acaf8c7](https://github.com/sanity-io/assist/commit/acaf8c75dd90ccbbd9a86beffc580295b07f79a8))
+- **deps:** plugin requires sanity 3.14.5 now ([880614c](https://github.com/sanity-io/assist/commit/880614c4b84c6082f06122f8baadda314ef9f442))
+
 ## [1.0.11](https://github.com/sanity-io/assist/compare/v1.0.10...v1.0.11) (2023-07-14)
 
 ### Bug Fixes
