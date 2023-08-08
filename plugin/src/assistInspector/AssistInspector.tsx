@@ -1,6 +1,6 @@
 import {ArrowRightIcon, CloseIcon, PlayIcon, RetryIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Spinner, Stack, Text} from '@sanity/ui'
-import {useCallback, useMemo, useState} from 'react'
+import {useCallback, useMemo, useRef} from 'react'
 import {
   DocumentInspectorProps,
   PresenceOverlay,
@@ -187,7 +187,7 @@ export function AssistInspectorWrapper(props: DocumentInspectorProps) {
 export function AssistInspector(props: DocumentInspectorProps) {
   const {params} = useAiPaneRouter()
 
-  const [boundary, setBoundary] = useState<HTMLDivElement | null>(null)
+  const boundary = useRef<HTMLDivElement | null>(null)
   const pathKey = params?.[fieldPathParam]
   const instructionKey = params?.[instructionParam]
   const documentPane = useDocumentPane()
@@ -275,7 +275,7 @@ export function AssistInspector(props: DocumentInspectorProps) {
 
   return (
     <Flex
-      ref={setBoundary}
+      ref={boundary}
       direction="column"
       height="fill"
       overflow="hidden"
@@ -290,7 +290,10 @@ export function AssistInspector(props: DocumentInspectorProps) {
             <PresenceOverlay>
               <Box padding={4}>
                 {selectedField && (
-                  <VirtualizerScrollInstanceProvider scrollElement={boundary}>
+                  <VirtualizerScrollInstanceProvider
+                    scrollElement={boundary.current}
+                    containerElement={boundary}
+                  >
                     <DocumentPaneProvider
                       paneKey={documentPane.paneKey}
                       index={documentPane.index}
