@@ -1,56 +1,33 @@
-import {Path, pathToString} from 'sanity'
-import {Button, Flex, Popover, Stack, Text} from '@sanity/ui'
-import {PropsWithChildren, useContext, useMemo, useRef} from 'react'
-import {FirstAssistedPathContext} from './FirstAssistedPathProvider'
+import {Button, Card, Flex, Popover, Stack, Text} from '@sanity/ui'
+import {useRef} from 'react'
 import {AssistFeatureBadge} from '../components/AssistFeatureBadge'
 import {ArrowRightIcon, CheckmarkIcon, SparklesIcon} from '@sanity/icons'
 import {pluginTitle, releaseAnnouncementUrl} from '../constants'
-import {fieldOnboardingKey, useOnboardingFeature} from './onboardingStore'
 
 export interface FieldActionsOnboardingProps {
-  path: Path
+  dismiss: () => void
 }
 
-export function FieldActionsOnboarding(props: PropsWithChildren<FieldActionsOnboardingProps>) {
-  const {path, children} = props
-
-  const firstAssistedPath = useContext(FirstAssistedPathContext)
-  const isFirstAssisted = useMemo(
-    () => pathToString(path) === firstAssistedPath,
-    [path, firstAssistedPath]
-  )
-
-  if (!isFirstAssisted) {
-    return <>{children}</>
-  }
-
-  return <AssistOnboardingPopover {...props} />
-}
-
-function AssistOnboardingPopover(props: PropsWithChildren<FieldActionsOnboardingProps>) {
-  const {showOnboarding, dismissOnboarding} = useOnboardingFeature(fieldOnboardingKey)
-
-  if (!showOnboarding) {
-    return <>{props.children}</>
-  }
+export function AssistOnboardingPopover(props: FieldActionsOnboardingProps) {
+  const {dismiss} = props
 
   return (
     <Popover
-      content={<AssistIntroCard path={props.path} dismiss={dismissOnboarding} />}
+      content={<AssistIntroCard dismiss={dismiss} />}
       open
       portal
       placeholder="bottom"
       tone="default"
       width={0}
     >
-      <div>
-        <Button disabled fontSize={1} icon={SparklesIcon} mode="ghost" padding={2} />
-      </div>
+      <Card radius={2} shadow={2} style={{padding: 2, lineHeight: 0}}>
+        <Button disabled fontSize={1} icon={SparklesIcon} mode="bleed" padding={2} />
+      </Card>
     </Popover>
   )
 }
 
-function AssistIntroCard(props: FieldActionsOnboardingProps & {dismiss: () => void}) {
+function AssistIntroCard(props: {dismiss: () => void}) {
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   return (
