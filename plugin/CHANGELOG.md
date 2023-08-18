@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/sanity-io/assist/compare/v1.1.0...v1.1.1) (2023-08-18)
+
+### Bug Fixes
+
+- show generate caption action when configured also for array items ([e9ad41a](https://github.com/sanity-io/assist/commit/e9ad41a55bb107fc7905937575d64f6d259c217c))
+
 ## [1.1.0](https://github.com/sanity-io/assist/compare/v1.0.12...v1.1.0) (2023-08-18)
 
 ### Features
