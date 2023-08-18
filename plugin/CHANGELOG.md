@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/sanity-io/assist/compare/v1.0.12...v1.1.0) (2023-08-18)
+
+### Features
+
+- caption generation action ([d675536](https://github.com/sanity-io/assist/commit/d67553611c148233c325018e4c75df5c120e6d1a))
+
 ## [1.0.12](https://github.com/sanity-io/assist/compare/v1.0.11...v1.0.12) (2023-08-08)
 
 ### Bug Fixes
