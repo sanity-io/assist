@@ -16,6 +16,7 @@ export const articleImage = defineType({
   ],
   options: {
     imagePromptField: 'altText',
+    captionField: 'altText',
   },
 })
 
@@ -219,6 +220,7 @@ export const mockArticle = defineType({
       type: 'string',
       name: 'title',
       title: 'Title',
+      readOnly: true,
       validation: (rule) => rule.required().min(3),
     }),
     defineField({
@@ -381,12 +383,13 @@ export const mockArticle = defineType({
       fields: [
         defineField({
           type: 'string',
-          name: 'altText',
-          title: 'Alt text',
+          name: 'caption',
+          title: 'Caption',
         }),
       ],
       options: {
-        imagePromptField: 'altText',
+        imagePromptField: 'caption',
+        captionField: 'caption',
       },
     }),
     defineField({

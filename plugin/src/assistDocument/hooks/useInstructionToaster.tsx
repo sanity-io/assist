@@ -36,7 +36,7 @@ export function useInstructionToaster(documentId: string, documentSchemaType: Ob
         .filter((task) => task.ended && isAfter(addSeconds(new Date(task.ended), 30), new Date()))
 
       endedTasks?.forEach((task) => {
-        const title = getInstructionTitle(task.instruction)
+        const title = task.title ?? getInstructionTitle(task.instruction)
         if (task.reason === 'error') {
           toast.push({
             title: `Failed: ${title}`,

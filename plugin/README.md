@@ -200,6 +200,33 @@ but some common caveats to the field that you may run into using AI Assist are:
 * Timeouts: To be able to write structured content, we're using the largest language models - long-running results may time out or intermittently fail
 * Limited capacity: The underlying LLM APIs used by AI Assist are resource constrained
 
+## Other features
+
+### Caption generation
+AI Assist can optionally generate captions for images. This has to be enabled on an image-type/field,
+by setting the `options.captionField` on the image type, where `captionField` is the field name of a 
+custom string-field on the image object:
+
+```tsx
+defineField({
+    type: 'image',
+    name: 'inlineImage',
+    title: 'Image',
+    fields: [
+      defineField({
+        type: 'string',
+        name: 'caption',
+        title: 'Caption',
+      }),
+    ],
+    options: {
+      captionField: 'caption', 
+    },
+}),
+```
+This will add a "Generate caption" action to the configured field. 
+"Generate caption" action will automatically run whenever the image changes.
+
 ## License
 
 [MIT](LICENSE) © Sanity

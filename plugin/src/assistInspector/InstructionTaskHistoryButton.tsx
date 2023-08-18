@@ -111,7 +111,7 @@ export function InstructionTaskHistoryButton(props: InstructionTaskHistoryButton
           const instruction = instructions?.find((i) => i._key === task.instructionKey)
           return {
             ...task,
-            title: showTitles ? getInstructionTitle(instruction) : undefined,
+            title: showTitles ? task.title ?? getInstructionTitle(instruction) : undefined,
             cancel: () => cancelRun(task._key),
           }
         }) ?? []

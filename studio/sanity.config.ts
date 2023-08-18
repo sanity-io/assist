@@ -3,10 +3,8 @@ import {deskTool} from 'sanity/desk'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemas'
 import {codeInput} from '@sanity/code-input'
-import {pluginApiHost, dataset, projectId} from './env'
+import {dataset, pluginApiHost, projectId} from './env'
 import {assist} from '../plugin/src'
-
-console.log(pluginApiHost)
 
 export default defineConfig({
   name: 'default',

@@ -20,6 +20,7 @@ import {
   useRequestRunInstruction,
 } from '../assistDocument/RequestRunInstructionProvider'
 import {PrivateIcon} from './PrivateIcon'
+import {generateCaptionsActions} from './generateCaptionActions'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -73,6 +74,8 @@ export const assistFieldActions: DocumentFieldAction = {
     const isPathSelected = pathKey === selectedPath
     const isSelected = isInspectorOpen && isPathSelected
 
+    const imageCaptionAction = generateCaptionsActions.useAction(props)
+
     const manageInstructions = useCallback(
       () =>
         isSelected
@@ -121,16 +124,19 @@ export const assistFieldActions: DocumentFieldAction = {
             type: 'group',
             icon: () => null,
             title: 'Run instructions',
-            children: instructions.map((instruction) =>
-              instructionItem({
-                instruction,
-                isPrivate: Boolean(instruction.userId && instruction.userId === currentUser?.id),
-                onInstructionAction,
-                hidden: isHidden,
-                documentIsNew: !!documentIsNew,
-                assistSupported,
-              })
-            ),
+            children: [
+              ...instructions.map((instruction) =>
+                instructionItem({
+                  instruction,
+                  isPrivate: Boolean(instruction.userId && instruction.userId === currentUser?.id),
+                  onInstructionAction,
+                  hidden: isHidden,
+                  documentIsNew: !!documentIsNew,
+                  assistSupported,
+                })
+              ),
+              imageCaptionAction,
+            ].filter(Boolean),
             expanded: true,
           })
         : undefined
@@ -141,6 +147,7 @@ export const assistFieldActions: DocumentFieldAction = {
       isHidden,
       documentIsNew,
       assistSupported,
+      imageCaptionAction,
     ])
 
     const instructionsLength = instructions?.length || 0
@@ -203,7 +210,7 @@ export const assistFieldActions: DocumentFieldAction = {
     )
 
     // If there are no instructions, we don't want to render the group
-    if (instructionsLength === 0) {
+    if (instructionsLength === 0 && !imageCaptionAction) {
       return emptyAction
     }
 

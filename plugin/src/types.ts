@@ -125,6 +125,7 @@ export interface InstructionTask {
   _key: string
   _type: typeof instructionTaskTypeName
   instructionKey?: string
+  title?: string
   path?: string
   started?: string
   updated?: string

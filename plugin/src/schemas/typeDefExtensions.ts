@@ -18,6 +18,7 @@ declare module 'sanity' {
   interface GeopointOptions extends AssistOptions {}
   interface ImageOptions extends AssistOptions {
     imagePromptField?: string
+    captionField?: string
   }
   interface NumberOptions extends AssistOptions {}
   interface ObjectOptions extends AssistOptions {}

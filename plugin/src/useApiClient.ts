@@ -35,6 +35,59 @@ export function useApiClient(customApiClient?: (defaultClient: SanityClient) => 
   )
 }
 
+export function useGenerateCaption(apiClient: SanityClient) {
+  const [loading, setLoading] = useState(false)
+  const user = useCurrentUser()
+  const schema = useSchema()
+  const types = useMemo(() => serializeSchema(schema, {leanFormat: true}), [schema])
+  const toast = useToast()
+
+  const generateCaption = useCallback(
+    ({path, documentId}: {path: string; documentId: string}) => {
+      setLoading(true)
+
+      return apiClient
+        .request({
+          method: 'POST',
+          url: `/assist/tasks/generate-caption/${apiClient.config().dataset}?projectId=${
+            apiClient.config().projectId
+          }`,
+          body: {
+            path,
+            documentId,
+            types,
+            userId: user?.id,
+          },
+        })
+        .catch((e) => {
+          toast.push({
+            status: 'error',
+            title: 'Generate caption failed',
+            description: e.message,
+          })
+          setLoading(false)
+          throw e
+        })
+        .finally(() => {
+          // adding some artificial delay here
+          // server responds with 201 then proceeds; we dont need to allow spamming the button
+          setTimeout(() => {
+            setLoading(false)
+          }, 2000)
+        })
+    },
+    [setLoading, apiClient, toast, user, types]
+  )
+
+  return useMemo(
+    () => ({
+      generateCaption,
+      loading,
+    }),
+    [generateCaption, loading]
+  )
+}
+
 export function useGetInstructStatus(apiClient: SanityClient) {
   const [loading, setLoading] = useState(true)
   const projectClient = useClient({apiVersion: '2023-06-05'})

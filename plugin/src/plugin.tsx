@@ -13,6 +13,8 @@ import {packageName} from './constants'
 import {AssistDocumentInputWrapper} from './assistDocument/AssistDocumentInput'
 import {createAssistDocumentPresence} from './presence/AssistDocumentPresence'
 import {isSchemaAssistEnabled} from './helpers/assistSupported'
+import {isImage} from './helpers/typeUtils'
+import {ImageContextProvider} from './components/ImageContext'
 
 export interface AssistPluginConfig {
   /**
@@ -74,6 +76,22 @@ export const assist = definePlugin<AssistPluginConfig | void>((config) => {
       definePlugin({
         name: `${packageName}/safe-value-input`,
         form: {components: {input: SafeValueInput}},
+      })(),
+
+      definePlugin({
+        name: `${packageName}/generate-caption`,
+        form: {
+          components: {
+            input: (props) => {
+              const {schemaType} = props
+
+              if (isImage(schemaType)) {
+                return <ImageContextProvider {...props} />
+              }
+              return props.renderDefault(props)
+            },
+          },
+        },
       })(),
     ],
   }
