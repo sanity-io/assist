@@ -119,13 +119,13 @@ export const assistFieldActions: DocumentFieldAction = {
     )
 
     const runInstructionsGroup = useMemo(() => {
-      return instructions?.length
+      return instructions?.length || imageCaptionAction
         ? node({
             type: 'group',
             icon: () => null,
             title: 'Run instructions',
             children: [
-              ...instructions.map((instruction) =>
+              ...instructions?.map((instruction) =>
                 instructionItem({
                   instruction,
                   isPrivate: Boolean(instruction.userId && instruction.userId === currentUser?.id),
@@ -170,28 +170,19 @@ export const assistFieldActions: DocumentFieldAction = {
           type: 'group',
           icon: SparklesIcon,
           title: pluginTitleShort,
-          children: [
-            runInstructionsGroup,
-            /*         documentIsNew && {
-              type: 'action',
-              disabled: true,
-              title: `Document is new. Make an edit to enable `,
-              icon: WarningOutlineIcon,
-              tone: 'caution',
-              status: 'warning',
-              onAction: () => {},
-            },*/
-            manageInstructionsItem,
-          ].filter((c): c is DocumentFieldActionItem | DocumentFieldActionGroup => !!c),
+          children: [runInstructionsGroup, assistSupported && manageInstructionsItem].filter(
+            (c): c is DocumentFieldActionItem | DocumentFieldActionGroup => !!c
+          ),
           expanded: false,
           renderAsButton: true,
-          hidden: !assistSupported,
+          hidden: !assistSupported && !imageCaptionAction,
         }),
       [
         //documentIsNew,
         runInstructionsGroup,
         manageInstructionsItem,
         assistSupported,
+        imageCaptionAction,
       ]
     )
 
