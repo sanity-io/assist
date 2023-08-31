@@ -14,6 +14,10 @@ The `@sanity/assist` package lives in the [plugin directory](./plugin).
 
 Follow the instructions for the Sanity plugin [here](./plugin).
 
+## Third party sub-processors
+
+This version of the feature uses OpenAI.com as a third-party sub-processor. Their security posture has been vetted by Sanity's security team, and approved for use.
+
 ## Local development
 
 To start the test studio run

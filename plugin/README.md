@@ -227,6 +227,10 @@ defineField({
 This will add a "Generate caption" action to the configured field. 
 "Generate caption" action will automatically run whenever the image changes.
 
+## Third party sub-processors
+
+This version of the feature uses OpenAI.com as a third-party sub-processor. Their security posture has been vetted by Sanity's security team, and approved for use.
+
 ## License
 
 [MIT](LICENSE) © Sanity
