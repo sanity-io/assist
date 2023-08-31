@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.3](https://github.com/sanity-io/assist/compare/v1.1.2...v1.1.3) (2023-08-31)
+
+### Bug Fixes
+
+- **docs:** added note about OpenAI as a third-party sub-processor ([2cb5fbc](https://github.com/sanity-io/assist/commit/2cb5fbcdc8f6d9494058b0147e5ebc106abee5c9))
+
 ## [1.1.2](https://github.com/sanity-io/assist/compare/v1.1.1...v1.1.2) (2023-08-31)
 
 ### Bug Fixes
