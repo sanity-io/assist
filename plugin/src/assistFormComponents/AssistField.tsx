@@ -1,12 +1,14 @@
-import {FieldProps, isArraySchemaType} from 'sanity'
+import {FieldProps, isArraySchemaType, pathToString} from 'sanity'
 import {useAssistPresence} from '../presence/useAssistPresence'
-import {useMemo} from 'react'
+import {useContext, useMemo} from 'react'
 import {Box, Flex} from '@sanity/ui'
 import {contextDocumentTypeName} from '../types'
 import {isAssistSupported} from '../helpers/assistSupported'
 import {isPortableTextArray, isType} from '../helpers/typeUtils'
 import {AiFieldPresence} from '../presence/AiFieldPresence'
-import {FieldActionsOnboarding} from '../onboarding/FieldActionsOnboarding'
+import {AssistOnboardingPopover} from '../onboarding/FieldActionsOnboarding'
+import {FirstAssistedPathContext} from '../onboarding/FirstAssistedPathProvider'
+import {fieldOnboardingKey, useOnboardingFeature} from '../onboarding/onboardingStore'
 
 export function AssistFieldWrapper(props: FieldProps) {
   const {schemaType} = props
@@ -28,12 +30,22 @@ export function AssistFieldWrapper(props: FieldProps) {
 }
 
 export function AssistField(props: FieldProps) {
+  const {path} = props
+
   const isPortableText = useMemo(
     () => !!(isArraySchemaType(props.schemaType) && isPortableTextArray(props.schemaType)),
     [props.schemaType]
   )
 
   const presence = useAssistPresence(props.path, isPortableText)
+
+  const firstAssistedPath = useContext(FirstAssistedPathContext)
+  const isFirstAssisted = useMemo(
+    () => pathToString(path) === firstAssistedPath,
+    [path, firstAssistedPath]
+  )
+
+  const {showOnboarding, dismissOnboarding} = useOnboardingFeature(fieldOnboardingKey)
 
   const actions = (
     <Flex gap={2} align="center" justify="space-between">
@@ -43,9 +55,18 @@ export function AssistField(props: FieldProps) {
         </Box>
       ))}
 
-      <FieldActionsOnboarding {...props}>{props.actions}</FieldActionsOnboarding>
+      {isFirstAssisted && showOnboarding && <AssistOnboardingPopover dismiss={dismissOnboarding} />}
     </Flex>
   )
 
-  return props.renderDefault({...props, actions})
+  return props.renderDefault({
+    ...props,
+
+    // When showing the onboarding, prevent default field actions from being rendered
+    actions: isFirstAssisted && showOnboarding ? [] : props.actions,
+
+    // Render presence (and possibly onboarding) in the internal slot (between presence and the field actions)
+    // eslint-disable-next-line camelcase
+    __internal_slot: actions,
+  })
 }

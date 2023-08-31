@@ -220,7 +220,6 @@ export const mockArticle = defineType({
       type: 'string',
       name: 'title',
       title: 'Title',
-      readOnly: true,
       validation: (rule) => rule.required().min(3),
     }),
     defineField({

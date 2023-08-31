@@ -26,12 +26,12 @@
     "@sanity/code-input": "^4.1.1",
     "@sanity/icons": "^2.4.0",
     "@sanity/ui": "^1.6.0",
-    "@sanity/vision": "3.13.0",
+    "@sanity/vision": "^3.16.1",
     "react": "^18.2.0",
     "react-animate-height": "^3.1.1",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
-    "sanity": "^3.14.5",
+    "sanity": "^3.16.1",
     "styled-components": "^5.2.0"
   },
   "devDependencies": {

@@ -40,7 +40,7 @@ In your Studio project folder, install the following plugin dependency:
 npm install @sanity/assist sanity@latest
 ```
 
-This plugin requires `sanity` version `3.14.5` or greater.
+This plugin requires `sanity` version `3.16.0` or greater.
 
 ## Setup
 
