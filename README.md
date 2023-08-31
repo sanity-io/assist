@@ -10,6 +10,10 @@ You create the instructions; Sanity AI Assist does the rest. [Learn more about w
 
 The `@sanity/assist` package lives in the [plugin directory](./plugin). 
 
+## Installation & usage
+
+Follow the instructions for the Sanity plugin [here](./plugin).
+
 ## Local development
 
 To start the test studio run
