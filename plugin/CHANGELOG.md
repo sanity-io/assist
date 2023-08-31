@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/sanity-io/assist/compare/v1.1.1...v1.1.2) (2023-08-31)
+
+### Bug Fixes
+
+- upgrade to latest field action API on sanity 3.16+ ([9afeffe](https://github.com/sanity-io/assist/commit/9afeffe384bfff2242e5ea9a83d02992ed5851ab))
+
 ## [1.1.1](https://github.com/sanity-io/assist/compare/v1.1.0...v1.1.1) (2023-08-18)
 
 ### Bug Fixes
