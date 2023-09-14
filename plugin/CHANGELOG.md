@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.4](https://github.com/sanity-io/assist/compare/v1.1.3...v1.1.4) (2023-09-14)
+
+### Bug Fixes
+
+- **docs:** added note about openai.io for processing ([b8258df](https://github.com/sanity-io/assist/commit/b8258df2df02dc023bded238efc5bb54995a564b))
+
 ## [1.1.3](https://github.com/sanity-io/assist/compare/v1.1.2...v1.1.3) (2023-08-31)
 
 ### Bug Fixes
