@@ -6,6 +6,9 @@ You create the instructions; Sanity AI Assist does the rest. [Learn more about w
 
 [Read the release announcement here.](https://www.sanity.io/blog/sanity-ai-assist-announcement?utm_source=github.com&utm_medium=organic_social&utm_campaign=ai-assist&utm_content=)
 
+
+> Using this feature requires Sanity to send data to OpenAI.com for processing. It uses generative AI; you should verify the data before using it.
+
 <img width="1019" alt="image" src="https://github.com/sanity-io/sanity/assets/835514/4d895477-c6d7-4da0-be25-c73e109edbdb">
 
 The `@sanity/assist` package lives in the [plugin directory](./plugin). 
