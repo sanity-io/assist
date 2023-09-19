@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.0](https://github.com/sanity-io/assist/compare/v1.1.4...v1.2.0) (2023-09-19)
+
+### Features
+
+- instructions can now be added to fields within array items ([347a3c7](https://github.com/sanity-io/assist/commit/347a3c78e69c86aaea213d8bfd22e17029308109))
+
 ## [1.1.4](https://github.com/sanity-io/assist/compare/v1.1.3...v1.1.4) (2023-09-14)
 
 ### Bug Fixes
