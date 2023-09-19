@@ -13,6 +13,7 @@ export interface RunInstructionRequest {
   documentId: string
   assistDocumentId: string
   path: string
+  typePath?: string
   instructionKey: string
   userId?: string
   userTexts?: UserTextInstance[]

@@ -1,13 +1,13 @@
 import {
+  AssistDocument,
+  AssistField,
   assistFieldTypeName,
   AssistInspectorRouteParams,
-  AssistDocument,
   documentRootKey,
   fieldPathParam,
-  AssistField,
   instructionParam,
 } from '../../types'
-import {useEffect, useMemo, useRef} from 'react'
+import {createContext, useContext, useEffect, useMemo, useRef} from 'react'
 import {
   FormCallbacksProvider,
   FormCallbacksValue,
@@ -33,6 +33,8 @@ import {documentTypeFromAiDocumentId} from '../../helpers/ids'
 
 const EMPTY_FIELDS: AssistField[] = []
 
+export const TypePathContext = createContext<string | undefined>(undefined)
+
 export function AssistDocumentForm(props: ObjectInputProps) {
   const {onChange} = props
   const value = props.value as AssistDocument | undefined
@@ -48,12 +50,15 @@ export function AssistDocumentForm(props: ObjectInputProps) {
 
   const {params, setParams} = useAiPaneRouter()
   const pathKey = params[fieldPathParam]
+  const typePath = useContext(TypePathContext)
   const instruction = params[instructionParam]
 
-  const activeKey = useMemo(
-    () => (fields ?? EMPTY_FIELDS).find((f) => f.path === pathKey)?._key,
-    [fields, pathKey]
-  )
+  const activeKey = useMemo(() => {
+    if (!typePath) {
+      return undefined
+    }
+    return (fields ?? EMPTY_FIELDS).find((f) => f.path === typePath)?._key
+  }, [fields, typePath])
 
   const activePath: Path | undefined = useMemo(() => {
     if (!activeKey) {
@@ -72,6 +77,7 @@ export function AssistDocumentForm(props: ObjectInputProps) {
   }, [schema, targetDocumentType])
 
   const fieldSchema = useSelectedSchema(pathKey, documentSchema)
+
   const context: SelectedFieldContextValue = useMemo(
     () => ({
       documentSchema,
@@ -88,7 +94,7 @@ export function AssistDocumentForm(props: ObjectInputProps) {
     }
   }, [title, documentSchema, onChange, id])
 
-  const fieldExists = !!fields?.some((f) => f._key === pathKey)
+  const fieldExists = !!fields?.some((f) => f._key === typePath)
 
   const {onPathOpen, ...formCallbacks} = useFormCallbacks()
 
@@ -122,8 +128,8 @@ export function AssistDocumentForm(props: ObjectInputProps) {
     <SelectedFieldContextProvider value={context}>
       <Stack space={5}>
         <FieldsInitializer
-          key={pathKey}
-          pathKey={pathKey}
+          key={typePath}
+          pathKey={typePath}
           activePath={activePath}
           fieldExists={fieldExists}
           onChange={onChange}

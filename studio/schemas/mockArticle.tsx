@@ -41,6 +41,12 @@ export const factBox = defineType({
       name: 'facts',
       title: 'Facts',
     }),
+    defineField({
+      type: 'array',
+      name: 'more',
+      title: 'More facts',
+      of: [{type: 'factBox'}],
+    }),
   ],
   preview: {
     select: {
@@ -220,7 +226,14 @@ export const mockArticle = defineType({
       type: 'string',
       name: 'title',
       title: 'Title',
-      validation: (rule) => rule.required().min(3),
+    }),
+    defineField({
+      type: 'string',
+      name: 'language',
+      title: 'Language',
+      options: {
+        list: ['Norwegian', 'German', 'English (US)'],
+      },
     }),
     defineField({
       type: 'array',

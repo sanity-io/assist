@@ -11,25 +11,29 @@ interface FieldSelectorProps {
   fieldPath?: string
   onSelect: (path: string) => void
   includeDocument?: boolean
+  filter?: (field: FieldRef) => boolean
 }
 
 export function FieldAutocomplete(props: FieldSelectorProps) {
-  const {id, schemaType, fieldPath, onSelect, includeDocument} = props
+  const {id, schemaType, fieldPath, onSelect, includeDocument, filter} = props
 
-  const fieldNames = useMemo(() => {
+  const fieldRefs = useMemo(() => {
     if (includeDocument) {
       return getFieldRefsWithDocument(schemaType)
     }
     return getFieldRefs(schemaType)
   }, [schemaType, includeDocument])
   const currentField = useMemo(
-    () => fieldNames.find((f) => f.key === fieldPath),
-    [fieldPath, fieldNames]
+    () => fieldRefs.find((f) => f.key === fieldPath),
+    [fieldPath, fieldRefs]
   )
 
   const autocompleteOptions = useMemo(
-    () => fieldNames.map((field) => ({value: field.key, field})),
-    [fieldNames]
+    () =>
+      fieldRefs
+        .filter((field) => (filter ? filter(field) : true))
+        .map((field) => ({value: field.key, field})),
+    [fieldRefs, filter]
   )
 
   const renderOption = useCallback((option: {value: string; field: FieldRef}) => {
@@ -55,33 +59,12 @@ export function FieldAutocomplete(props: FieldSelectorProps) {
       )
     }
 
-    const splitTitle = field.title.split('/')
     return (
       <Card as="button" padding={3} radius={1}>
         <Flex gap={3}>
           <Text size={1}>{createElement(field.icon)}</Text>
 
-          <Box flex="none">
-            <Breadcrumbs
-              separator={
-                <Text muted size={1}>
-                  /
-                </Text>
-              }
-              space={1}
-            >
-              {splitTitle.slice(0, splitTitle.length - 1).map((pt, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Text key={i} muted size={1}>
-                  {pt.trim()}
-                </Text>
-              ))}
-
-              <Text size={1} weight="medium">
-                {splitTitle[splitTitle.length - 1]}
-              </Text>
-            </Breadcrumbs>
-          </Box>
+          <FieldTitle field={field} />
         </Flex>
       </Card>
     )
@@ -99,7 +82,6 @@ export function FieldAutocomplete(props: FieldSelectorProps) {
     )
   }, [])
 
-  // const id = useId()
   return (
     <Autocomplete
       fontSize={1}
@@ -115,5 +97,43 @@ export function FieldAutocomplete(props: FieldSelectorProps) {
       value={currentField?.key}
       filterOption={filterOption}
     />
+  )
+}
+
+export function FieldTitle(props: {field: FieldRef}) {
+  const splitTitle = props.field.title.split('/')
+  return (
+    <Box flex="none">
+      <Breadcrumbs
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          marginTop: '-4px',
+        }}
+        separator={
+          <Box marginTop={1}>
+            <Text muted size={1}>
+              /
+            </Text>
+          </Box>
+        }
+        space={1}
+      >
+        {splitTitle.slice(0, splitTitle.length - 1).map((pt, i) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <Box key={i} marginTop={1}>
+            <Text muted size={1}>
+              {pt.trim()}
+            </Text>
+          </Box>
+        ))}
+        <Box marginTop={1}>
+          <Text size={1} weight="medium">
+            {splitTitle[splitTitle.length - 1]}
+          </Text>
+        </Box>
+      </Breadcrumbs>
+    </Box>
   )
 }

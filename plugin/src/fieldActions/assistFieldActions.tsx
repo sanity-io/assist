@@ -11,7 +11,7 @@ import {pluginTitle, pluginTitleShort} from '../constants'
 import {useAssistSupported} from '../helpers/useAssistSupported'
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {getInstructionTitle, usePathKey} from '../helpers/misc'
-import {fieldPathParam, instructionParam, StudioInstruction} from '../types'
+import {documentRootKey, fieldPathParam, instructionParam, StudioInstruction} from '../types'
 import {aiInspectorId} from '../assistInspector/constants'
 import {getIcon} from '../assistDocument/components/instruction/appearance/IconInput'
 import {useAssistDocumentContextValue} from '../assistDocument/hooks/useAssistDocumentContextValue'
@@ -21,6 +21,8 @@ import {
 } from '../assistDocument/RequestRunInstructionProvider'
 import {PrivateIcon} from './PrivateIcon'
 import {generateCaptionsActions} from './generateCaptionActions'
+import {useDocumentPane} from 'sanity/desk'
+import {useSelectedField, useTypePath} from '../assistInspector/helpers'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -30,7 +32,6 @@ export const assistFieldActions: DocumentFieldAction = {
   name: 'sanity-assist-actions',
   useAction(props) {
     const {schemaType} = props
-    const assistSupported = useAssistSupported(props.path, schemaType)
 
     const isDocumentLevel = props.path.length === 0
 
@@ -54,9 +55,11 @@ export const assistFieldActions: DocumentFieldAction = {
         : // eslint-disable-next-line react-hooks/rules-of-hooks
           useAssistDocumentContext()
 
+    const {value: docValue} = useDocumentPane()
     const currentUser = useCurrentUser()
     const isHidden = !assistDocument
     const pathKey = usePathKey(props.path)
+    const typePath = useTypePath(docValue, pathKey)
     const assistDocumentId = assistDocument?._id
 
     const assistableDocId = getAssistableDocId(documentSchemaType, documentId)
@@ -65,10 +68,17 @@ export const assistFieldActions: DocumentFieldAction = {
       isDocAssistable: documentIsAssistable ?? false,
     })
 
+    const isSelectable = !!useSelectedField(documentSchemaType, typePath)
+    const assistSupported = useAssistSupported(props.path, schemaType) && isSelectable
+
     const fieldAssist = useMemo(
-      () => (assistDocument?.fields ?? []).find((f) => f.path == pathKey),
-      [assistDocument?.fields, pathKey]
+      () =>
+        (assistDocument?.fields ?? []).find(
+          (f) => f.path === typePath || (pathKey === documentRootKey && f.path === pathKey)
+        ),
+      [assistDocument?.fields, pathKey, typePath]
     )
+
     const fieldAssistKey = fieldAssist?._key
     const isInspectorOpen = inspector?.name === aiInspectorId
     const isPathSelected = pathKey === selectedPath
@@ -96,10 +106,11 @@ export const assistFieldActions: DocumentFieldAction = {
           documentId: assistableDocId,
           assistDocumentId,
           path: pathKey,
+          typePath,
           instruction,
         })
       },
-      [requestRunInstruction, assistableDocId, pathKey, assistDocumentId, fieldAssistKey]
+      [requestRunInstruction, assistableDocId, pathKey, typePath, assistDocumentId, fieldAssistKey]
     )
 
     const privateInstructions = useMemo(

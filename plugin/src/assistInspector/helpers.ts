@@ -7,13 +7,24 @@ import {
   OlistIcon,
   StringIcon,
 } from '@sanity/icons'
-import {isObjectSchemaType, ObjectSchemaType, Path, pathToString, SchemaType} from 'sanity'
+import {
+  ArraySchemaType,
+  isKeySegment,
+  isObjectSchemaType,
+  ObjectSchemaType,
+  Path,
+  pathToString,
+  SanityDocumentLike,
+  SchemaType,
+  stringToPath,
+} from 'sanity'
 import {ComponentType, useContext, useMemo} from 'react'
 import {AssistInspectorRouteParams, documentRootKey, fieldPathParam} from '../types'
 import {usePaneRouter} from 'sanity/desk'
 import {isAssistSupported} from '../helpers/assistSupported'
 import {isPortableTextArray, isType} from '../helpers/typeUtils'
 import {SelectedFieldContext} from '../assistDocument/components/SelectedFieldContext'
+import {extractWithPath} from '@sanity/mutator'
 
 export interface FieldRef {
   key: string
@@ -21,9 +32,10 @@ export interface FieldRef {
   title: string
   schemaType: SchemaType
   icon: ComponentType
+  synthetic?: boolean
 }
 
-const maxDepth = 4
+const maxDepth = 6
 
 export function getTypeIcon(schemaType: SchemaType) {
   let t: SchemaType | undefined = schemaType
@@ -73,7 +85,7 @@ export function getFieldRefs(
       const path: Path = parent ? [...parent.path, field.name] : [field.name]
       const title = field.type.title ?? field.name
       const fieldRef: FieldRef = {
-        key: pathToString(path),
+        key: patchableKey(pathToString(path)),
         path,
         title: parent ? [parent.title, title].join(' / ') : title,
         schemaType: field.type,
@@ -82,11 +94,79 @@ export function getFieldRefs(
       const fields =
         field.type.jsonType === 'object' ? getFieldRefs(field.type, fieldRef, depth + 1) : []
 
+      const syntheticFields =
+        field.type.jsonType === 'array' ? getSyntheticFields(field.type, fieldRef, depth + 1) : []
       if (!isAssistSupported(field.type, true)) {
+        return [...fields, ...syntheticFields]
+      }
+      return [fieldRef, ...fields, ...syntheticFields]
+    })
+}
+
+function getSyntheticFields(schemaType: ArraySchemaType, parent?: FieldRef, depth = 0) {
+  if (depth >= maxDepth) {
+    return []
+  }
+
+  return schemaType.of
+    .filter((itemType) => !isType(itemType, 'block'))
+    .flatMap((itemType) => {
+      const segment = {_key: itemType.name}
+      const title = itemType.title ?? itemType.name
+      const path: Path = parent ? [...parent.path, segment] : [segment]
+      const fieldRef: FieldRef = {
+        key: patchableKey(pathToString(path)),
+        path,
+        title: parent ? [parent.title, title].join(' / ') : title,
+        schemaType: itemType,
+        icon: getTypeIcon(itemType),
+        synthetic: true,
+      }
+      const fields =
+        itemType.jsonType === 'object' ? getFieldRefs(itemType, fieldRef, depth + 1) : []
+
+      if (!isAssistSupported(itemType, true)) {
         return fields
       }
       return [fieldRef, ...fields]
     })
+}
+
+export function getTypePath(doc: SanityDocumentLike, pathString: string) {
+  if (!pathString) {
+    return undefined
+  }
+
+  const path = stringToPath(pathString)
+  const currentPath: Path = []
+  let valid = true
+  const syntheticPath = path.map((segment) => {
+    currentPath.push(segment)
+
+    if (isKeySegment(segment)) {
+      const match = extractWithPath(pathToString(currentPath), doc)[0]
+      const value = match?.value
+      if (match && value && typeof value === 'object' && '_type' in value) {
+        return {_key: value._type as string}
+      }
+      valid = false
+    }
+    return segment
+  })
+
+  return valid ? patchableKey(pathToString(syntheticPath)) : undefined
+}
+
+/**
+ * mutator crashes if path contains certain letters
+ * @param pathKey
+ */
+function patchableKey(pathKey: string) {
+  return pathKey.replace(/[=]=/g, ':').replace(/[[\]]/g, '|').replace(/"/g, '')
+}
+
+export function useTypePath(doc: SanityDocumentLike, pathString: string) {
+  return useMemo(() => getTypePath(doc, pathString), [doc, pathString])
 }
 
 export function useSelectedField(
@@ -115,7 +195,7 @@ export function useSelectedFieldTitle() {
 
 export function getFieldTitle(field?: FieldRef) {
   const schemaType = field?.schemaType
-  return schemaType?.title ?? schemaType?.name ?? 'Untitled'
+  return field?.title ?? schemaType?.title ?? schemaType?.name ?? 'Untitled'
 }
 
 export function useAiPaneRouter() {

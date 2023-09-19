@@ -15,7 +15,7 @@ import {
 } from 'sanity/desk'
 import {DocumentForm} from '../_lib/form'
 import {assistDocumentTypeName, fieldPathParam, instructionParam} from '../types'
-import {getFieldTitle, useAiPaneRouter, useSelectedField} from './helpers'
+import {FieldRef, getFieldTitle, useAiPaneRouter, useSelectedField, useTypePath} from './helpers'
 import styled from 'styled-components'
 import {useStudioAssistDocument} from '../assistDocument/hooks/useStudioAssistDocument'
 import {InstructionTaskHistoryButton} from './InstructionTaskHistoryButton'
@@ -29,6 +29,8 @@ import {
 } from '../assistDocument/RequestRunInstructionProvider'
 import {InspectorOnboarding} from '../onboarding/InspectorOnboarding'
 import {inspectorOnboardingKey, useOnboardingFeature} from '../onboarding/onboardingStore'
+import {TypePathContext} from '../assistDocument/components/AssistDocumentForm'
+import {FieldTitle} from './FieldAutocomplete'
 
 const CardWithShadowBelow = styled(Card)`
   position: relative;
@@ -191,7 +193,13 @@ export function AssistInspector(props: DocumentInspectorProps) {
   const pathKey = params?.[fieldPathParam]
   const instructionKey = params?.[instructionParam]
   const documentPane = useDocumentPane()
-  const {documentId, documentType, schemaType, onChange: documentOnChange} = documentPane
+  const {
+    documentId,
+    documentType,
+    value: docValue,
+    schemaType,
+    onChange: documentOnChange,
+  } = documentPane
   const {published, draft} = useEditState(documentId, documentType, 'low')
 
   const assistableDocId = getAssistableDocId(schemaType, documentId)
@@ -199,12 +207,14 @@ export function AssistInspector(props: DocumentInspectorProps) {
     documentOnChange,
     isDocAssistable: isDocAssistable(schemaType, published, draft),
   })
-  const selectedField = useSelectedField(schemaType, params[fieldPathParam])
+
+  const typePath = useTypePath(docValue, pathKey ?? '')
+  const selectedField = useSelectedField(schemaType, typePath)
 
   const aiDocId = assistDocumentId(documentType)
 
   const assistDocument = useStudioAssistDocument({documentId, schemaType})
-  const assistField = assistDocument?.fields?.find((f) => f.path === pathKey)
+  const assistField = assistDocument?.fields?.find((f) => f.path === typePath)
   const instruction = assistField?.instructions?.find((i) => i._key === instructionKey)
   const tasks = useMemo(
     () =>
@@ -244,13 +254,15 @@ export function AssistInspector(props: DocumentInspectorProps) {
     () =>
       instruction &&
       pathKey &&
+      typePath &&
       requestRunInstruction({
         documentId: assistableDocId,
         path: pathKey,
+        typePath,
         assistDocumentId: assistDocumentId(documentType),
         instruction,
       }),
-    [instruction, pathKey, documentType, assistableDocId, requestRunInstruction]
+    [pathKey, instruction, typePath, documentType, assistableDocId, requestRunInstruction]
   )
 
   const Region = useCallback((_props: any) => {
@@ -282,7 +294,11 @@ export function AssistInspector(props: DocumentInspectorProps) {
       sizing="border"
       style={{lineHeight: 0}}
     >
-      <AiInspectorHeader onClose={props.onClose} fieldTitle={getFieldTitle(selectedField)} />
+      <AiInspectorHeader
+        onClose={props.onClose}
+        field={selectedField}
+        fieldTitle={getFieldTitle(selectedField)}
+      />
 
       <Card as={Region} flex={1} overflow="auto">
         <Flex direction="column" style={{minHeight: '100%'}}>
@@ -290,19 +306,21 @@ export function AssistInspector(props: DocumentInspectorProps) {
             <PresenceOverlay>
               <Box padding={4}>
                 {selectedField && (
-                  <VirtualizerScrollInstanceProvider
-                    scrollElement={boundary.current}
-                    containerElement={boundary}
-                  >
-                    <DocumentPaneProvider
-                      paneKey={documentPane.paneKey}
-                      index={documentPane.index}
-                      itemId="ai"
-                      pane={paneNode}
+                  <TypePathContext.Provider value={typePath}>
+                    <VirtualizerScrollInstanceProvider
+                      scrollElement={boundary.current}
+                      containerElement={boundary}
                     >
-                      <DocumentForm />
-                    </DocumentPaneProvider>
-                  </VirtualizerScrollInstanceProvider>
+                      <DocumentPaneProvider
+                        paneKey={documentPane.paneKey}
+                        index={documentPane.index}
+                        itemId="ai"
+                        pane={paneNode}
+                      >
+                        <DocumentForm />
+                      </DocumentPaneProvider>
+                    </VirtualizerScrollInstanceProvider>
+                  </TypePathContext.Provider>
                 )}
               </Box>
             </PresenceOverlay>
@@ -323,7 +341,6 @@ export function AssistInspector(props: DocumentInspectorProps) {
           </Box>
         </Flex>
       </Card>
-
       <CardWithShadowAbove flex="none" paddingX={4} paddingY={3} style={{justifySelf: 'flex-end'}}>
         <Flex gap={2} flex={1} justify="flex-end">
           {schemaType?.name && pathKey && instructionKey && (
@@ -352,22 +369,28 @@ export function AssistInspector(props: DocumentInspectorProps) {
   )
 }
 
-function AiInspectorHeader(props: {fieldTitle: string; onClose: () => void}) {
-  const {onClose, fieldTitle} = props
+function AiInspectorHeader(props: {fieldTitle: string; field?: FieldRef; onClose: () => void}) {
+  const {onClose, field, fieldTitle} = props
   const {showOnboarding, dismissOnboarding} = useOnboardingFeature(inspectorOnboardingKey)
 
   return (
     <CardWithShadowBelow flex="none" padding={2}>
       <Flex flex={1} align="center">
         <Flex flex={1} padding={3} gap={2} align="center">
-          <Flex gap={1} align="center">
-            <Text size={1} weight="semibold">
-              AI instructions for
-            </Text>
-            <Card radius={2} border padding={1} style={{margin: '-4px 0'}}>
+          <Flex gap={1} align="center" wrap="wrap" style={{marginTop: '-4px'}}>
+            <Box marginTop={1}>
               <Text size={1} weight="semibold">
-                {fieldTitle}
+                AI instructions for
               </Text>
+            </Box>
+            <Card radius={2} border padding={1} marginTop={1}>
+              {field ? (
+                <FieldTitle field={field} />
+              ) : (
+                <Text size={1} weight="semibold">
+                  {fieldTitle}
+                </Text>
+              )}
             </Card>
           </Flex>
         </Flex>
