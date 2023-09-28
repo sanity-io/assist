@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/sanity-io/assist/compare/v1.2.0...v1.2.1) (2023-09-28)
+
+### Bug Fixes
+
+- **regression:** avoid bundling `@sanity/mutator` ([ee6c2e9](https://github.com/sanity-io/assist/commit/ee6c2e98145570609f50b2d8a80b2624075a6248))
+
 ## [1.2.0](https://github.com/sanity-io/assist/compare/v1.1.4...v1.2.0) (2023-09-19)
 
 ### Features
