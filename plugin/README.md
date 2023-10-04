@@ -10,6 +10,7 @@
 - [Setup](#setup)
   - [Add the plugin](#add-the-plugin)
   - [Enabling the AI Assist API](#enabling-the-ai-assist-api)
+  - [Permissions](#permissions)
 - [Schema configuration](#schema-configuration)
   - [Disable AI Assist for a schema type](#disable-ai-assist-for-a-schema-type)
   - [Disable for a field](#disable-for-a-field)
@@ -88,6 +89,18 @@ You will find a new API token entry for your project named “Sanity AI” in yo
 The plugin will now work for any dataset in your project.
 
 **Note:** You can revoke this token at any time to disable Sanity AI Assist service. A new token has to be generated via the plugin UI for it to work again.
+
+### Permissions
+
+If your project is using custom roles (Enterprise), there are some additional considerations.
+
+To see AI Assist presence when running instructions, users will need read access to
+documents of `_type=="sanity.assist.task.status"`.
+
+To edit instructions, users will need read and write access to documents of `_type=="sanity.assist.schemaType.annotations"`.
+
+Note that instructions run using the permissions of the user invoking it, so only fields that the user
+themselves can edit can be changed by the instruction instance.
 
 ## Schema configuration
 
@@ -224,7 +237,7 @@ defineField({
     options: {
       captionField: 'caption', 
     },
-}),
+})
 ```
 This will add a "Generate caption" action to the configured field. 
 "Generate caption" action will automatically run whenever the image changes.
