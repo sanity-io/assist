@@ -425,5 +425,30 @@ export const mockArticle = defineType({
         }),
       ],
     }),
+    defineField({
+      name: 'select',
+      type: 'array',
+      of: [{type: 'string'}],
+      options: {
+        list: [
+          {
+            title: 'Apple',
+            value: 'apple',
+          },
+          {
+            title: 'Orange',
+            value: 'orange',
+          },
+          {
+            title: 'Grape',
+            value: 'grape',
+          },
+          {
+            title: 'Rock',
+            value: 'rock',
+          },
+        ],
+      },
+    }),
   ],
 })

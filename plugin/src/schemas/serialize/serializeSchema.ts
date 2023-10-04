@@ -83,10 +83,11 @@ function getBaseFields(
           imagePromptField: imagePromptField,
         }
       : undefined,
-    values:
-      type.jsonType === 'string' && type?.options?.list
-        ? type?.options?.list.map((v) => (typeof v === 'string' ? v : v.value ?? `${v.title}`))
-        : undefined,
+    values: type?.options?.list
+      ? type?.options?.list.map((v: string | {value: string; title: string}) =>
+          typeof v === 'string' ? v : v.value ?? `${v.title}`
+        )
+      : undefined,
     of: 'of' in type && typeName === 'array' ? arrayOf(type, schema, options) : undefined,
     to:
       'to' in type && typeName === 'reference'

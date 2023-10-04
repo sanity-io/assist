@@ -392,6 +392,36 @@ describe('serializeSchema', () => {
     ])
   })
 
+  test('should serialize list values in string array', () => {
+    const schema = Schema.compile({
+      name: 'test',
+      types: [
+        defineType({
+          type: 'array',
+          name: 'list',
+          of: [{type: 'string'}],
+          options: {
+            list: [
+              {title: 'A', value: 'a'},
+              {title: 'B', value: 'b'},
+            ],
+          },
+        }),
+      ],
+    })
+
+    const serializedTypes = serializeSchema(schema, {leanFormat: true})
+
+    expect(serializedTypes).toEqual([
+      {
+        name: 'list',
+        type: 'array',
+        of: [{type: 'string', name: 'string', title: 'String'}],
+        values: ['a', 'b'],
+      },
+    ])
+  })
+
   test('should exclude truthy hidden and readonly', () => {
     const schema = Schema.compile({
       name: 'test',
