@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/sanity-io/assist/compare/v1.2.1...v1.2.2) (2023-10-04)
+
+### Bug Fixes
+
+- support schema used by assist should no longer appear in structure or document lists ([0451ceb](https://github.com/sanity-io/assist/commit/0451ceb646a8283a495d26b9cfcda3f6130dc7ca))
+
 ## [1.2.1](https://github.com/sanity-io/assist/compare/v1.2.0...v1.2.1) (2023-09-28)
 
 ### Bug Fixes
