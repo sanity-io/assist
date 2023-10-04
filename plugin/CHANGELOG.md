@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/sanity-io/assist/compare/v1.2.2...v1.2.3) (2023-10-04)
+
+### Bug Fixes
+
+- users without project/read grant should now be able to run instructions ([bce959d](https://github.com/sanity-io/assist/commit/bce959d415841c7423ff134ecef5e8a83675421a))
+
 ## [1.2.2](https://github.com/sanity-io/assist/compare/v1.2.1...v1.2.2) (2023-10-04)
 
 ### Bug Fixes
