@@ -367,7 +367,7 @@ export const fieldInstructions = defineType({
 
 export const assistDocumentSchema = defineType({
   //NOTE: this is a document type. Using object here ensures it does not appear in structure menus
-  type: 'document',
+  type: 'object',
   //workaround for using object and not document
   ...({liveEdit: true} as any),
   name: assistDocumentTypeName,
