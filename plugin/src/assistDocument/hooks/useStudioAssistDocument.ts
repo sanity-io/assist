@@ -26,11 +26,13 @@ import {maxHistoryVisibilityMs} from '../../constants'
 interface UseAssistDocumentProps {
   documentId: string
   schemaType: ObjectSchemaType
+  initDoc?: boolean
 }
 
 export function useStudioAssistDocument({
   documentId,
   schemaType,
+  initDoc,
 }: UseAssistDocumentProps): StudioAssistDocument | undefined {
   const documentTypeName = schemaType.name
   const currentUser = useCurrentUser()
@@ -48,13 +50,17 @@ export function useStudioAssistDocument({
   const client = useClient({apiVersion: '2023-01-01'})
 
   useEffect(() => {
-    if (!assistDocument) {
-      client.createIfNotExists({
-        _id: assistDocumentId(documentTypeName),
-        _type: assistDocumentTypeName,
-      })
+    if (!assistDocument && initDoc) {
+      client
+        .createIfNotExists({
+          _id: assistDocumentId(documentTypeName),
+          _type: assistDocumentTypeName,
+        })
+        .catch((e) => {
+          // best effort
+        })
     }
-  }, [client, assistDocument, documentTypeName])
+  }, [client, assistDocument, documentTypeName, initDoc])
 
   return useMemo(() => {
     if (!assistDocument) {

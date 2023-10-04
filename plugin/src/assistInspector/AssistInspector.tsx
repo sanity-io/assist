@@ -213,7 +213,7 @@ export function AssistInspector(props: DocumentInspectorProps) {
 
   const aiDocId = assistDocumentId(documentType)
 
-  const assistDocument = useStudioAssistDocument({documentId, schemaType})
+  const assistDocument = useStudioAssistDocument({documentId, schemaType, initDoc: true})
   const assistField = assistDocument?.fields?.find((f) => f.path === typePath)
   const instruction = assistField?.instructions?.find((i) => i._key === instructionKey)
   const tasks = useMemo(

@@ -3,7 +3,7 @@ import {deskTool} from 'sanity/desk'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemas'
 import {codeInput} from '@sanity/code-input'
-import {dataset, pluginApiHost, projectId} from './env'
+import {apiHost, dataset, pluginApiHost, projectId} from './env'
 import {assist} from '../plugin/src'
 
 export default defineConfig({
@@ -12,6 +12,7 @@ export default defineConfig({
 
   projectId,
   dataset,
+  apiHost,
 
   plugins: [
     deskTool(),

@@ -28,7 +28,7 @@ import {
 import {BackToInstructionListLink} from './instruction/BackToInstructionsLink'
 import {useAiPaneRouter} from '../../assistInspector/helpers'
 import {SelectedFieldContextProvider, SelectedFieldContextValue} from './SelectedFieldContext'
-import {Stack} from '@sanity/ui'
+import {Card, Stack, Text} from '@sanity/ui'
 import {documentTypeFromAiDocumentId} from '../../helpers/ids'
 
 const EMPTY_FIELDS: AssistField[] = []
@@ -36,6 +36,16 @@ const EMPTY_FIELDS: AssistField[] = []
 export const TypePathContext = createContext<string | undefined>(undefined)
 
 export function AssistDocumentForm(props: ObjectInputProps) {
+  if (props.readOnly) {
+    return (
+      <Card border tone="caution" padding={2}>
+        <Text size={1}> You do not have sufficient permissions to manage instructions.</Text>
+      </Card>
+    )
+  }
+  return <AssistDocumentFormEditable {...props} />
+}
+function AssistDocumentFormEditable(props: ObjectInputProps) {
   const {onChange} = props
   const value = props.value as AssistDocument | undefined
   const id = value?._id

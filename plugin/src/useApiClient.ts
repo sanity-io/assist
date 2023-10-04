@@ -26,7 +26,6 @@ export interface InstructStatus {
 }
 
 const basePath = '/assist/tasks/instruction'
-const editorialAiFieldActionFeature = 'editorialAiFieldActions'
 
 export function useApiClient(customApiClient?: (defaultClient: SanityClient) => SanityClient) {
   const client = useClient({apiVersion: '2023-06-05'})
@@ -91,33 +90,22 @@ export function useGenerateCaption(apiClient: SanityClient) {
 
 export function useGetInstructStatus(apiClient: SanityClient) {
   const [loading, setLoading] = useState(true)
-  const projectClient = useClient({apiVersion: '2023-06-05'})
 
   const getInstructStatus = useCallback(async () => {
     setLoading(true)
 
     const projectId = apiClient.config().projectId
     try {
-      const features = await projectClient.request<string[]>({
-        method: 'GET',
-        url: `/projects/${projectId}/features`,
-      })
-
-      const enabled = features.some((f) => f === editorialAiFieldActionFeature)
-
-      const status = await apiClient.request<Omit<InstructStatus, 'enabled'>>({
+      const status = await apiClient.request<InstructStatus>({
         method: 'GET',
         url: `${basePath}/${apiClient.config().dataset}/status?projectId=${projectId}`,
       })
 
-      return {
-        ...status,
-        enabled,
-      }
+      return status
     } finally {
       setLoading(false)
     }
-  }, [setLoading, apiClient, projectClient])
+  }, [setLoading, apiClient])
 
   return {
     loading,
