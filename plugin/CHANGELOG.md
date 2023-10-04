@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.4](https://github.com/sanity-io/assist/compare/v1.2.3...v1.2.4) (2023-10-04)
+
+### Bug Fixes
+
+- list options for string-arrays should now be respected when generating values ([4701ea6](https://github.com/sanity-io/assist/commit/4701ea625b5f216f2c37d7c453b79ebde1eac63c))
+
 ## [1.2.3](https://github.com/sanity-io/assist/compare/v1.2.2...v1.2.3) (2023-10-04)
 
 ### Bug Fixes
