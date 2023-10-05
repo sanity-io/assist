@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.5](https://github.com/sanity-io/assist/compare/v1.2.4...v1.2.5) (2023-10-05)
+
+### Bug Fixes
+
+- **docs:** captionField now supports field paths with . separator ([cf7d85b](https://github.com/sanity-io/assist/commit/cf7d85b5a4d16eba639c3b7dd53a521118a12eb6))
+
 ## [1.2.4](https://github.com/sanity-io/assist/compare/v1.2.3...v1.2.4) (2023-10-04)
 
 ### Bug Fixes
