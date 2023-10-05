@@ -394,14 +394,27 @@ export const mockArticle = defineType({
       title: 'Image (inline type)',
       fields: [
         defineField({
-          type: 'string',
-          name: 'caption',
-          title: 'Caption',
+          type: 'object',
+          name: 'wrapper',
+          title: 'Wrapper',
+          fields: [
+            defineField({
+              type: 'object',
+              name: 'wrapper',
+              title: 'Wrapper',
+              fields: [
+                defineField({
+                  type: 'string',
+                  name: 'caption',
+                  title: 'Caption',
+                }),
+              ],
+            }),
+          ],
         }),
       ],
       options: {
-        imagePromptField: 'caption',
-        captionField: 'caption',
+        captionField: 'wrapper.wrapper.caption',
       },
     }),
     defineField({
