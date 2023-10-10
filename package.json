@@ -19,12 +19,12 @@
     "test": "npm run test --workspaces --if-present"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.6.3",
-    "@commitlint/config-conventional": "^17.6.3",
-    "eslint": "^8.41.0",
+    "@commitlint/cli": "^17.7.2",
+    "@commitlint/config-conventional": "^17.7.0",
+    "eslint": "^8.51.0",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.2",
+    "lint-staged": "^13.3.0",
     "prettier": "^2.8.8",
-    "prettier-plugin-packagejson": "^2.4.3"
+    "prettier-plugin-packagejson": "^2.4.6"
   }
 }
