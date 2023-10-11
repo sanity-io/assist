@@ -83,7 +83,7 @@ function getBaseFields(
           imagePromptField: imagePromptField,
         }
       : undefined,
-    values: type?.options?.list
+    values: Array.isArray(type?.options?.list)
       ? type?.options?.list.map((v: string | {value: string; title: string}) =>
           typeof v === 'string' ? v : v.value ?? `${v.title}`
         )
