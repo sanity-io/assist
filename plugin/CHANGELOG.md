@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.7](https://github.com/sanity-io/assist/compare/v1.2.6...v1.2.7) (2023-10-11)
+
+### Bug Fixes
+
+- don't try to serialize list values if list is not an array ([#11](https://github.com/sanity-io/assist/issues/11)) ([e135df4](https://github.com/sanity-io/assist/commit/e135df410daa4d21e36a2fa24c867faa9dadca1c))
+
 ## [1.2.6](https://github.com/sanity-io/assist/compare/v1.2.5...v1.2.6) (2023-10-10)
 
 ### Bug Fixes
