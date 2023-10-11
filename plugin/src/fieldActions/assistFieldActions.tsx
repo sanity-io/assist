@@ -23,6 +23,7 @@ import {PrivateIcon} from './PrivateIcon'
 import {generateCaptionsActions} from './generateCaptionActions'
 import {useDocumentPane} from 'sanity/desk'
 import {useSelectedField, useTypePath} from '../assistInspector/helpers'
+import {isSchemaAssistEnabled} from '../helpers/assistSupported'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -69,7 +70,10 @@ export const assistFieldActions: DocumentFieldAction = {
     })
 
     const isSelectable = !!useSelectedField(documentSchemaType, typePath)
-    const assistSupported = useAssistSupported(props.path, schemaType) && isSelectable
+    const assistSupported =
+      useAssistSupported(props.path, schemaType) &&
+      isSelectable &&
+      isSchemaAssistEnabled(documentSchemaType)
 
     const fieldAssist = useMemo(
       () =>

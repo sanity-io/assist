@@ -23,6 +23,28 @@ const mockStudioTypes = [
 ]
 
 describe('serializeSchema', () => {
+  test('should not serialize excluded document schema', () => {
+    const schema = Schema.compile({
+      name: 'test',
+      types: [
+        defineType({
+          type: 'document',
+          name: 'article',
+          fields: [{type: 'string', name: 'title'}],
+          options: {
+            aiWritingAssistance: {
+              exclude: true,
+            },
+          },
+        }),
+      ],
+    })
+
+    const serializedTypes = serializeSchema(schema, {leanFormat: true})
+
+    expect(serializedTypes).toEqual([])
+  })
+
   test('should serialize simple schema', () => {
     const schema = Schema.compile({
       name: 'test',

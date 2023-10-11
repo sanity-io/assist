@@ -50,7 +50,10 @@ export const assist = definePlugin<AssistPluginConfig | void>((config) => {
       },
       unstable_languageFilter: (prev, {documentId, schema, schemaType}) => {
         const docSchema = schema.get(schemaType) as ObjectSchemaType
-        return [...prev, createAssistDocumentPresence(documentId, docSchema)]
+        if (isSchemaAssistEnabled(docSchema)) {
+          return [...prev, createAssistDocumentPresence(documentId, docSchema)]
+        }
+        return prev
       },
     },
 

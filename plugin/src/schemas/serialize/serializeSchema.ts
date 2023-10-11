@@ -29,6 +29,7 @@ export function serializeSchema(schema: Schema, options?: Options): SerializedSc
     .filter((t) => !(hiddenTypes.includes(t) || t.startsWith('sanity.')))
     .map((t) => schema.get(t))
     .filter((t): t is SchemaType => !!t)
+    .filter((t) => isAssistSupported(t))
     .filter((t) => !t.hidden && !t.readOnly)
     .map((t) => getSchemaStub(t, schema, options))
     .filter((t) => {
