@@ -1,4 +1,4 @@
-import {definePlugin, ObjectSchemaType} from 'sanity'
+import {definePlugin, isObjectSchemaType} from 'sanity'
 import {assistInspector} from './assistInspector'
 import {AssistFieldWrapper} from './assistFormComponents/AssistField'
 import {AssistLayout} from './assistLayout/AssistLayout'
@@ -49,8 +49,8 @@ export const assist = definePlugin<AssistPluginConfig | void>((config) => {
         return [...prev, assistFieldActions]
       },
       unstable_languageFilter: (prev, {documentId, schema, schemaType}) => {
-        const docSchema = schema.get(schemaType) as ObjectSchemaType
-        if (isSchemaAssistEnabled(docSchema)) {
+        const docSchema = schema.get(schemaType)
+        if (docSchema && isObjectSchemaType(docSchema) && isSchemaAssistEnabled(docSchema)) {
           return [...prev, createAssistDocumentPresence(documentId, docSchema)]
         }
         return prev
