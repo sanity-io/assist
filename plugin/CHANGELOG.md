@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.9](https://github.com/sanity-io/assist/compare/v1.2.8...v1.2.9) (2023-10-12)
+
+### Bug Fixes
+
+- unstable_languageFilter should no longer crash when processing unknown schemaType ([a1eb2f9](https://github.com/sanity-io/assist/commit/a1eb2f94f1d5fc0d34b204810c013a425f364d5b))
+
 ## [1.2.8](https://github.com/sanity-io/assist/compare/v1.2.7...v1.2.8) (2023-10-11)
 
 ### Bug Fixes
