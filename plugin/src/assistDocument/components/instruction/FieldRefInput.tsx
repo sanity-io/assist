@@ -24,9 +24,14 @@ export function FieldRefPathInput(props: StringInputProps) {
       if (!field.key.includes('|') || !typePath) {
         return true
       }
-      const dotSplit = typePath.split('.')
-      const base = dotSplit.slice(0, dotSplit.length - 1).join('.')
-      return field.key.includes(base)
+      if (field.key.includes('|') && !typePath.includes('|')) {
+        return false
+      }
+
+      const fieldSegments = field.key.split('.')
+      const lastArrayItemIndex = fieldSegments.findLastIndex((s) => s.includes('|'))
+      const mustStartWith = fieldSegments.slice(0, lastArrayItemIndex + 1).join('.')
+      return typePath.startsWith(mustStartWith)
     },
     [typePath]
   )
