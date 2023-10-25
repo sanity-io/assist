@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.10](https://github.com/sanity-io/assist/compare/v1.2.9...v1.2.10) (2023-10-25)
+
+### Bug Fixes
+
+- field reference autocomplete should no longer include illegal fields ([e4849db](https://github.com/sanity-io/assist/commit/e4849db93f4ca7c3fab539e883b1acfe7692c233))
+
 ## [1.2.9](https://github.com/sanity-io/assist/compare/v1.2.8...v1.2.9) (2023-10-12)
 
 ### Bug Fixes
