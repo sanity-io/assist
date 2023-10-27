@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.11](https://github.com/sanity-io/assist/compare/v1.2.10...v1.2.11) (2023-10-27)
+
+### Bug Fixes
+
+- image caption will now wait for document to sync before starting generation ([a70a425](https://github.com/sanity-io/assist/commit/a70a425f9bf15997034aa136cd6d9642f00758a7))
+
 ## [1.2.10](https://github.com/sanity-io/assist/compare/v1.2.9...v1.2.10) (2023-10-25)
 
 ### Bug Fixes
