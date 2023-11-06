@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.13](https://github.com/sanity-io/assist/compare/v1.2.12...v1.2.13) (2023-11-06)
+
+### Bug Fixes
+
+- remove comments from instruction fields ([d1b8284](https://github.com/sanity-io/assist/commit/d1b8284ff8899c30c7385e3a546db057311dd0e1))
+
 ## [1.2.12](https://github.com/sanity-io/assist/compare/v1.2.11...v1.2.12) (2023-11-02)
 
 ### Bug Fixes
