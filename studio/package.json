@@ -24,6 +24,7 @@
   "dependencies": {
     "@portabletext/types": "^2.0.2",
     "@sanity/code-input": "^4.1.1",
+    "@sanity/embeddings-index-ui": "^1.1.8",
     "@sanity/icons": "^2.4.0",
     "@sanity/ui": "^1.6.0",
     "@sanity/vision": "^3.16.1",
@@ -31,7 +32,7 @@
     "react-animate-height": "^3.1.1",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
-    "sanity": "^3.16.7",
+    "sanity": "^3.19.1",
     "styled-components": "^5.2.0"
   },
   "devDependencies": {
