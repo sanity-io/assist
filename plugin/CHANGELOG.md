@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.15](https://github.com/sanity-io/assist/compare/v1.2.14...v1.2.15) (2023-11-16)
+
+### Bug Fixes
+
+- **deps:** Update dependency styled-components to v6 ([#12](https://github.com/sanity-io/assist/issues/12)) ([dbff139](https://github.com/sanity-io/assist/commit/dbff1398162084527b10fffbee2de9c7972c6e29))
+
 ## [1.2.14](https://github.com/sanity-io/assist/compare/v1.2.13...v1.2.14) (2023-11-16)
 
 ### Bug Fixes
