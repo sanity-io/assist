@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.14](https://github.com/sanity-io/assist/compare/v1.2.13...v1.2.14) (2023-11-16)
+
+### Bug Fixes
+
+- instructions on fields with explicit exclude: false no longer fails with an error ([4fd892e](https://github.com/sanity-io/assist/commit/4fd892ec146afb71161f047ed95129cfc43d0246))
+
 ## [1.2.13](https://github.com/sanity-io/assist/compare/v1.2.12...v1.2.13) (2023-11-06)
 
 ### Bug Fixes
