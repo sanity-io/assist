@@ -29,7 +29,8 @@ export function serializeSchema(schema: Schema, options?: Options): SerializedSc
     .filter((t) => !(hiddenTypes.includes(t) || t.startsWith('sanity.')))
     .map((t) => schema.get(t))
     .filter((t): t is SchemaType => !!t)
-    .filter((t) => isAssistSupported(t))
+    // because a field can override exclude at the type level, we have to also serialize excluded types
+    // so don't do this: .filter((t) => isAssistSupported(t))
     .filter((t) => !t.hidden && !t.readOnly)
     .map((t) => getSchemaStub(t, schema, options))
     .filter((t) => {

@@ -20,6 +20,17 @@ export const articleImage = defineType({
   },
 })
 
+export const excludedTypeString = defineType({
+  type: 'string',
+  name: 'excludedTypeString',
+  title: 'Excluded string type',
+  options: {
+    aiWritingAssistance: {
+      exclude: true,
+    },
+  },
+})
+
 export const factBox = defineType({
   type: 'object',
   name: 'factBox',
@@ -210,15 +221,16 @@ export const mockArticle = defineType({
   type: 'document',
   name: 'mockArticle',
   title: 'Article',
-  /*  components: {
-    input: ForceSummarizationButton,
-  },*/
   fieldsets: [{name: 'group', title: 'SEO', options: {columns: 1}}],
-  /*  groups: [{name: 'seo', title: 'SEO'}],*/
   preview: {
     select: {
       title: 'title',
       subtitle: 'lede',
+    },
+  },
+  options: {
+    aiWritingAssistance: {
+      exclude: false,
     },
   },
   fields: [
@@ -226,6 +238,16 @@ export const mockArticle = defineType({
       type: 'string',
       name: 'title',
       title: 'Title',
+    }),
+    defineField({
+      type: 'excludedTypeString',
+      name: 'excludedTypeString',
+      title: 'Overridden Excluded type string',
+      options: {
+        aiWritingAssistance: {
+          exclude: false,
+        },
+      },
     }),
     defineField({
       type: 'string',
@@ -256,11 +278,18 @@ export const mockArticle = defineType({
       },
     }),
     defineField({
+      type: 'array',
+      name: 'gallery',
+      title: 'Gallery',
+      of: [{type: articleImage.name}],
+    }),
+    defineField({
       name: 'body',
       type: 'array',
       of: [
         defineArrayMember({
           type: 'block',
+          of: [{type: todo.name}],
           marks: {
             decorators: [
               {title: 'Bold', value: 'strong'},
@@ -330,7 +359,7 @@ export const mockArticle = defineType({
     defineField({
       type: 'reference',
       name: 'ref',
-      title: 'Ref',
+      title: 'Article reference',
       to: [{type: 'mockArticle'}],
     }),
     defineField({

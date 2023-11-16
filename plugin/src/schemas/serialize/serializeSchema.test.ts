@@ -23,7 +23,7 @@ const mockStudioTypes = [
 ]
 
 describe('serializeSchema', () => {
-  test('should not serialize excluded document schema', () => {
+  test('should serialize excluded document schema to support exclude: false overrides at the field level', () => {
     const schema = Schema.compile({
       name: 'test',
       types: [
@@ -42,7 +42,20 @@ describe('serializeSchema', () => {
 
     const serializedTypes = serializeSchema(schema, {leanFormat: true})
 
-    expect(serializedTypes).toEqual([])
+    expect(serializedTypes).toEqual([
+      {
+        fields: [
+          {
+            name: 'title',
+            title: 'Title',
+            type: 'string',
+          },
+        ],
+        name: 'article',
+        title: 'Article',
+        type: 'document',
+      },
+    ])
   })
 
   test('should serialize simple schema', () => {

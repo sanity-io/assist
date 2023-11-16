@@ -45,8 +45,12 @@ export const assist = definePlugin<AssistPluginConfig | void>((config) => {
         }
         return prev
       },
-      unstable_fieldActions: (prev) => {
-        return [...prev, assistFieldActions]
+      unstable_fieldActions: (prev, {documentType, schema}) => {
+        const docSchema = schema.get(documentType)
+        if (docSchema && isSchemaAssistEnabled(docSchema)) {
+          return [...prev, assistFieldActions]
+        }
+        return prev
       },
       unstable_languageFilter: (prev, {documentId, schema, schemaType}) => {
         const docSchema = schema.get(schemaType)
