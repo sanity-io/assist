@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.16](https://github.com/sanity-io/assist/compare/v1.2.15...v1.2.16) (2023-12-20)
+
+### Bug Fixes
+
+- support for sanity 3.23 ([8d971df](https://github.com/sanity-io/assist/commit/8d971dfc06aaaf0d441f8705ed22e94023836ffe))
+
 ## [1.2.15](https://github.com/sanity-io/assist/compare/v1.2.14...v1.2.15) (2023-11-16)
 
 ### Bug Fixes
