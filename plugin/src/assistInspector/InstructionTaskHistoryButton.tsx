@@ -167,7 +167,7 @@ export function InstructionTaskHistoryButton(props: InstructionTaskHistoryButton
   )
 }
 
-const TASK_STATUS_BUTTON_TOOLTIP_PROPS: StatusButtonProps['tooltip'] = {
+const TASK_STATUS_BUTTON_TOOLTIP_PROPS: StatusButtonProps['tooltipProps'] = {
   placement: 'top',
 }
 
@@ -190,11 +190,10 @@ const TaskStatusButton = forwardRef(function TaskStatusButton(
       mode="bleed"
       onClick={onClick}
       tone={hasErrors ? 'critical' : undefined}
-      fontSize={1}
       disabled={disabled}
       ref={ref}
       selected={selected}
-      tooltip={TASK_STATUS_BUTTON_TOOLTIP_PROPS}
+      tooltipProps={TASK_STATUS_BUTTON_TOOLTIP_PROPS}
     />
   )
 })

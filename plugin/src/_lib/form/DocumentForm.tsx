@@ -148,7 +148,7 @@ export function DocumentForm(
             readOnly={formState.readOnly}
             schemaType={formState.schemaType}
             validation={validation}
-            value={formState.value}
+            value={formState.value as any}
           />
         )
       ) : (

@@ -88,7 +88,7 @@ export function AssistAvatar(props: {state?: 'present' | 'active'}) {
       </Outline>
       <IconDisc>
         <Text as="span" size={0} style={{color: 'inherit'}}>
-          <SparklesIcon />
+          <SparklesIcon style={{color: 'inherit'}} />
         </Text>
       </IconDisc>
     </Root>
