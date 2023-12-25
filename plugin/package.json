@@ -57,7 +57,7 @@
     "@sanity/icons": "^2.4.0",
     "@sanity/incompatible-plugin": "^1.0.4",
     "@sanity/ui": "^2.0.0-beta.13",
-    "date-fns": "^2.30.0",
+    "date-fns": "^3.0.0",
     "react-fast-compare": "^3.2.1",
     "react-is": "^18.2.0",
     "rxjs": "^7.8.0",
