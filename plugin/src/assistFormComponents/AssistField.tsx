@@ -46,14 +46,15 @@ export function AssistField(props: FieldProps) {
   )
 
   const {showOnboarding, dismissOnboarding} = useOnboardingFeature(fieldOnboardingKey)
+  const singlePresence = presence[0]
 
   const actions = (
     <Flex gap={2} align="center" justify="space-between">
-      {presence.map((pre) => (
-        <Box key={pre.user.id}>
-          <AiFieldPresence key={pre.lastActiveAt} presence={pre} />
+      {singlePresence && (
+        <Box>
+          <AiFieldPresence presence={singlePresence} />
         </Box>
-      ))}
+      )}
 
       {isFirstAssisted && showOnboarding && <AssistOnboardingPopover dismiss={dismissOnboarding} />}
     </Flex>

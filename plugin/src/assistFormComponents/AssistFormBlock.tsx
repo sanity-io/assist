@@ -18,13 +18,12 @@ export function AssistFormBlock(props: BlockProps) {
     },
     [onChange, key]
   )
+  const singlePresence = presence[0]
   return (
     <ErrorWrapper onChange={localOnChange}>
       <Flex align="center" justify="space-between">
         <Box flex={1}>{props.renderDefault(props)}</Box>
-        {presence.map((pre) => (
-          <AiFieldPresence key={pre.lastActiveAt} presence={pre} />
-        ))}
+        {singlePresence && <AiFieldPresence presence={singlePresence} />}
       </Flex>
     </ErrorWrapper>
   )
