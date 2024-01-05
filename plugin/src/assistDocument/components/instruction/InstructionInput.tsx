@@ -8,14 +8,15 @@ export function InstructionInput(props: ObjectInputProps) {
     <Stack space={[4, 4, 4, 5]}>
       <NameField {...props} />
       <ShareField {...props} />
-      <PromptField {...props} />
+      <ObjectMember fieldName={'prompt'} {...props} />
+      <ObjectMember fieldName={'output'} {...props} />
     </Stack>
   )
 }
 
-function PromptField(props: ObjectInputProps) {
-  const promptMember = findFieldMember(props.members, 'prompt')
-  return promptMember ? <ObjectInputMember {...props} member={promptMember} /> : null
+function ObjectMember({fieldName, ...props}: ObjectInputProps & {fieldName: string}) {
+  const member = findFieldMember(props.members, fieldName)
+  return member ? <ObjectInputMember {...props} member={member} /> : null
 }
 
 const NONE: (FieldMember | FieldError)[] = []

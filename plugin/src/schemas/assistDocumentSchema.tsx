@@ -18,6 +18,8 @@ import {
   instructionContextTypeName,
   instructionTaskTypeName,
   instructionTypeName,
+  outputFieldTypeName,
+  outputTypeTypeName,
   promptTypeName,
   userInputTypeName,
 } from '../types'
@@ -37,6 +39,8 @@ import {PromptInput} from '../assistDocument/components/instruction/PromptInput'
 import {instructionGuideUrl} from '../constants'
 import {InstructionsArrayField} from '../assistDocument/components/InstructionsArrayField'
 import {getFieldRefsWithDocument} from '../assistInspector/helpers'
+import {InstructionOutputField} from '../assistDocument/components/instruction/InstructionOutputField'
+import {InstructionOutputInput} from '../assistDocument/components/instruction/InstructionOutputInput'
 
 export const fieldReference = defineType({
   type: 'object',
@@ -328,6 +332,41 @@ export const instruction = defineType({
       initialValue: (params, context) => {
         return context.currentUser?.id ?? ''
       },
+    }),
+    defineField({
+      type: 'array',
+      name: 'output',
+      title: 'Output filter',
+      components: {
+        input: InstructionOutputInput,
+        field: InstructionOutputField,
+      },
+      of: [
+        defineArrayMember({
+          type: 'object' as const,
+          name: outputFieldTypeName,
+          title: 'Output field',
+          fields: [
+            {
+              type: 'string',
+              name: 'path',
+              title: 'Path',
+            },
+          ],
+        }),
+        defineArrayMember({
+          type: 'object' as const,
+          name: outputTypeTypeName,
+          title: 'Output type',
+          fields: [
+            {
+              type: 'string',
+              name: 'type',
+              title: 'Type',
+            },
+          ],
+        }),
+      ],
     }),
   ],
 })

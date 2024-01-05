@@ -1,4 +1,4 @@
-import {SanityDocument, ValidationMarker} from 'sanity'
+import {SanityDocument} from 'sanity'
 import {PortableTextBlock, PortableTextMarkDefinition, PortableTextSpan} from '@portabletext/types'
 
 //id prefixes
@@ -25,6 +25,9 @@ export const fieldPresenceTypeName = 'sanity.assist.instructionTask.presence' as
 
 export const assistSerializedTypeName = 'sanity.assist.serialized.type' as const
 export const assistSerializedFieldTypeName = 'sanity.assist.serialized.field' as const
+
+export const outputFieldTypeName = 'sanity.assist.output.field' as const
+export const outputTypeTypeName = 'sanity.assist.output.type' as const
 
 //url params
 export const inspectParam = 'inspect' as const
@@ -149,10 +152,10 @@ export interface StudioInstruction {
   userId?: string
   title?: string
   placeholder?: string
+  output?: (OutputFieldItem | OutputTypeItem)[]
 
   //added after query / synthetic fields
   tasks?: InstructionTask[]
-  validation?: ValidationMarker[]
 }
 
 export interface AssistTasksStatus {
@@ -165,4 +168,20 @@ export interface AssistInspectorRouteParams {
   [inspectParam]?: string
   [fieldPathParam]?: string
   [instructionParam]?: string
+}
+
+export interface OutputFieldItem {
+  _type: typeof outputFieldTypeName
+  _key: string
+  //path relative to the field the instruction is for (same as _key)
+  relativePath?: string
+}
+
+export interface OutputTypeItem {
+  _type: typeof outputTypeTypeName
+  _key: string
+  /* array item type name */
+  type?: string
+  //path relative to the array-field the instruction is for, can be empty string (the array itself, same as _key)
+  relativePath?: string
 }
