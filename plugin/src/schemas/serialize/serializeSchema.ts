@@ -2,6 +2,7 @@ import {
   ArraySchemaType,
   ImageOptions,
   ObjectSchemaType,
+  ReferenceOptions,
   ReferenceSchemaType,
   Schema,
   SchemaType,
@@ -78,13 +79,12 @@ function getBaseFields(
   typeName: string,
   options: Options | undefined
 ) {
-  const imagePromptField = (type.options as ImageOptions)?.imagePromptField
+  const schemaOptions = removeUndef({
+    imagePromptField: (type.options as ImageOptions)?.imagePromptField,
+    embeddingsIndex: (type.options as ReferenceOptions)?.aiWritingAssistance?.embeddingsIndex,
+  })
   return removeUndef({
-    options: imagePromptField
-      ? {
-          imagePromptField: imagePromptField,
-        }
-      : undefined,
+    options: Object.keys(schemaOptions).length ? schemaOptions : undefined,
     values: Array.isArray(type?.options?.list)
       ? type?.options?.list.map((v: string | {value: string; title: string}) =>
           typeof v === 'string' ? v : v.value ?? `${v.title}`

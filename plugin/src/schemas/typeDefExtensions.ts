@@ -22,7 +22,18 @@ declare module 'sanity' {
   }
   interface NumberOptions extends AssistOptions {}
   interface ObjectOptions extends AssistOptions {}
-  interface ReferenceBaseOptions extends AssistOptions {}
+  interface ReferenceBaseOptions {
+    aiWritingAssistance?: {
+      /** Set to true to disable assistance for this field or type */
+      exclude?: boolean
+
+      /**
+       * When set, the reference field will allow instructions to be added to it.
+       * Should be the name of the embeddings-index where assist will look for contextually relevant documents
+       * */
+      embeddingsIndex?: string
+    }
+  }
   interface SlugOptions extends AssistOptions {}
   interface StringOptions extends AssistOptions {}
   interface TextOptions extends AssistOptions {}

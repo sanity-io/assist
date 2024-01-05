@@ -32,6 +32,7 @@ export function FieldAutocomplete(props: FieldSelectorProps) {
     () =>
       fieldRefs
         .filter((field) => (filter ? filter(field) : true))
+        .filter((f) => !isType(f.schemaType, 'reference'))
         .map((field) => ({value: field.key, field})),
     [fieldRefs, filter]
   )
