@@ -18,6 +18,9 @@
   - [Unsupported types](#unsupported-types)
   - [Troubleshooting](#troubleshooting)
 - [Included document types](#included-document-types)
+- [Field and type filters](#field-and-type-filters)
+- [Other features](#other-features)
+  - [Caption generation](#caption-generation)
 - [License](#license)
 - [Develop \& test](#develop--test)
   - [Release new version](#release-new-version)
@@ -191,6 +194,8 @@ If you have a very large schema (that is, many document and field types), it can
 
 We recommend excluding any and all types which rarely would benefit from automated workflows. A quick win is typically to exclude array types. It can be a good idea to exclude most non-block types from Portable Text arrays. This will ensure that the Sanity Assist outputs mostly formatted text.
 
+It is also possible to exclude fields/types when creating an instruction. See [Field and type filters](#field-and-type-filters) for more. 
+
 ## Included document types
 
 This plugin adds an `AI Context` document type. 
@@ -205,6 +210,18 @@ import {contextDocumentTypeName} from '@sanity/assist'
 // put into structure in structure  
 S.documentTypeListItem(contextDocumentTypeName)
 ```
+
+## Field and type filters
+
+When creating instructions for a document, objects fields, array fields or portable text fields, you can explicitly control what will be visited by AI Assist.
+By default, all fields and types configured for assist will be included. 
+
+Opting out fields/types per instruction is done using the respective field/type filter checkboxes under the instruction.
+When using these filters, it is not necessary to tell Assist what to include in the instruction text itself.  
+
+Note that if the schema targeted by the instruction changes, the following behavior applies:
+* instructions that included all fields or types will automatically also include the new fields or types
+* instructions that have excluded one or more fields or types, will NOT include the new fields or types
 
 ## Caveats
 
