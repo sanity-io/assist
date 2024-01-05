@@ -54,9 +54,9 @@
     "release": "semantic-release"
   },
   "dependencies": {
-    "@sanity/icons": "^2.4.0",
+    "@sanity/icons": "^2.8.0",
     "@sanity/incompatible-plugin": "^1.0.4",
-    "@sanity/ui": "^2.0.0-beta.13",
+    "@sanity/ui": "^2.0.0-beta.14",
     "date-fns": "^2.30.0",
     "react-fast-compare": "^3.2.1",
     "react-is": "^18.2.0",
@@ -85,7 +85,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rimraf": "^5.0.5",
-    "sanity": "^3.23.1",
+    "sanity": "^3.23.4",
     "semantic-release": "^21.1.2",
     "styled-components": "^6.1.1",
     "typescript": "^5.3.3",
