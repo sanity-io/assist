@@ -3,24 +3,14 @@ import {
   assistDocumentTypeName,
   AssistTasksStatus,
   assistTasksStatusTypeName,
-  FieldRef,
-  fieldReferenceTypeName,
   InstructionTask,
   StudioAssistDocument,
   StudioAssistField,
   StudioInstruction,
 } from '../../types'
-import {
-  ObjectSchemaType,
-  pathToString,
-  typed,
-  useClient,
-  useCurrentUser,
-  useValidationStatus,
-  ValidationMarker,
-} from 'sanity'
+import {ObjectSchemaType, typed, useClient, useCurrentUser} from 'sanity'
 import {useDocumentState} from './useDocumentState'
-import {assistDocumentId, assistTasksStatusId, publicId} from '../../helpers/ids'
+import {assistDocumentId, assistTasksStatusId} from '../../helpers/ids'
 import {maxHistoryVisibilityMs} from '../../constants'
 
 interface UseAssistDocumentProps {
@@ -37,7 +27,6 @@ export function useStudioAssistDocument({
   const documentTypeName = schemaType.name
   const currentUser = useCurrentUser()
 
-  const validation = useValidationStatus(publicId(documentId), schemaType.name).validation
   const assistDocument = useDocumentState<StudioAssistDocument>(
     assistDocumentId(documentTypeName),
     assistDocumentTypeName
@@ -73,7 +62,7 @@ export function useStudioAssistDocument({
         tasks: tasks.filter((task) => task.path === assistField.path),
         instructions: assistField.instructions
           ?.filter((p) => !p.userId || p.userId === currentUser?.id)
-          .map((instruction) => asStudioInstruction(instruction, tasks, validation)),
+          .map((instruction) => asStudioInstruction(instruction, tasks)),
       }
     })
     return typed<StudioAssistDocument>({
@@ -89,23 +78,13 @@ export function useStudioAssistDocument({
       }),
       fields: fields,
     })
-  }, [assistDocument, assistTasksStatus, currentUser, validation])
+  }, [assistDocument, assistTasksStatus, currentUser])
 }
 
 function asStudioInstruction(
   instruction: StudioInstruction,
-  run: InstructionTask[],
-  validation: ValidationMarker[]
+  run: InstructionTask[]
 ): StudioInstruction {
-  const errors = validation.filter((marker) => marker.level === 'error')
-
-  const fieldRefs: FieldRef[] = (instruction?.prompt ?? []).flatMap((block) => {
-    if (block._type === 'block') {
-      return block.children.filter((c): c is FieldRef => c._type === fieldReferenceTypeName)
-    }
-    return []
-  })
-
   return {
     ...instruction,
     tasks: run
@@ -115,11 +94,5 @@ function asStudioInstruction(
           task.started &&
           new Date().getTime() - new Date(task.started).getTime() < maxHistoryVisibilityMs
       ),
-    validation: errors.filter((marker) =>
-      fieldRefs
-        .map((r) => r.path)
-        .filter((p): p is string => !!p)
-        .find((path) => pathToString(marker.path) === path)
-    ),
   }
 }
