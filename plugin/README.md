@@ -16,6 +16,7 @@
   - [Disable for a field](#disable-for-a-field)
   - [Disable for an array type](#disable-for-an-array-type)
   - [Unsupported types](#unsupported-types)
+  - [Reference support](#reference-support)
   - [Troubleshooting](#troubleshooting)
 - [Included document types](#included-document-types)
 - [Field and type filters](#field-and-type-filters)
@@ -170,13 +171,13 @@ defineType({
 
 The following types are not supported, and behave as excluded types:
 * [Number](https://www.sanity.io/docs/number-type)
-* [Reference](https://www.sanity.io/docs/reference-type)
 * [Slug](https://www.sanity.io/docs/slug-type)
 * [Url](https://www.sanity.io/docs/url-type)
 * [Date](https://www.sanity.io/docs/date-type)
 * [Datetime](https://www.sanity.io/docs/datetime-type)
 * [Image](https://www.sanity.io/docs/image-type) (supported when image has custom fields)
 * [File](https://www.sanity.io/docs/file-type) (never supported, even when file has custom fields)
+* [Reference](https://www.sanity.io/docs/reference-type) (supported when configured with embeddingsIndex)
 
 Types and fields with `hidden` or `readonly` with a truthy value (`true` or `function`) are not supported.
 (Hidden and readOnly fields can be referenced in instructions still)
@@ -185,6 +186,44 @@ Fields with these types will not be changed by the assistant, do not have AI Ass
 
 Objects where all fields are excluded or unsupported and arrays where all member types are excluded or unsupported
 will also be excluded.
+
+### Reference support
+
+#### Create an Embeddings-index
+To enable AI assist for references, first, your project must have an existing [embeddings-index](https://www.sanity.io/docs/embeddings-index-api-overview)
+with the documents it should be able to reference.
+
+You can manage your indexes directly in the studio using the [Embeddings Index Dashboard plugin](https://github.com/sanity-io/embeddings-index-ui#embeddings-index-api-dashboard-for-sanity-studio).
+
+#### Set schema options
+Set `options.aiWritingAssistance.embeddingsIndex` for reference fields/types you want to enable reference instructions for. 
+Reference fields with this options set can have instructions attached to them, and will be visited when running instructions for object fields and arrays.
+
+AI assist will use the embeddings-index, filtered by the types allowed by the reference to look up contextually relevant references.
+For arrays or portable text fields with references, one more references can be added. Use the instruction text to control this.
+
+Example:
+
+```ts
+import {defineArrayMember} from 'sanity'
+
+defineField({
+  type: 'reference',
+  name: 'articleReference',
+  title: 'Article referene',
+  to: [ { type: 'article'} ],
+  options: {
+    aiWritingAssistance: {
+      embeddingsIndex: 'article-index'
+    },
+  },
+})
+```
+
+An example instruction attached to this field could be:
+`Given <Document field: Title> suggest a related article`
+
+Running it would use the `article-index` to find an related article based on the current document title.
 
 ### Troubleshooting
 
