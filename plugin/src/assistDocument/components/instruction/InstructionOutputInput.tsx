@@ -190,7 +190,7 @@ function Selectable({
   onChange: (checked: boolean, value: string) => void
 }) {
   const checked = !arrayValue?.length || !!arrayValue?.find((v) => v._key === value)
-  const handleChange = useCallback(() => onChange(checked, value), [checked, value])
+  const handleChange = useCallback(() => onChange(checked, value), [onChange, checked, value])
 
   return (
     <Flex gap={2} align="flex-start">

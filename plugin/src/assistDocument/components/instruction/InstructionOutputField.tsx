@@ -40,6 +40,6 @@ function EnabledOutputField({
     onCollapse,
     collapsed: !open,
     level: 1,
-    title: isObjectSchemaType(fieldSchema) ? 'Field filter' : 'Type filter',
+    title: isObjectSchemaType(fieldSchema) ? 'Allowed fields' : 'Allowed types',
   })
 }
