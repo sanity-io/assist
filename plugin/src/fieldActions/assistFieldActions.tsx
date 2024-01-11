@@ -24,6 +24,7 @@ import {generateCaptionsActions} from './generateCaptionActions'
 import {useDocumentPane} from 'sanity/desk'
 import {useSelectedField, useTypePath} from '../assistInspector/helpers'
 import {isSchemaAssistEnabled} from '../helpers/assistSupported'
+import {translateActions} from './translateActions'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -47,6 +48,7 @@ export const assistFieldActions: DocumentFieldAction = {
       documentSchemaType,
       documentId,
       selectedPath,
+      assistableDocumentId,
     } =
       // document field actions do not have access to the document context
       // conditional hook _should_ be safe here since the logical path will be stable
@@ -89,7 +91,7 @@ export const assistFieldActions: DocumentFieldAction = {
     const isSelected = isInspectorOpen && isPathSelected
 
     const imageCaptionAction = generateCaptionsActions.useAction(props)
-
+    const translateAction = translateActions.useAction({...props, documentId: assistableDocumentId})
     const manageInstructions = useCallback(
       () =>
         isSelected
@@ -134,7 +136,7 @@ export const assistFieldActions: DocumentFieldAction = {
     )
 
     const runInstructionsGroup = useMemo(() => {
-      return instructions?.length || imageCaptionAction
+      return instructions?.length || imageCaptionAction || translateAction
         ? node({
             type: 'group',
             icon: () => null,
@@ -151,7 +153,7 @@ export const assistFieldActions: DocumentFieldAction = {
                 })
               ),
               imageCaptionAction,
-            ].filter(Boolean),
+            ].filter((a): a is DocumentFieldActionItem => !!a),
             expanded: true,
           })
         : undefined
@@ -163,6 +165,7 @@ export const assistFieldActions: DocumentFieldAction = {
       documentIsNew,
       assistSupported,
       imageCaptionAction,
+      translateAction,
     ])
 
     const instructionsLength = instructions?.length || 0
@@ -185,12 +188,14 @@ export const assistFieldActions: DocumentFieldAction = {
           type: 'group',
           icon: SparklesIcon,
           title: pluginTitleShort,
-          children: [runInstructionsGroup, assistSupported && manageInstructionsItem].filter(
-            (c): c is DocumentFieldActionItem | DocumentFieldActionGroup => !!c
-          ),
+          children: [
+            runInstructionsGroup,
+            translateAction,
+            assistSupported && manageInstructionsItem,
+          ].filter((c): c is DocumentFieldActionItem | DocumentFieldActionGroup => !!c),
           expanded: false,
           renderAsButton: true,
-          hidden: !assistSupported && !imageCaptionAction,
+          hidden: !assistSupported && !imageCaptionAction && !translateAction,
         }),
       [
         //documentIsNew,
@@ -198,6 +203,7 @@ export const assistFieldActions: DocumentFieldAction = {
         manageInstructionsItem,
         assistSupported,
         imageCaptionAction,
+        translateAction,
       ]
     )
 
@@ -216,7 +222,7 @@ export const assistFieldActions: DocumentFieldAction = {
     )
 
     // If there are no instructions, we don't want to render the group
-    if (instructionsLength === 0 && !imageCaptionAction) {
+    if (instructionsLength === 0 && !imageCaptionAction && !translateAction) {
       return emptyAction
     }
 

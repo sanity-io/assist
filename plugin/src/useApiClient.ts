@@ -3,6 +3,7 @@ import {useCallback, useMemo, useState} from 'react'
 import {serializeSchema} from './schemas/serialize/serializeSchema'
 import {useToast} from '@sanity/ui'
 import {SanityClient} from '@sanity/client'
+import {TranslationMap} from './translate/paths'
 
 export interface UserTextInstance {
   blockKey: string
@@ -32,6 +33,68 @@ export function useApiClient(customApiClient?: (defaultClient: SanityClient) => 
   return useMemo(
     () => (customApiClient ? customApiClient(client) : client),
     [client, customApiClient]
+  )
+}
+
+export function useTranslate(apiClient: SanityClient) {
+  const [loading, setLoading] = useState(false)
+  const user = useCurrentUser()
+  const schema = useSchema()
+  const types = useMemo(() => serializeSchema(schema, {leanFormat: true}), [schema])
+  const toast = useToast()
+
+  const translate = useCallback(
+    ({
+      documentId,
+      languagePath,
+      fieldLanguageMap,
+    }: {
+      documentId: string
+      languagePath?: string
+      fieldLanguageMap?: TranslationMap[]
+    }) => {
+      setLoading(true)
+
+      return apiClient
+        .request({
+          method: 'POST',
+          url: `/assist/tasks/translate/${apiClient.config().dataset}?projectId=${
+            apiClient.config().projectId
+          }`,
+          body: {
+            documentId,
+            types,
+            languagePath,
+            fieldLanguageMap,
+            userId: user?.id,
+          },
+        })
+        .catch((e) => {
+          toast.push({
+            status: 'error',
+            title: 'Translate failed',
+            description: e.message,
+          })
+          setLoading(false)
+          throw e
+        })
+        .finally(() => {
+          // adding some artificial delay here
+          // server responds with 201 then proceeds; we dont need to allow spamming the button
+          setTimeout(() => {
+            setLoading(false)
+          }, 2000)
+        })
+    },
+    [setLoading, apiClient, toast, user, types]
+  )
+
+  return useMemo(
+    () => ({
+      translate,
+      loading,
+    }),
+    [translate, loading]
   )
 }
 

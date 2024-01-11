@@ -9,6 +9,7 @@ import {StudioInstruction} from '../types'
 import {RunInstructionProvider} from './RunInstructionProvider'
 import {ThemeProvider} from '@sanity/ui'
 import {AlphaMigration} from './AlphaMigration'
+import {FieldTranslationProvider} from '../translate/FieldTranslationProvider'
 
 export interface AIStudioLayoutProps extends LayoutProps {
   config: AssistPluginConfig
@@ -26,12 +27,14 @@ export function AssistLayout(props: AIStudioLayoutProps) {
     <AiAssistanceConfigProvider config={props.config}>
       {migrate ? <AlphaMigration /> : null}
       <RunInstructionProvider>
-        <ConnectorsProvider onConnectorsChange={setConnectors}>
-          {props.renderDefault(props)}
-          <ThemeProvider tone="default">
-            <AssistConnectorsOverlay connectors={connectors} />
-          </ThemeProvider>
-        </ConnectorsProvider>
+        <FieldTranslationProvider>
+          <ConnectorsProvider onConnectorsChange={setConnectors}>
+            {props.renderDefault(props)}
+            <ThemeProvider tone="default">
+              <AssistConnectorsOverlay connectors={connectors} />
+            </ThemeProvider>
+          </ConnectorsProvider>
+        </FieldTranslationProvider>
       </RunInstructionProvider>
     </AiAssistanceConfigProvider>
   )
