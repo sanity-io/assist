@@ -15,8 +15,11 @@ import {createAssistDocumentPresence} from './presence/AssistDocumentPresence'
 import {isSchemaAssistEnabled} from './helpers/assistSupported'
 import {isImage} from './helpers/typeUtils'
 import {ImageContextProvider} from './components/ImageContext'
+import {TranslationConfig} from './translate/types'
 
 export interface AssistPluginConfig {
+  translate?: TranslationConfig
+
   /**
    * Set this to false to disable model migration from the alpha version of this plugin
    */
@@ -35,6 +38,9 @@ export const assist = definePlugin<AssistPluginConfig | void>((config) => {
 
     schema: {
       types: schemaTypes,
+    },
+    i18n: {
+      bundles: [{}],
     },
 
     document: {

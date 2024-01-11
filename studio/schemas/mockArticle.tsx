@@ -1,12 +1,280 @@
 import {defineArrayMember, defineField, defineType, PreviewProps} from 'sanity'
-import {ActivityIcon, ClipboardIcon, ErrorOutlineIcon, TrendUpwardIcon} from '@sanity/icons'
+import {
+  ActivityIcon,
+  BlockquoteIcon,
+  ClipboardIcon,
+  ErrorOutlineIcon,
+  ImageIcon,
+  TagIcon,
+  TrendUpwardIcon,
+  WarningOutlineIcon,
+} from '@sanity/icons'
 import {Stack, Text} from '@sanity/ui'
 import {dataset, projectId} from '../env'
+import {languages} from '../src/lang/languages'
+
+export const featureProduct = defineType({
+  name: 'featureProduct',
+  type: 'object',
+  title: 'Feature Product',
+  fields: [
+    defineField({
+      type: 'string',
+      name: 'title',
+      title: 'Title',
+    }),
+    defineField({
+      name: 'nested',
+      type: 'array',
+      title: 'PTE',
+      of: [
+        defineArrayMember({
+          type: 'block',
+        }),
+      ],
+    }),
+  ],
+})
+
+export const localizedPte = defineType({
+  name: 'localePte',
+  type: 'object',
+  title: 'PTE',
+  fields: languages.map((l) =>
+    defineField({
+      name: l.id,
+      type: 'array',
+      title: l.title,
+      of: [
+        defineArrayMember({
+          type: 'block',
+        }),
+      ],
+    })
+  ),
+})
+
+export const localeObject = defineType({
+  name: 'localeObject',
+  type: 'object',
+  title: 'Localized object',
+  fields: languages.map((l) =>
+    defineField({
+      name: l.id,
+      type: 'object',
+      title: l.title,
+      fields: [
+        defineField({
+          type: 'string',
+          name: 'title',
+          title: 'Title',
+        }),
+        defineField({
+          name: 'strings',
+          type: 'array',
+          title: 'String array',
+          of: [{type: 'string'}],
+        }),
+      ],
+    })
+  ),
+})
+
+export const languageArticle = defineType({
+  type: 'document',
+  name: 'languageArticle',
+  title: 'Multi language',
+  __experimental_formPreviewTitle: false,
+  preview: {
+    select: {
+      title: 'title',
+      subtitle: 'language',
+    },
+  },
+  fields: [
+    defineField({
+      type: 'string',
+      name: 'title',
+      title: 'Title',
+    }),
+    defineField({
+      type: 'string',
+      name: 'language',
+      title: 'Language',
+      options: {
+        list: ['Norwegian', 'German', 'English (US)', 'Spanish']
+          .map((v) => ({title: v, value: v}))
+          .sort(),
+      },
+    }),
+    defineField({
+      name: 'subtitle',
+      type: 'internationalizedArrayString',
+      title: 'Subtitle',
+    }),
+    defineField({
+      name: 'localePte',
+      type: localizedPte.name,
+      title: 'PTE',
+    }),
+    defineField({
+      name: 'localeObject',
+      type: localeObject.name,
+      title: 'Localized object',
+    }),
+    defineField({
+      name: 'featureProduct',
+      type: 'internationalizedArrayFeatureProduct',
+      title: 'Feature Product',
+      // featureProduct: [{_key: 'langId', title: string }]
+    }),
+    defineField({
+      type: 'image',
+      name: 'image',
+      title: 'Image',
+      fields: [
+        defineField({
+          type: 'string',
+          name: 'altText',
+          title: 'Alt text',
+        }),
+      ],
+      options: {
+        imagePromptField: 'altText',
+      },
+    }),
+    defineField({
+      type: 'array',
+      name: 'alternateTitles',
+      title: 'Alternate titles',
+      of: [{type: 'string'}],
+    }),
+    defineField({
+      name: 'description',
+      type: 'array',
+      title: 'Description',
+      of: [
+        defineArrayMember({
+          type: 'block',
+          marks: {
+            decorators: [
+              {title: 'Bold', value: 'strong'},
+              {title: 'Italic', value: 'em'},
+            ] as any,
+            annotations: [],
+          },
+          lists: [{value: 'bullet', title: 'Bullet'}],
+          styles: [{value: 'normal', title: 'Normal'}],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'body',
+      type: 'array',
+      title: 'Body',
+      of: [
+        defineArrayMember({
+          type: 'block',
+          marks: {
+            decorators: [
+              {title: 'Bold', value: 'strong'},
+              {title: 'Italic', value: 'em'},
+            ] as any,
+            annotations: [],
+          },
+        }),
+        defineArrayMember({
+          type: 'image',
+          name: 'image',
+          title: 'Image',
+          fields: [
+            defineField({
+              type: 'string',
+              name: 'altText',
+              title: 'Alt text',
+            }),
+          ],
+          options: {
+            imagePromptField: 'altText',
+          },
+        }),
+        defineArrayMember({
+          type: 'object',
+          name: 'callout',
+          title: 'Callout',
+          icon: WarningOutlineIcon,
+          preview: {
+            select: {
+              title: 'title',
+            },
+            prepare: ({title}) => {
+              return {
+                title,
+                subtitle: 'Callout',
+              }
+            },
+          },
+          fields: [
+            defineField({
+              type: 'string',
+              name: 'title',
+              title: 'Title',
+            }),
+            defineField({
+              type: 'array',
+              name: 'body',
+              title: 'Body',
+              of: [
+                defineArrayMember({
+                  type: 'block',
+                  marks: {
+                    decorators: [
+                      {title: 'Bold', value: 'strong'},
+                      {title: 'Italic', value: 'em'},
+                    ] as any,
+                    annotations: [],
+                  },
+                  lists: [{value: 'bullet', title: 'Bullet'}],
+                  styles: [{value: 'normal', title: 'Normal'}],
+                }),
+              ],
+            }),
+          ],
+        }),
+        defineArrayMember({
+          type: 'object',
+          name: 'quote',
+          title: 'Quote',
+          icon: BlockquoteIcon,
+          preview: {
+            select: {
+              subtitle: 'source',
+              title: 'text',
+            },
+          },
+          fields: [
+            defineField({
+              type: 'string',
+              name: 'source',
+              title: 'Source',
+            }),
+            defineField({
+              type: 'text',
+              name: 'text',
+              title: 'Text',
+            }),
+          ],
+        }),
+      ],
+    }),
+  ],
+})
 
 export const articleImage = defineType({
   type: 'image',
   name: 'articleImage',
   title: 'Image',
+  icon: ImageIcon,
   fields: [
     defineField({
       type: 'string',
@@ -220,12 +488,20 @@ export const seoObject = defineType({
 export const mockArticle = defineType({
   type: 'document',
   name: 'mockArticle',
+  __experimental_formPreviewTitle: false,
   title: 'Article',
   fieldsets: [{name: 'group', title: 'SEO', options: {columns: 1}}],
   preview: {
     select: {
       title: 'title',
       subtitle: 'lede',
+      lang: 'language',
+    },
+    prepare: ({title, subtitle, lang}) => {
+      return {
+        title,
+        subtitle: `${lang ? languages.find((l) => l.id === lang)?.title ?? lang : subtitle ?? ''}`,
+      }
     },
   },
   options: {
@@ -239,6 +515,58 @@ export const mockArticle = defineType({
       name: 'title',
       title: 'Title',
     }),
+    /*    defineField({
+      type: 'reference',
+      name: 'ref',
+      title: 'Article reference',
+      to: [{type: 'mockArticle'}],
+      options: {
+        aiWritingAssistance: {
+          embeddingsIndex: 'articles',
+        },
+      },
+    }),*/
+    defineField({
+      type: 'array',
+      name: 'categories',
+      title: 'Categories',
+      of: [
+        defineArrayMember({
+          type: 'reference',
+          to: [{type: 'category'}],
+          options: {
+            aiWritingAssistance: {
+              embeddingsIndex: 'Categories',
+            },
+          },
+        }),
+      ],
+    }),
+    defineField({
+      type: 'array',
+      name: 'refs',
+      title: 'Article references',
+      of: [
+        defineField({
+          type: 'reference',
+          name: 'ref',
+          title: 'Article reference',
+          to: [{type: 'mockArticle'}],
+          options: {
+            aiWritingAssistance: {
+              embeddingsIndex: 'articles',
+            },
+          },
+        }),
+      ],
+    }),
+    defineField({
+      name: 'language',
+      type: 'string',
+      readOnly: true,
+      hidden: true,
+    }),
+
     defineField({
       type: 'excludedTypeString',
       name: 'excludedTypeString',
@@ -247,14 +575,6 @@ export const mockArticle = defineType({
         aiWritingAssistance: {
           exclude: false,
         },
-      },
-    }),
-    defineField({
-      type: 'string',
-      name: 'language',
-      title: 'Language',
-      options: {
-        list: ['Norwegian', 'German', 'English (US)'],
       },
     }),
     defineField({
@@ -267,7 +587,6 @@ export const mockArticle = defineType({
       type: 'text',
       name: 'lede',
       title: 'Lede',
-      validation: (rule) => rule.required(),
     }),
     defineField({
       type: articleImage.name,
@@ -310,6 +629,17 @@ export const mockArticle = defineType({
           title: 'Detail',
           fields: [{name: 'title', title: 'Title', type: 'string'}],
         },
+        defineArrayMember({
+          type: 'reference',
+          name: 'ref',
+          title: 'Article reference',
+          to: [{type: 'mockArticle'}],
+          options: {
+            aiWritingAssistance: {
+              embeddingsIndex: 'articles',
+            },
+          },
+        }),
       ],
     }),
     defineField({
@@ -355,12 +685,6 @@ export const mockArticle = defineType({
       type: 'array',
       title: 'Numbers',
       of: [{type: 'number'}],
-    }),
-    defineField({
-      type: 'reference',
-      name: 'ref',
-      title: 'Article reference',
-      to: [{type: 'mockArticle'}],
     }),
     defineField({
       type: 'crossDatasetReference',
@@ -491,6 +815,19 @@ export const mockArticle = defineType({
           },
         ],
       },
+    }),
+  ],
+})
+
+export const category = defineType({
+  type: 'document',
+  name: 'category',
+  icon: TagIcon,
+  fields: [
+    defineField({
+      type: 'string',
+      name: 'title',
+      title: 'Title',
     }),
   ],
 })

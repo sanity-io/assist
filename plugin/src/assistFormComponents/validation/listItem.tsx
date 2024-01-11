@@ -47,9 +47,9 @@ export function ListItem(props: ValidationListItemProps) {
             {path}
           </StyledText>
         )}
-        {marker.item.message && (
+        {marker.item?.message && (
           <StyledText muted size={1} textOverflow={truncate ? 'ellipsis' : undefined}>
-            {marker.item.message}
+            {marker.item?.message}
           </StyledText>
         )}
       </Stack>

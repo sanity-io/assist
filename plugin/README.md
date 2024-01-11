@@ -20,8 +20,10 @@
   - [Troubleshooting](#troubleshooting)
 - [Included document types](#included-document-types)
 - [Field and type filters](#field-and-type-filters)
-- [Other features](#other-features)
-  - [Caption generation](#caption-generation)
+- [Caption generation](#caption-generation)
+- [Full document translation](#full-document-translation)
+  - [What it solves](#what-ai-assist-full-document-translations-solves)
+  - [Configure](#configure-document-translations)
 - [License](#license)
 - [Develop \& test](#develop--test)
   - [Release new version](#release-new-version)
@@ -262,6 +264,339 @@ Note that if the schema targeted by the instruction changes, the following behav
 * instructions that included all fields or types will automatically also include the new fields or types
 * instructions that have excluded one or more fields or types, will NOT include the new fields or types
 
+## Caption generation
+AI Assist can optionally generate captions for images. This has to be enabled on an image-type/field,
+by setting the `options.captionField` on the image type, where `captionField` is the field name of a
+custom string-field on the image object:
+
+## Full document translation
+AI assist offers full document translations, which is ideal for pairing with [@sanity/document-internationalization](https://github.com/sanity-io/document-internationalization).
+
+### What AI Assist full document translations solves
+
+Given a document written in one language, AI assist can translate the document in place to a language specified by a language field in the document.
+
+When the document translation feature is enabled, AI Assist will go through the document field by field, translating all string and portable text fields into the language specified in the document's language field.
+
+This works well with [@sanity/document-internationalization](https://github.com/sanity-io/document-internationalization), where documents are duplicated from a source language and set a hidden language field.
+
+AI assist allows editors to translate these documents into the desired language immediately.
+
+### Configure document translations
+
+To enable full document translations, set `translate.document.languageField` to the path of the language field in your documents.
+
+All documents with a language field will get a "Translate document" instruction added to the assist drop-down for the document.
+
+To limit which document types get "Translate document" further, provide `translate.document.documentTypes` with an array of document type names.
+
+If the studio is using [@sanity/document-internationalization](https://github.com/sanity-io/document-internationalization), these options should be the same as those used for that plugin.
+
+**Example configs**
+
+```ts
+// This will add a "Translate document" instruction to all documents with a language field
+assist({
+    translate: {
+        document: {
+            languageField: 'language'
+        }
+    }
+})
+```
+
+```ts
+// This will add a "Translate document" instruction only to the 'article' document type
+assist({
+    translate: {
+        document: {
+            languageField: 'language',
+            documentTypes: ['article']
+        }
+    }
+})
+```
+
+**All configuration params**
+```ts
+assist({
+    translate: {
+        /** Config for document types with a single language field that determines the language for the whole document. */
+        document: {
+            /**
+             * Required config, enable document tranlations.
+             *
+             * Path to language field in documents. Can be a hidden field.
+             * For instance: 'config.language'
+             *
+             * For projects that use the `@sanity/document-internationalization` plugin,
+             * this should be the same as `languageField` config for that plugin (which defaults to 'language')
+             */
+            languageField: string,
+
+            /**
+             * `documentTypes` should be an array of strings where each entry must match a name from your document schemas.
+             *
+             * this property will add a translate instruction to these document types if defined.
+             * If undefined, the instruction will be added to all documents with aiAssistance enabled and a field matching `languageField` config.
+             *
+             * Documents with translation support will get a "Translate document>" instruction added.
+             **/
+            documentTypes: string[]
+        }
+    }
+})
+```
+
+## Field level translations
+
+AI assist offers field-level translations, which is ideal for using alongside with[sanity-plugin-internationalized-array](https://github.com/sanity-io/sanity-plugin-internationalized-array?tab=readme-ov-file#sanity-plugin-internationalized-array) and (@sanity/language-filter)[https://github.com/sanity-io/language-filter]
+
+### What AI Assist field-level translations solves
+
+Given a document with field values in different languages, AI assist can transfer and translate from one language to the others.
+
+The typical use case would be for documents that use internationalized wrapper types to hold values for multiple languages.
+
+AI Assist supports complex values, so language fields that hold nested objects, portable text, or arrays will also be translated.
+
+When initiating translations, editors select a language to translate from and which languages to translate to. This means that AI Assist supports partial translations in cases where editors are responsible for only some languages in the document.
+
+### Configure field translations
+To enable field-level translations, set `translate.field.documentTypes` to an array with which document types should get field translations, and `translate.field.languages`
+
+```ts
+assist({
+      translate: {
+        field: {
+          documentTypes: ['article'],
+          languages: [
+						{id: 'en', title: 'English'},
+						{id: 'de', title: 'German'}
+					]
+        },
+      },
+ })
+```
+
+These documents will get a "Translate fields" instruction added to the document AI Assist dropdown.
+
+Out of the box, this is sufficient config for document types using `internationalizedArray*` types for localization [sanity-plugin-internationalized-array](https://github.com/sanity-io/sanity-plugin-internationalized-array?tab=readme-ov-file#sanity-plugin-internationalized-array).
+
+It will also work without further config for object types named "locale*", with one field per language:
+
+*Example locale object supported by default*
+
+```ts
+// Object type with name starting with 'locale', and one field per language language
+defineType({
+	type: 'object',
+  name: 'localeString',
+  fields: [
+		defineField({
+      // these do not have to be string, could be any type
+			type: 'string',
+      name: 'en',
+			title: 'English'
+		}),
+		defineField({
+			type: 'string',
+      name: 'de',
+			title: 'German'
+		})
+	]
+})
+```
+
+**If your schema is not using either of these structures**, confer [Custom language fields](#custom-language-fields).
+
+### Loading field languages
+Languages must be an array of objects with an id and title.
+
+```ts
+assist({
+      translate: {
+        field: {
+          languages: [
+						{id: 'en', title: 'English'},
+						{id: 'de', title: 'German'}
+					]
+        },
+      },
+ })
+```
+
+Or an asynchronous function that returns an array of objects with an id and title.
+
+```ts
+assist({
+      translate: {
+        field: {
+          languages: async () => {
+					  const response = await fetch('https://example.com/languages')
+					  return response.json()
+					}
+        },
+      },
+ })
+```
+
+The async function contains a configured Sanity Client in the first parameter, allowing you to store Language options as documents. Your query should return an array of objects with an id and title.
+
+
+```ts
+assist({
+      translate: {
+        field: {
+          languages: async () => {
+					    const response = await client.fetch(`*[_type == "language"]{ id, title }`)
+						  return response
+					}
+        },
+      },
+ })
+```
+
+Additionally, you can "pick" fields from a document, to pass into the query. For example, if you have a concept of "Markets" where only certain language fields are required in certain markets.
+
+In this example, each language document has an array of strings called markets to declare where that language can be used. And the document being authored has a single market field.
+
+```ts
+assist({
+      translate: {
+        field: {
+          selectLanguageParams: {
+					  market: 'market'
+					},
+					languages: async (client, {market = ``}) => {
+					  const response = await client.fetch(
+							`*[_type == "language" && $market in markets]{ id, title }`,
+					    {market}
+					  )
+					  return response
+					},
+        },
+      },
+ })
+```
+
+### Custom language fields
+By providing a function to `translate.field.translationOutputs`, complete control over which fields belong to which language is given.
+
+`translationOutputs` is used when an editor uses the "Translate fields" instruction.
+
+It determines the relationships between document paths: Given a document path and a language, it should return into which sibling paths translations are output.
+
+`translationOutputs` is invoked once per path in the document (limited to a depth of 6), with the following:
+
+* `documentMember` - the field or array item for a given path; contains the path and its schemaType,
+* `enclosingType` - the schema type of the parent holding the member
+* `translateFromLanguageId` - the languageId for the language the users want to to translate from
+* `translateToLanguageIds` - all languageIds the user can translate to
+
+The function should return a `TranslationOutput[]` array that contains all the paths where translations from `documentMember` (in the language given by translateFromLanguageId) should be output.
+
+The function should return `undefined` for all documentMembers that should not be directly translated, or are nested fields under a translated path.
+
+#### Default function
+
+The default `translationOutputs` is available using `import {defaultTranslationOutputs} from '@sanity/assist`.
+
+#### Example
+
+Given the following document:
+
+```ts
+{
+	titles: {
+		_type: 'languageObject',		
+		en: {
+			_type: 'titleObject',
+			title: 'Some title',
+      subtitle: 'Some subtitle'
+		},
+		de: {
+			_type: 'titleObject',
+		}
+	}
+}
+```
+
+When translating from English to German, `translationOutputs` will be
+invoked multiple times.
+
+The following parameters will be the same every invocation:
+
+* `translateFromLanguageId` will be `'en'`
+* `translateToLanguageIds` will be `['de']`
+
+`documentMember` and `enclosingType` will change between each invocation, and take the following values:
+
+1. `{path: 'titles', name: 'titles', schemaType: ObjectSchemaType}`, `ObjectSchemaType`
+2. `{path: 'titles.en', name: 'en', schemaType: ObjectSchemaType}`, `ObjectSchemaType`
+3. `{path: 'titles.en.title', name: 'title', schemaType: StringSchemaType}`, `ObjectSchemaType`
+4. `{path: 'titles.en.subtitle', name: 'subtitle', schemaType: StringSchemaType}`, `ObjectSchemaType`
+5. `{path: 'titles.de', name: 'de', schemaType: ObjectSchemaType}`, `ObjectSchemaType`
+
+To indicate that you want everything under `title.en` to be translated into `title.de`, `translationOutputs` needs to return [id: 'de', outputPath: 'titles.de'] when invoked with `documentMember.path: 'titles.en'`.
+
+The following function enables this:
+
+```ts
+function translationOutputs(member, enclosingType, translateFromLanguageId, translateToLanguageIds) {
+  const parentIsLanguageWrapper = enclosingType.jsonType === 'object' && enclosingType.name.startsWith('language')
+
+	if (parentIsLanguageWrapper && translateFromLanguageId === member.name) {
+
+    // [id: 'de', ]
+		return translateToLanguageIds.map((translateToId) => ({
+								id: translateToId,
+                // in this example, member.path is 'titles.en' 	
+								// so this changes titles.en -> titles.de
+		            outputPath: [...member.path.slice(0, -1), translateToId],
+		       }))
+	}
+
+  // ignore other members 
+	return undefined
+}
+```
+
+### Full field translation configuration example
+
+```ts
+assist({
+      translate: {
+        field: {
+          documentTypes: ['article'],
+          selectLanguageParams: {market: 'market'},
+					apiVersion: '2023-01-01',
+					languages: (client, {market}) => {
+            return client.fetch(
+								`*[_type == "language" && $market in markets]{ id, title }`,
+							  {market}
+					  )
+          },
+					translationOutputs: (member, enclosingType, fromLanguageId, toLanguageIds) => {
+					   // When the document member is named the same as fromLangagueId
+             // and it is a field in a object with a name starting with "language"
+             // then we return the paths to all other sibling language fields (and their langauge id)
+						// It is ok that the member is an object, then all child fields will be translated
+							if (translateFromLanguageId === member.name && enclosingType.jsonType === 'object' && enclosingType.name.startsWith('locale')) {
+					      return translateToLanguageIds.map((translateToId) => ({
+					         id: translateToId,
+									 	//changes path.to.en -> path.to.de (for instance)
+					         outputPath: [...member.path.slice(0, -1), translateToId],
+					   }))
+					   }
+						// all other member paths are skipped
+				   return undefined
+				 }
+        },
+      },
+ })
+```
+
 ## Caveats
 
 Large Language Models (LLMs) are a new technology. Constraints and limitations are still being explored, 
@@ -271,12 +606,7 @@ but some common caveats to the field that you may run into using AI Assist are:
 * Timeouts: To be able to write structured content, we're using the largest language models - long-running results may time out or intermittently fail
 * Limited capacity: The underlying LLM APIs used by AI Assist are resource constrained
 
-## Other features
 
-### Caption generation
-AI Assist can optionally generate captions for images. This has to be enabled on an image-type/field,
-by setting the `options.captionField` on the image type, where `captionField` is the field name of a 
-custom string-field on the image object:
 
 ```tsx
 defineField({
