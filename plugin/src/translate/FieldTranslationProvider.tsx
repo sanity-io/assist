@@ -22,7 +22,10 @@ import {Language} from './types'
 import {getLanguageParams} from './getLanguageParams'
 
 export interface FieldTranslationContextValue {
-  openFieldTranslation: (document: SanityDocumentLike, documentSchema: ObjectSchemaType) => void
+  openFieldTranslation: (args: {
+    document: SanityDocumentLike
+    documentSchema: ObjectSchemaType
+  }) => void
   translationLoading: boolean
 }
 
@@ -116,30 +119,38 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
     []
   )
 
+  const openFieldTranslation = useCallback(
+    async ({
+      document,
+      documentSchema,
+    }: {
+      document: SanityDocumentLike
+      documentSchema: ObjectSchemaType
+    }) => {
+      setDialogOpen(true)
+      const languageParams = getLanguageParams(config?.selectLanguageParams, document)
+      const languages: Language[] | undefined = await (typeof config?.languages === 'function'
+        ? config?.languages(languageClient, languageParams)
+        : Promise.resolve(config?.languages))
+      setLanguages(languages)
+      setDocument(document)
+      setDocumentSchema(documentSchema)
+      const fromLanguage = languages?.[0]
+      if (fromLanguage) {
+        selectFromLanguage(fromLanguage, languages, document, documentSchema)
+      } else {
+        console.error('No languages available for selected language params', languageParams)
+      }
+    },
+    [selectFromLanguage, config, languageClient]
+  )
+
   const contextValue: FieldTranslationContextValue = useMemo(() => {
     return {
-      openFieldTranslation: async (
-        document: SanityDocumentLike,
-        documentSchema: ObjectSchemaType
-      ) => {
-        setDialogOpen(true)
-        const languageParams = getLanguageParams(config?.selectLanguageParams, document)
-        const languages: Language[] | undefined = await (typeof config?.languages === 'function'
-          ? config?.languages(languageClient, languageParams)
-          : Promise.resolve(config?.languages))
-        setLanguages(languages)
-        setDocument(document)
-        setDocumentSchema(documentSchema)
-        const fromLanguage = languages?.[0]
-        if (fromLanguage) {
-          selectFromLanguage(fromLanguage, languages, document, documentSchema)
-        } else {
-          console.error('No languages available for selected language params', languageParams)
-        }
-      },
+      openFieldTranslation,
       translationLoading: false,
     }
-  }, [selectFromLanguage, config, languageClient])
+  }, [openFieldTranslation])
 
   const runDisabled =
     !fromLanguage || !toLanguages?.length || !translationMap?.length || !documentId

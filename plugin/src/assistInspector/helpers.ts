@@ -20,7 +20,7 @@ import {
 } from 'sanity'
 import {ComponentType, useContext, useMemo} from 'react'
 import {AssistInspectorRouteParams, documentRootKey, fieldPathParam} from '../types'
-import {usePaneRouter} from 'sanity/desk'
+import {usePaneRouter, type PaneRouterContextValue} from 'sanity/desk'
 import {isAssistSupported} from '../helpers/assistSupported'
 import {isPortableTextArray, isType} from '../helpers/typeUtils'
 import {SelectedFieldContext} from '../assistDocument/components/SelectedFieldContext'
@@ -198,18 +198,16 @@ export function getFieldTitle(field?: FieldRef) {
   return field?.title ?? schemaType?.title ?? schemaType?.name ?? 'Untitled'
 }
 
+export type AiPaneRouter = Omit<PaneRouterContextValue, 'setParams' | 'params'> & {
+  params: AssistInspectorRouteParams
+  setParams: (p: Record<keyof AssistInspectorRouteParams, string | undefined>) => void
+}
+
 export function useAiPaneRouter() {
   const paneRouter = usePaneRouter()
 
   return useMemo(
-    () =>
-      ({...paneRouter, params: paneRouter.params ?? {}} as Omit<
-        typeof paneRouter,
-        'setParams' | 'params'
-      > & {
-        params: AssistInspectorRouteParams
-        setParams: (p: Record<keyof AssistInspectorRouteParams, string | undefined>) => void
-      }),
+    () => ({...paneRouter, params: paneRouter.params ?? {}} as AiPaneRouter),
     [paneRouter]
   )
 }
