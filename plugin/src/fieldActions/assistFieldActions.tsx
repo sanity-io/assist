@@ -3,6 +3,7 @@ import {
   DocumentFieldActionGroup,
   DocumentFieldActionItem,
   ObjectSchemaType,
+  typed,
   useCurrentUser,
 } from 'sanity'
 import {ControlsIcon, SparklesIcon} from '@sanity/icons'
@@ -24,7 +25,7 @@ import {generateCaptionsActions} from './generateCaptionActions'
 import {useDocumentPane} from 'sanity/desk'
 import {useSelectedField, useTypePath} from '../assistInspector/helpers'
 import {isSchemaAssistEnabled} from '../helpers/assistSupported'
-import {translateActions} from './translateActions'
+import {translateActions, TranslateProps} from './translateActions'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -91,7 +92,13 @@ export const assistFieldActions: DocumentFieldAction = {
     const isSelected = isInspectorOpen && isPathSelected
 
     const imageCaptionAction = generateCaptionsActions.useAction(props)
-    const translateAction = translateActions.useAction({...props, documentId: assistableDocumentId})
+    const translateAction = translateActions.useAction(
+      typed<TranslateProps>({
+        ...props,
+        documentId: assistableDocumentId,
+        documentIsAssistable,
+      })
+    )
     const manageInstructions = useCallback(
       () =>
         isSelected

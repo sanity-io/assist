@@ -3,6 +3,7 @@ import {
   DocumentFieldAction,
   DocumentFieldActionGroup,
   DocumentFieldActionItem,
+  DocumentFieldActionProps,
   ObjectSchemaType,
 } from 'sanity'
 import {TranslateIcon} from '@sanity/icons'
@@ -13,23 +14,33 @@ import {Box, Spinner} from '@sanity/ui'
 import {isAssistSupported} from '../helpers/assistSupported'
 import {useDocumentPane} from 'sanity/desk'
 import {useFieldTranslation} from '../translate/FieldTranslationProvider'
+import {useDraftDelayedTask} from '../assistDocument/RequestRunInstructionProvider'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
 }
 
+export type TranslateProps = DocumentFieldActionProps & {documentIsAssistable?: boolean}
 export const translateActions: DocumentFieldAction = {
   name: 'sanity-assist-translate',
-  useAction(props) {
+  useAction(props: TranslateProps) {
     const {config} = useAiAssistanceConfig()
     const apiClient = useApiClient(config?.__customApiClient)
-    const {translate, loading} = useTranslate(apiClient)
 
     const isDocumentLevel = props.path.length === 0
-    const {schemaType, documentId} = props
+    const {schemaType, documentId, documentIsAssistable} = props
 
+    // if this is true, it is stable, and not breaking rules of hooks
     if (isDocumentLevel) {
-      const {value: documentValue} = useDocumentPane()
+      const {value: documentValue, onChange: documentOnChange} = useDocumentPane()
+      const translationApi = useTranslate(apiClient)
+
+      const translate = useDraftDelayedTask({
+        documentOnChange,
+        isDocAssistable: documentIsAssistable ?? false,
+        task: translationApi.translate,
+      })
+
       const docRef = useRef(documentValue)
       docRef.current = documentValue
 
@@ -46,7 +57,7 @@ export const translateActions: DocumentFieldAction = {
           languagePath && documentTranslation
             ? node({
                 type: 'action',
-                icon: loading
+                icon: translationApi.loading
                   ? () => (
                       <Box style={{height: 17}}>
                         <Spinner style={{transform: 'translateY(6px)'}} />
@@ -55,27 +66,32 @@ export const translateActions: DocumentFieldAction = {
                   : TranslateIcon,
                 title: `Translate document`,
                 onAction: () => {
-                  if (loading || !languagePath || !documentId) {
+                  if (translationApi.loading || !languagePath || !documentId) {
                     return
                   }
                   translate({languagePath, documentId: documentId ?? ''})
                 },
                 renderAsButton: true,
-                disabled: loading,
+                disabled: translationApi.loading,
               })
             : undefined,
-        [languagePath, translate, documentId, loading, documentTranslation]
+        [languagePath, translate, documentId, translationApi.loading, documentTranslation]
       )
 
       const fieldTranslate = useFieldTranslation()
-
+      const openFieldTranslation = useDraftDelayedTask({
+        documentOnChange,
+        isDocAssistable: documentIsAssistable ?? false,
+        task: fieldTranslate.openFieldTranslation,
+      })
       const fieldTransEnabled = config.translate?.field?.documentTypes?.includes(schemaType.name)
+
       const translateFieldsAction = useMemo(
         () =>
           fieldTransEnabled
             ? node({
                 type: 'action',
-                icon: loading
+                icon: fieldTranslate.translationLoading
                   ? () => (
                       <Box style={{height: 17}}>
                         <Spinner style={{transform: 'translateY(6px)'}} />
@@ -84,19 +100,25 @@ export const translateActions: DocumentFieldAction = {
                   : TranslateIcon,
                 title: `Translate fields`,
                 onAction: () => {
-                  if (loading || !documentId) {
+                  if (fieldTranslate.translationLoading || !documentId) {
                     return
                   }
-                  fieldTranslate.openFieldTranslation(
-                    docRef.current,
-                    schemaType as ObjectSchemaType
-                  )
+                  openFieldTranslation({
+                    document: docRef.current,
+                    documentSchema: schemaType as ObjectSchemaType,
+                  })
                 },
                 renderAsButton: true,
-                disabled: loading,
+                disabled: fieldTranslate.translationLoading,
               })
             : undefined,
-        [fieldTranslate, schemaType, documentId, loading, fieldTransEnabled]
+        [
+          openFieldTranslation,
+          schemaType,
+          documentId,
+          fieldTranslate.translationLoading,
+          fieldTransEnabled,
+        ]
       )
 
       // eslint-disable-next-line react-hooks/rules-of-hooks
