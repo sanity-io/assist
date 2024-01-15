@@ -7,25 +7,28 @@ import {
   useMemo,
   useState,
 } from 'react'
-import {ObjectSchemaType, SanityDocumentLike, useClient} from 'sanity'
+import {ObjectSchemaType, Path, SanityDocumentLike, useClient} from 'sanity'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 import {useApiClient, useTranslate} from '../useApiClient'
 import {Box, Button, Checkbox, Dialog, Flex, Radio, Spinner, Stack, Text, Tooltip} from '@sanity/ui'
 import {
   defaultLanguageOutputs,
+  FieldLanguageMap,
   getDocumentMembersFlat,
-  getTranslationMap,
-  TranslationMap,
+  getFieldLanguageMap,
 } from './paths'
 import {PlayIcon} from '@sanity/icons'
 import {Language} from './types'
 import {getLanguageParams} from './getLanguageParams'
 
+interface FieldTranslationParams {
+  document: SanityDocumentLike
+  documentSchema: ObjectSchemaType
+  translatePath: Path
+}
+
 export interface FieldTranslationContextValue {
-  openFieldTranslation: (args: {
-    document: SanityDocumentLike
-    documentSchema: ObjectSchemaType
-  }) => void
+  openFieldTranslation: (args: FieldTranslationParams) => void
   translationLoading: boolean
 }
 
@@ -46,33 +49,33 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
 
   const [dialogOpen, setDialogOpen] = useState(false)
 
-  const [document, setDocument] = useState<SanityDocumentLike | undefined>()
-  const [documentSchema, setDocumentSchema] = useState<ObjectSchemaType | undefined>()
+  const [fieldTranslationParams, setFieldTranslationParams] = useState<
+    FieldTranslationParams | undefined
+  >()
   const [languages, setLanguages] = useState<Language[] | undefined>()
   const [fromLanguage, setFromLanguage] = useState<Language | undefined>(undefined)
   const [toLanguages, setToLanguages] = useState<Language[] | undefined>(undefined)
-  const [translationMap, setTranslationMap] = useState<TranslationMap[] | undefined>()
+  const [fieldLanguageMaps, setFieldLanguageMaps] = useState<FieldLanguageMap[] | undefined>()
 
   const close = useCallback(() => {
     setDialogOpen(false)
     setLanguages(undefined)
-    setDocument(undefined)
-    setDocument(undefined)
+    setFieldTranslationParams(undefined)
   }, [])
   const languageClient = useClient({apiVersion: config?.apiVersion ?? '2022-11-27'})
-  const documentId = document?._id
+  const documentId = fieldTranslationParams?.document?._id
   const id = useId()
 
   const selectFromLanguage = useCallback(
     (
       from: Language,
       languages: Language[] | undefined,
-      document: SanityDocumentLike | undefined,
-      documentSchema: ObjectSchemaType | undefined
+      params: FieldTranslationParams | undefined
     ) => {
+      const {document, documentSchema} = params ?? {}
       setFromLanguage(from)
-      if (!document || !documentSchema || !languages) {
-        setTranslationMap(undefined)
+      if (!document || !documentSchema || !params || !languages) {
+        setFieldLanguageMaps(undefined)
         return
       }
 
@@ -82,16 +85,16 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
       const toIds = to?.map((l) => l.id) ?? []
       const docMembers = getDocumentMembersFlat(document, documentSchema)
       if (fromId && toIds?.length) {
-        const transMap = getTranslationMap(
+        const transMap = getFieldLanguageMap(
           documentSchema,
           docMembers,
           fromId,
           toIds,
           config?.translationOutputs ?? defaultLanguageOutputs
         )
-        setTranslationMap(transMap)
+        setFieldLanguageMaps(transMap)
       } else {
-        setTranslationMap(undefined)
+        setFieldLanguageMaps(undefined)
       }
     },
     [config]
@@ -120,24 +123,17 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
   )
 
   const openFieldTranslation = useCallback(
-    async ({
-      document,
-      documentSchema,
-    }: {
-      document: SanityDocumentLike
-      documentSchema: ObjectSchemaType
-    }) => {
+    async (params: FieldTranslationParams) => {
       setDialogOpen(true)
-      const languageParams = getLanguageParams(config?.selectLanguageParams, document)
+      const languageParams = getLanguageParams(config?.selectLanguageParams, params.document)
       const languages: Language[] | undefined = await (typeof config?.languages === 'function'
         ? config?.languages(languageClient, languageParams)
         : Promise.resolve(config?.languages))
       setLanguages(languages)
-      setDocument(document)
-      setDocumentSchema(documentSchema)
+      setFieldTranslationParams(params)
       const fromLanguage = languages?.[0]
       if (fromLanguage) {
-        selectFromLanguage(fromLanguage, languages, document, documentSchema)
+        selectFromLanguage(fromLanguage, languages, params)
       } else {
         console.error('No languages available for selected language params', languageParams)
       }
@@ -153,13 +149,15 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
   }, [openFieldTranslation])
 
   const runDisabled =
-    !fromLanguage || !toLanguages?.length || !translationMap?.length || !documentId
+    !fromLanguage || !toLanguages?.length || !fieldLanguageMaps?.length || !documentId
 
   const onRunTranslation = useCallback(() => {
-    if (translationMap && documentId) {
+    const translatePath = fieldTranslationParams?.translatePath
+    if (fieldLanguageMaps && documentId && translatePath) {
       runTranslate({
         documentId,
-        fieldLanguageMap: translationMap.map((map) => ({
+        translatePath: fieldTranslationParams?.translatePath,
+        fieldLanguageMap: fieldLanguageMaps.map((map) => ({
           ...map,
           // eslint-disable-next-line max-nested-callbacks
           outputs: map.outputs.filter((out) => !!toLanguages?.find((l) => l.id === out.id)),
@@ -167,7 +165,14 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
       })
     }
     close()
-  }, [translationMap, documentId, runTranslate, close, toLanguages])
+  }, [
+    fieldLanguageMaps,
+    documentId,
+    runTranslate,
+    close,
+    toLanguages,
+    fieldTranslationParams?.translatePath,
+  ])
 
   const runButton = (
     <Button
@@ -220,7 +225,7 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
                       name="fromLang"
                       value={l.id}
                       checked={l.id === fromLanguage?.id}
-                      onClick={() => selectFromLanguage(l, languages, document, documentSchema)}
+                      onClick={() => selectFromLanguage(l, languages, fieldTranslationParams)}
                     />
                     <Text>{l.title ?? l.id}</Text>
                   </Flex>
@@ -241,7 +246,7 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
                         checked={!!toLanguages?.find((tl) => tl.id === l.id)}
                         onClick={() => toggleToLanguage(l, toLanguages, languages)}
                         disabled={
-                          !translationMap?.find((tm) => tm.outputs.find((o) => o.id === l.id))
+                          !fieldLanguageMaps?.find((tm) => tm.outputs.find((o) => o.id === l.id))
                         }
                       />
                       <Text>{l.title ?? l.id}</Text>

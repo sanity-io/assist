@@ -10,7 +10,7 @@ import {defaultLanguages, languages, translatedDocTypes} from './src/lang/langua
 import {documentInternationalization} from '@sanity/document-internationalization'
 import {languageFilter} from '@sanity/language-filter'
 import {internationalizedArray} from 'sanity-plugin-internationalized-array'
-import {featureProduct, languageArticle} from './schemas/mockArticle'
+import {featureProduct, languageArticle} from './schemas/languageArticle'
 
 export default defineConfig({
   name: 'default',

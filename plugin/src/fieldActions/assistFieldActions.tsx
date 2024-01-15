@@ -25,7 +25,7 @@ import {generateCaptionsActions} from './generateCaptionActions'
 import {useDocumentPane} from 'sanity/desk'
 import {useSelectedField, useTypePath} from '../assistInspector/helpers'
 import {isSchemaAssistEnabled} from '../helpers/assistSupported'
-import {translateActions, TranslateProps} from './translateActions'
+import {translateActions, TranslateProps} from '../translate/translateActions'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -97,6 +97,7 @@ export const assistFieldActions: DocumentFieldAction = {
         ...props,
         documentId: assistableDocumentId,
         documentIsAssistable,
+        documentSchemaType,
       })
     )
     const manageInstructions = useCallback(
@@ -199,7 +200,9 @@ export const assistFieldActions: DocumentFieldAction = {
             runInstructionsGroup,
             translateAction,
             assistSupported && manageInstructionsItem,
-          ].filter((c): c is DocumentFieldActionItem | DocumentFieldActionGroup => !!c),
+          ]
+            .filter((c): c is DocumentFieldActionItem | DocumentFieldActionGroup => !!c)
+            .filter((c) => (c.type === 'group' ? c.children.length : true)),
           expanded: false,
           renderAsButton: true,
           hidden: !assistSupported && !imageCaptionAction && !translateAction,

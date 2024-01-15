@@ -7,9 +7,9 @@ import {
   SanityDocumentLike,
 } from 'sanity'
 import {extractWithPath} from '@sanity/mutator'
-import {DocumentMember, TranslationOutputsFunction, TranslationOutput} from './types'
+import {DocumentMember, TranslationOutput, TranslationOutputsFunction} from './types'
 
-export interface TranslationMap {
+export interface FieldLanguageMap {
   inputLanguageId: string
   inputPath: Path
   outputs: TranslationOutput[]
@@ -117,14 +117,14 @@ export const defaultLanguageOutputs: TranslationOutputsFunction = function (
   return undefined
 }
 
-export function getTranslationMap(
+export function getFieldLanguageMap(
   documentSchema: ObjectSchemaType,
   documentMembers: DocumentMember[],
   translateFromLanguageId: string,
   outputLanguageIds: string[],
   langFn: TranslationOutputsFunction
-): TranslationMap[] {
-  const translationMaps: TranslationMap[] = []
+): FieldLanguageMap[] {
+  const translationMaps: FieldLanguageMap[] = []
   for (const member of documentMembers) {
     const parentPath = member.path.slice(0, -1)
     const enclosingType =

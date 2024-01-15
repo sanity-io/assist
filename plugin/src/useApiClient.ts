@@ -1,9 +1,10 @@
-import {useClient, useCurrentUser, useSchema} from 'sanity'
+import {Path, pathToString, useClient, useCurrentUser, useSchema} from 'sanity'
 import {useCallback, useMemo, useState} from 'react'
 import {serializeSchema} from './schemas/serialize/serializeSchema'
 import {useToast} from '@sanity/ui'
 import {SanityClient} from '@sanity/client'
-import {TranslationMap} from './translate/paths'
+import {FieldLanguageMap} from './translate/paths'
+import {documentRootKey} from './types'
 
 export interface UserTextInstance {
   blockKey: string
@@ -26,6 +27,13 @@ export interface InstructStatus {
   validToken: boolean
 }
 
+export interface TranslateRequest {
+  documentId: string
+  translatePath: Path
+  languagePath?: string
+  fieldLanguageMap?: FieldLanguageMap[]
+}
+
 const basePath = '/assist/tasks/instruction'
 
 export function useApiClient(customApiClient?: (defaultClient: SanityClient) => SanityClient) {
@@ -44,15 +52,7 @@ export function useTranslate(apiClient: SanityClient) {
   const toast = useToast()
 
   const translate = useCallback(
-    ({
-      documentId,
-      languagePath,
-      fieldLanguageMap,
-    }: {
-      documentId: string
-      languagePath?: string
-      fieldLanguageMap?: TranslationMap[]
-    }) => {
+    ({documentId, languagePath, translatePath, fieldLanguageMap}: TranslateRequest) => {
       setLoading(true)
 
       return apiClient
@@ -66,6 +66,8 @@ export function useTranslate(apiClient: SanityClient) {
             types,
             languagePath,
             fieldLanguageMap,
+            translatePath:
+              translatePath.length === 0 ? documentRootKey : pathToString(translatePath),
             userId: user?.id,
           },
         })
