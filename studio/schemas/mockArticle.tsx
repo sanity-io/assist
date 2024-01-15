@@ -22,9 +22,15 @@ export const articleImage = defineType({
       name: 'altText',
       title: 'Alt text',
     }),
+    defineField({
+      type: 'text',
+      name: 'imagePrompt',
+      title: 'Image prompt',
+      rows: 2,
+    }),
   ],
   options: {
-    imagePromptField: 'altText',
+    imagePromptField: 'imagePrompt',
     captionField: 'altText',
   },
 })
@@ -237,11 +243,13 @@ export const mockArticle = defineType({
       title: 'title',
       subtitle: 'lede',
       lang: 'language',
+      imageUrl: 'image.asset.url',
     },
-    prepare: ({title, subtitle, lang}) => {
+    prepare: ({title, subtitle, lang, imageUrl}) => {
       return {
         title,
         subtitle: `${lang ? languages.find((l) => l.id === lang)?.title ?? lang : subtitle ?? ''}`,
+        media: imageUrl ? <img src={`${imageUrl}?w=100`} alt="" /> : undefined,
       }
     },
   },

@@ -31,7 +31,10 @@ export function ErrorWrapper(
     [setError]
   )
 
-  const unsetValue = useCallback(() => onChange(PatchEvent.from(unset())), [onChange])
+  const unsetValue = useCallback(() => {
+    onChange(PatchEvent.from(unset()))
+    setError(undefined)
+  }, [onChange])
   const dismiss = useCallback(() => setError(undefined), [])
   const catcher = <ErrorBoundary onCatch={catchError}>{props.children}</ErrorBoundary>
 

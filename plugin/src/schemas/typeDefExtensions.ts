@@ -23,7 +23,63 @@ declare module 'sanity' {
   interface FileOptions extends AssistOptions {}
   interface GeopointOptions extends AssistOptions {}
   interface ImageOptions extends AssistOptions {
+    /**
+     * When set, an image will be created whenever the `imagePromptField` is written to by
+     * an AI Assist instruction.
+     *
+     * The value output by AI Assist will be use as an image prompt for an generative image AI.
+     *
+     * This means that instructions directly for the field or instructions that visit the field when running,
+     * will result in the image being changed.
+     *
+     * `imagePromptField` must be a child-path relative to the image field.
+     * ### Example
+     * ```ts
+     * defineType({
+     *   type: 'image',
+     *   name: 'articleImage',
+     *   fields: [
+     *     defineField({
+     *       type: 'text',
+     *       name: 'imagePrompt',
+     *       title: 'Image prompt',
+     *       rows: 2,
+     *     }),
+     *   ],
+     *   options: {
+     *     imagePromptField: 'imagePromptField',
+     *   },
+     * })
+     * ```
+     */
     imagePromptField?: string
+
+    /**
+     * When set, an image caption will be automatically created for the image.
+     *
+     * `captionField` must be a child-path relative to the image field.
+     *
+     * Whenever the image asset for the field is changed in the Studio,
+     * an image caption is generated and set into the `captionField`.
+     *
+     * ### Example
+     * ```ts
+     * defineType({
+     *   type: 'image',
+     *   name: 'articleImage',
+     *   fields: [
+     *     defineField({
+     *       type: 'string',
+     *       name: 'altText',
+     *       title: 'Alt text',
+     *     }),
+     *   ],
+     *   options: {
+     *     captionField: 'altText',
+     *   },
+     * })
+     * ```
+     */
     captionField?: string
   }
   interface NumberOptions extends AssistOptions {}

@@ -21,6 +21,7 @@
 - [Included document types](#included-document-types)
 - [Field and type filters](#field-and-type-filters)
 - [Caption generation](#caption-generation)
+- [Image generation](#image-generation)
 - [Full document translation](#full-document-translation)
   - [What it solves](#what-ai-assist-full-document-translations-solves)
   - [Configure](#configure-document-translations)
@@ -272,6 +273,100 @@ Note that if the schema targeted by the instruction changes, the following behav
 AI Assist can optionally generate captions for images. This has to be enabled on an image-type/field,
 by setting the `options.captionField` on the image type, where `captionField` is the field name of a
 custom string-field on the image object:
+
+```tsx
+defineField({
+    type: 'image',
+    name: 'inlineImage',
+    title: 'Image',
+    fields: [
+      defineField({
+        type: 'string',
+        name: 'caption',
+        title: 'Caption',
+      }),
+    ],
+    options: {
+      captionField: 'caption', 
+    },
+})
+```
+This will add a "Generate caption" action to the configured field.
+"Generate caption" action will automatically run whenever the image changes.
+
+`captionField` can be a nested field, if the image has object field, ie `captionField: 'wrapper.caption'`.
+Fields within array items are not supported.
+
+## Image generation
+
+<img width="600" alt="image" src="https://github.com/sanity-io/assist/assets/835514/c144985c-d828-4e55-8a6d-5d5da033791f">
+
+AI Assist can generate assets for images configured with a prompt field.
+
+Whenever the image prompt field is written to by an AI Assist instruction, the field value is used as a prompt to generate a new image.
+
+To enable image generation for an image field, the image must:
+- set `options.imagePromptField` to a child-path relative to the image
+- have a `string` or `text` field that corresponds to the `imagePromptField` path
+
+Next, create an AI Assist instruction that will visit the image prompt field.
+
+This could be a document instruction, an instruction for the image field or parent object, or directly on the image prompt field.
+
+Use AI context documents to apply a reusable styleguide to images as needed.
+
+#### Example
+Given the following document schema
+```ts
+defineType({
+  type: 'document',
+	name: 'article',
+	fields: [
+		defineField({
+		  type: 'image',
+		  name: 'articleImage',
+		  fields: [
+		    defineField({
+		      type: 'text',
+		      name: 'imagePrompt',
+		      title: 'Image prompt',
+		      rows: 2,
+		    }),
+		  ],
+		  options: {
+		    imagePromptField: 'imagePromptField',
+		  },
+		})
+	] 
+})
+```
+
+To directly generate an image, run the following instruction on the image prompt field:
+"Repeat the value in {Reference to image-prompt-field}".
+
+### Example prompt expansion instruction
+
+For better image results, use an instruction that expands the prompt to be more detailed.
+
+Example instruction text:
+
+"
+Rewrite image prompts for image generation according to the following rules:
+- Be Specific: Include detailed descriptions of the scene, objects, colors, and any characters. Instead of saying "a cat in a garden", say "a fluffy gray cat sitting beside pink tulips in a sunny garden".
+- Set the Scene: Describe the environment or background. Mention if it's indoors or outdoors, the time of day, weather conditions, and any specific setting details like a beach, forest, cityscape, etc.
+- Detail Characters: If your image includes people or animals, specify their appearance, clothing, poses, and expressions. For example, "a smiling young woman with short black hair, wearing a red dress, standing under a tree".
+- Color and Style: Mention specific colors and artistic styles you prefer. For instance, "bright, vivid colors with a watercolor effect".
+- Mood and Atmosphere: Describe the mood or atmosphere of the image. Words like 'peaceful', 'dynamic', 'mysterious', or 'joyful' can guide the AI in capturing the right tone.
+- Avoid Ambiguity: Be clear and direct. Avoid using vague or abstract concepts that the AI might struggle to interpret.
+- Follow the Guidelines: Ensure your prompt doesn't include any content against usage policies, such as depictions of real people, copyrighted characters, or sensitive subjects.
+
+Keep it 100 words or less.
+
+The prompt to rewrite is:
+{Reference to image-prompt-field}
+"
+
+The rules can be extracted into an AI Context document and reused in other instructions as needed. This approach can also be used to inform a reusable styleguide for image generation.
 
 ## Full document translation
 <img width="250" alt="Translate document action" src="https://github.com/sanity-io/assist/assets/835514/932968ee-1a8c-4389-8822-338188f88b40">
@@ -648,30 +743,6 @@ but some common caveats to the field that you may run into using AI Assist are:
 * Timeouts: To be able to write structured content, we're using the largest language models - long-running results may time out or intermittently fail
 * Limited capacity: The underlying LLM APIs used by AI Assist are resource constrained
 
-
-
-```tsx
-defineField({
-    type: 'image',
-    name: 'inlineImage',
-    title: 'Image',
-    fields: [
-      defineField({
-        type: 'string',
-        name: 'caption',
-        title: 'Caption',
-      }),
-    ],
-    options: {
-      captionField: 'caption', 
-    },
-})
-```
-This will add a "Generate caption" action to the configured field. 
-"Generate caption" action will automatically run whenever the image changes.
-
-`captionField` can be a nested field, if the image has object field, ie `captionField: 'wrapper.caption'`.
-Fields within array items are not supported.
 
 ## Third party sub-processors
 
