@@ -24,6 +24,10 @@
 - [Full document translation](#full-document-translation)
   - [What it solves](#what-ai-assist-full-document-translations-solves)
   - [Configure](#configure-document-translations)
+- [Field level translations](#field-level-translations)
+  - [What it solves](#what-ai-assist-field-level-translations-solves)
+  - [Configure](#configure-field-translations)
+- [Adding translation actions to fields](#adding-translation-actions-to-fields)
 - [License](#license)
 - [Develop \& test](#develop--test)
   - [Release new version](#release-new-version)
@@ -270,6 +274,8 @@ by setting the `options.captionField` on the image type, where `captionField` is
 custom string-field on the image object:
 
 ## Full document translation
+<img width="250" alt="Translate document action" src="https://github.com/sanity-io/assist/assets/835514/932968ee-1a8c-4389-8822-338188f88b40">
+
 AI assist offers full document translations, which is ideal for pairing with [@sanity/document-internationalization](https://github.com/sanity-io/document-internationalization).
 
 ### What AI Assist full document translations solves
@@ -349,6 +355,9 @@ assist({
 ```
 
 ## Field level translations
+<img width="250" alt="Translate fields action" src="https://github.com/sanity-io/assist/assets/835514/99819cd4-578e-43b2-8c70-8e39afff5f09">
+
+<img width="250" alt="Translate fields dialog" src="https://github.com/sanity-io/assist/assets/835514/fe3d289c-49b6-46dd-ae2f-cd509a01534a">
 
 AI assist offers field-level translations, which is ideal for using alongside with[sanity-plugin-internationalized-array](https://github.com/sanity-io/sanity-plugin-internationalized-array?tab=readme-ov-file#sanity-plugin-internationalized-array) and (@sanity/language-filter)[https://github.com/sanity-io/language-filter]
 
@@ -595,6 +604,39 @@ assist({
         },
       },
  })
+```
+
+## Adding translation actions to fields
+
+<img width="250" alt="Translate action on field" src="https://github.com/sanity-io/assist/assets/835514/e6dc0860-90a7-4f7a-b3d2-71893b09862f">
+
+<img width="250" alt="Translate fields action on field" src="https://github.com/sanity-io/assist/assets/835514/acc5fa23-2022-4eae-922d-5c83dda7379c">
+
+By default, “Translate document” and “Translate fields…” instructions are only added to the document instruction dropdown.
+
+These instructions can also be added to fields by setting
+`options.aiWritingAssistance.translateAction: true` for a field or type.
+
+This allows editors to translate only parts of the document, and can be useful to enable on `internatinalizedArrays` or `locale` wrapper object types.
+
+For document types configured for full document translations, a "Translate" action will be added. Running it will translate the field to the language set in the language field
+
+For document types configured for field translations, a "Translate fields..." action will be added. Running it will open a dialog with language selectors.
+
+
+#### Example
+
+```ts
+defineField({
+    name: 'subtitle',
+    type: 'internationalizedArrayString',
+    title: 'Subtitle',
+    options: {
+        aiWritingAssistance: {
+            translateAction: true
+        }
+    },
+})
 ```
 
 ## Caveats

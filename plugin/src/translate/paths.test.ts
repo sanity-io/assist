@@ -3,9 +3,9 @@ import {Schema} from '@sanity/schema'
 import {defineType, ObjectSchemaType, pathToString, SanityDocumentLike, typed} from 'sanity'
 import {
   defaultLanguageOutputs,
+  FieldLanguageMap,
   getDocumentMembersFlat,
-  getTranslationMap,
-  TranslationMap,
+  getFieldLanguageMap,
 } from './paths'
 
 describe('paths', () => {
@@ -72,10 +72,10 @@ describe('paths', () => {
       'translations[_key=="nb"].value',
     ])
 
-    const transMap = getTranslationMap(docSchema, members, 'en', ['nb'], defaultLanguageOutputs)
+    const transMap = getFieldLanguageMap(docSchema, members, 'en', ['nb'], defaultLanguageOutputs)
 
     expect(transMap).toEqual(
-      typed<TranslationMap[]>([
+      typed<FieldLanguageMap[]>([
         {
           inputLanguageId: 'en',
           inputPath: ['translations', {_key: 'en'}],

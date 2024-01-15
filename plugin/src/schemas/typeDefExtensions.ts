@@ -3,6 +3,12 @@ export interface AssistOptions {
   aiWritingAssistance?: {
     /** Set to true to disable assistance for this field or type */
     exclude?: boolean
+
+    /**
+     * Set to true to add translation field-action to the field.
+     * Only has an effect in document types configured for document or field level translations.
+     */
+    translateAction?: boolean
   }
 }
 
