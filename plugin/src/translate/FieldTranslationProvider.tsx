@@ -20,6 +20,7 @@ import {
 import {PlayIcon} from '@sanity/icons'
 import {Language} from './types'
 import {getLanguageParams} from './getLanguageParams'
+import {getPreferredToFieldLanguages, setPreferredToFieldLanguages} from './languageStore'
 
 interface FieldTranslationParams {
   document: SanityDocumentLike
@@ -79,7 +80,11 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
         return
       }
 
-      const to = languages.filter((l) => l.id !== from?.id)
+      const preferred = getPreferredToFieldLanguages(from.id)
+      const to = languages
+        .filter((l) => l.id !== from?.id)
+        .filter((l) => !preferred.length || preferred.includes(l.id))
+
       setToLanguages(to)
       const fromId = from?.id
       const toIds = to?.map((l) => l.id) ?? []
@@ -106,7 +111,7 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
       toLanguages: Language[] | undefined,
       languages: Language[] | undefined
     ) => {
-      if (!languages) {
+      if (!languages || !fromLanguage) {
         return
       }
       const wasSelected = !!toLanguages?.find((l) => l.id === toggledLang.id)
@@ -118,8 +123,12 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
           (toggledLang.id === anyLang.id && !wasSelected)
       )
       setToLanguages(newToLangs)
+      setPreferredToFieldLanguages(
+        fromLanguage.id,
+        newToLangs.map((l) => l.id)
+      )
     },
-    []
+    [fromLanguage]
   )
 
   const openFieldTranslation = useCallback(
@@ -245,9 +254,6 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
                         value={l.id}
                         checked={!!toLanguages?.find((tl) => tl.id === l.id)}
                         onClick={() => toggleToLanguage(l, toLanguages, languages)}
-                        disabled={
-                          !fieldLanguageMaps?.find((tm) => tm.outputs.find((o) => o.id === l.id))
-                        }
                       />
                       <Text>{l.title ?? l.id}</Text>
                     </Flex>
