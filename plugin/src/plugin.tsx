@@ -16,6 +16,7 @@ import {isSchemaAssistEnabled} from './helpers/assistSupported'
 import {isImage} from './helpers/typeUtils'
 import {ImageContextProvider} from './components/ImageContext'
 import {TranslationConfig} from './translate/types'
+import {assistDocumentTypeName} from './types'
 
 export interface AssistPluginConfig {
   translate?: TranslationConfig
@@ -45,13 +46,17 @@ export const assist = definePlugin<AssistPluginConfig | void>((config) => {
 
     document: {
       inspectors: (prev, context) => {
-        const docSchema = context.schema.get(context.documentType)
+        const documentType = context.documentType
+        const docSchema = context.schema.get(documentType)
         if (docSchema && isSchemaAssistEnabled(docSchema)) {
           return [...prev, assistInspector]
         }
         return prev
       },
       unstable_fieldActions: (prev, {documentType, schema}) => {
+        if (documentType === assistDocumentTypeName) {
+          return []
+        }
         const docSchema = schema.get(documentType)
         if (docSchema && isSchemaAssistEnabled(docSchema)) {
           return [...prev, assistFieldActions]
@@ -59,6 +64,9 @@ export const assist = definePlugin<AssistPluginConfig | void>((config) => {
         return prev
       },
       unstable_languageFilter: (prev, {documentId, schema, schemaType}) => {
+        if (schemaType === assistDocumentTypeName) {
+          return []
+        }
         const docSchema = schema.get(schemaType)
         if (docSchema && isObjectSchemaType(docSchema) && isSchemaAssistEnabled(docSchema)) {
           return [...prev, createAssistDocumentPresence(documentId, docSchema)]
