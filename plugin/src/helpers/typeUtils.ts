@@ -28,3 +28,14 @@ export function getCaptionFieldOption(schemaType: SchemaType | undefined): strin
   }
   return getCaptionFieldOption(schemaType.type)
 }
+
+export function getImagePromptFieldOption(schemaType: SchemaType | undefined): string | undefined {
+  if (!schemaType) {
+    return undefined
+  }
+  const imagePromptField = (schemaType.options as ImageOptions)?.imagePromptField
+  if (imagePromptField) {
+    return imagePromptField
+  }
+  return getImagePromptFieldOption(schemaType.type)
+}

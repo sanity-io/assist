@@ -278,7 +278,7 @@ export const mockArticle = defineType({
         },
       },
     }),*/
-    defineField({
+    /*    defineField({
       type: 'array',
       name: 'categories',
       title: 'Categories',
@@ -293,6 +293,31 @@ export const mockArticle = defineType({
           },
         }),
       ],
+    }),*/
+    defineField({
+      type: 'text',
+      name: 'lede',
+      title: 'Lede',
+      rows: 3,
+    }),
+    defineField({
+      type: articleImage.name,
+      name: 'image',
+      title: 'Cover image',
+      options: {
+        collapsible: true,
+      },
+    }),
+    defineField({
+      type: 'reference',
+      name: 'category',
+      title: 'Category',
+      to: [{type: 'category'}],
+      options: {
+        aiWritingAssistance: {
+          embeddingsIndex: 'Categories',
+        },
+      },
     }),
     defineField({
       type: 'array',
@@ -311,48 +336,6 @@ export const mockArticle = defineType({
           },
         }),
       ],
-    }),
-    defineField({
-      name: 'language',
-      type: 'string',
-      readOnly: true,
-      hidden: true,
-    }),
-
-    defineField({
-      type: 'excludedTypeString',
-      name: 'excludedTypeString',
-      title: 'Overridden Excluded type string',
-      options: {
-        aiWritingAssistance: {
-          exclude: false,
-        },
-      },
-    }),
-    defineField({
-      type: 'array',
-      name: 'alternateTitles',
-      title: 'Alternate titles',
-      of: [{type: 'string'}],
-    }),
-    defineField({
-      type: 'text',
-      name: 'lede',
-      title: 'Lede',
-    }),
-    defineField({
-      type: articleImage.name,
-      name: 'image',
-      title: 'Cover image',
-      options: {
-        collapsible: true,
-      },
-    }),
-    defineField({
-      type: 'array',
-      name: 'gallery',
-      title: 'Gallery',
-      of: [{type: articleImage.name}],
     }),
     defineField({
       name: 'body',
@@ -394,6 +377,28 @@ export const mockArticle = defineType({
         }),
       ],
     }),
+    defineField({
+      name: 'language',
+      type: 'string',
+      readOnly: false,
+      hidden: false,
+      options: {
+        list: languages.map(({id, title}) => ({value: id, title})),
+      },
+    }),
+    defineField({
+      type: 'array',
+      name: 'alternateTitles',
+      title: 'Alternate titles',
+      of: [{type: 'string'}],
+    }),
+    defineField({
+      type: 'array',
+      name: 'gallery',
+      title: 'Gallery',
+      of: [{type: articleImage.name}],
+    }),
+
     defineField({
       name: 'plainBody',
       type: 'array',

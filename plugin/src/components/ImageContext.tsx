@@ -1,17 +1,18 @@
 import {createContext, useEffect, useMemo, useState} from 'react'
 import {InputProps, pathToString, useSyncState} from 'sanity'
-import {getCaptionFieldOption} from '../helpers/typeUtils'
+import {getCaptionFieldOption, getImagePromptFieldOption} from '../helpers/typeUtils'
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {useApiClient, useGenerateCaption} from '../useApiClient'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 import {publicId} from '../helpers/ids'
 
 export interface ImageContextValue {
-  captionPath: string
+  captionPath?: string
+  imagePromptPath?: string
   assetRef?: string
 }
 
-export const ImageContext = createContext<ImageContextValue | undefined>(undefined)
+export const ImageContext = createContext<ImageContextValue>({})
 
 export function ImageContextProvider(props: InputProps) {
   const {schemaType, path, value} = props
@@ -33,9 +34,14 @@ export function ImageContextProvider(props: InputProps) {
     }
   }, [schemaType, path, assetRef, assetRefState, documentId, generateCaption, isSyncing])
 
-  const context: ImageContextValue | undefined = useMemo(() => {
+  const context: ImageContextValue = useMemo(() => {
     const captionField = getCaptionFieldOption(schemaType)
-    return captionField ? {captionPath: pathToString([...path, captionField]), assetRef} : undefined
+    const imagePromptField = getImagePromptFieldOption(schemaType)
+    return {
+      captionPath: captionField ? pathToString([...path, captionField]) : undefined,
+      imagePromptPath: imagePromptField ? pathToString([...path, imagePromptField]) : undefined,
+      assetRef,
+    }
   }, [schemaType, path, assetRef])
 
   return <ImageContext.Provider value={context}>{props.renderDefault(props)}</ImageContext.Provider>

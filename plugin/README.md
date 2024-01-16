@@ -298,24 +298,29 @@ This will add a "Generate caption" action to the configured field.
 Fields within array items are not supported.
 
 ## Image generation
-
-<img width="600" alt="image" src="https://github.com/sanity-io/assist/assets/835514/c144985c-d828-4e55-8a6d-5d5da033791f">
+<img width="600" alt="image" src="https://github.com/sanity-io/assist/assets/835514/c4de6791-f530-4cd1-b0c2-96ef988bc256">
 
 AI Assist can generate assets for images configured with a prompt field.
 
-Whenever the image prompt field is written to by an AI Assist instruction, the field value is used as a prompt to generate a new image.
+An image is generated directly by using the "Generate image from prompt" instruction on the prompt field, 
+or indirectly whenever the image prompt field is written to by an AI Assist instruction.
 
+### Configure
 To enable image generation for an image field, the image must:
 - set `options.imagePromptField` to a child-path relative to the image
 - have a `string` or `text` field that corresponds to the `imagePromptField` path
 
-Next, create an AI Assist instruction that will visit the image prompt field.
+This will add a "Generate image from prompt" instruction to the image prompt field. Running it will generate and image.
+
+Additionally, whenever an AI Assist instruction writes to the image prompt field, the image will be generated.
 
 This could be a document instruction, an instruction for the image field or parent object, or directly on the image prompt field.
 
-Use AI context documents to apply a reusable styleguide to images as needed.
+A common styleguide can achieved by adding an instruction to the image prompt field that rewrites whatever value is there, to include a common style.
+Use AI context documents to apply a reusable styleguide to the prompt rewriting as needed.
 
 #### Example
+
 Given the following document schema
 ```ts
 defineType({
@@ -341,16 +346,19 @@ defineType({
 })
 ```
 
-To directly generate an image, run the following instruction on the image prompt field:
-"Repeat the value in {Reference to image-prompt-field}".
+To directly generate an image based on the value in the prompt field, 
+run the "Generate image from prompt" instruction that is automatically added.
+
+For better image results or to ensure a consistent style, rewrite the prompt before generating the image:
 
 ### Example prompt expansion instruction
+<img width="267" alt="image" src="https://github.com/sanity-io/assist/assets/835514/dabc6910-80d3-4a69-940f-49ac5cae9ade">
 
 For better image results, use an instruction that expands the prompt to be more detailed.
 
 Example instruction text:
 
-"
+```
 Rewrite image prompts for image generation according to the following rules:
 - Be Specific: Include detailed descriptions of the scene, objects, colors, and any characters. Instead of saying "a cat in a garden", say "a fluffy gray cat sitting beside pink tulips in a sunny garden".
 - Set the Scene: Describe the environment or background. Mention if it's indoors or outdoors, the time of day, weather conditions, and any specific setting details like a beach, forest, cityscape, etc.
@@ -364,10 +372,9 @@ Keep it 100 words or less.
 
 The prompt to rewrite is:
 {Reference to image-prompt-field}
-"
+```
 
 The rules can be extracted into an AI Context document and reused in other instructions as needed. This approach can also be used to inform a reusable styleguide for image generation.
-
 ## Full document translation
 <img width="250" alt="Translate document action" src="https://github.com/sanity-io/assist/assets/835514/932968ee-1a8c-4389-8822-338188f88b40">
 

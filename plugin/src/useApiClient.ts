@@ -153,6 +153,59 @@ export function useGenerateCaption(apiClient: SanityClient) {
   )
 }
 
+export function useGenerateImage(apiClient: SanityClient) {
+  const [loading, setLoading] = useState(false)
+  const user = useCurrentUser()
+  const schema = useSchema()
+  const types = useMemo(() => serializeSchema(schema, {leanFormat: true}), [schema])
+  const toast = useToast()
+
+  const generateImage = useCallback(
+    ({path, documentId}: {path: string; documentId: string}) => {
+      setLoading(true)
+
+      return apiClient
+        .request({
+          method: 'POST',
+          url: `/assist/tasks/generate-image/${apiClient.config().dataset}?projectId=${
+            apiClient.config().projectId
+          }`,
+          body: {
+            path,
+            documentId,
+            types,
+            userId: user?.id,
+          },
+        })
+        .catch((e) => {
+          toast.push({
+            status: 'error',
+            title: 'Generate image from prompt failed',
+            description: e.message,
+          })
+          setLoading(false)
+          throw e
+        })
+        .finally(() => {
+          // adding some artificial delay here
+          // server responds with 201 then proceeds; we dont need to allow spamming the button
+          setTimeout(() => {
+            setLoading(false)
+          }, 2000)
+        })
+    },
+    [setLoading, apiClient, toast, user, types]
+  )
+
+  return useMemo(
+    () => ({
+      generateImage,
+      loading,
+    }),
+    [generateImage, loading]
+  )
+}
+
 export function useGetInstructStatus(apiClient: SanityClient) {
   const [loading, setLoading] = useState(true)
 
