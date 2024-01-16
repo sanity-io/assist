@@ -26,6 +26,7 @@ import {useDocumentPane} from 'sanity/desk'
 import {useSelectedField, useTypePath} from '../assistInspector/helpers'
 import {isSchemaAssistEnabled} from '../helpers/assistSupported'
 import {translateActions, TranslateProps} from '../translate/translateActions'
+import {generateImagActions} from './generateImageActions'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -92,6 +93,7 @@ export const assistFieldActions: DocumentFieldAction = {
     const isSelected = isInspectorOpen && isPathSelected
 
     const imageCaptionAction = generateCaptionsActions.useAction(props)
+    const imageGenAction = generateImagActions.useAction(props)
     const translateAction = translateActions.useAction(
       typed<TranslateProps>({
         ...props,
@@ -144,7 +146,7 @@ export const assistFieldActions: DocumentFieldAction = {
     )
 
     const runInstructionsGroup = useMemo(() => {
-      return instructions?.length || imageCaptionAction || translateAction
+      return instructions?.length || imageCaptionAction || translateAction || imageGenAction
         ? node({
             type: 'group',
             icon: () => null,
@@ -161,6 +163,7 @@ export const assistFieldActions: DocumentFieldAction = {
                 })
               ),
               imageCaptionAction,
+              imageGenAction,
             ].filter((a): a is DocumentFieldActionItem => !!a),
             expanded: true,
           })
@@ -174,6 +177,7 @@ export const assistFieldActions: DocumentFieldAction = {
       assistSupported,
       imageCaptionAction,
       translateAction,
+      imageGenAction,
     ])
 
     const instructionsLength = instructions?.length || 0
@@ -205,7 +209,7 @@ export const assistFieldActions: DocumentFieldAction = {
             .filter((c) => (c.type === 'group' ? c.children.length : true)),
           expanded: false,
           renderAsButton: true,
-          hidden: !assistSupported && !imageCaptionAction && !translateAction,
+          hidden: !assistSupported && !imageCaptionAction && !translateAction && !imageGenAction,
         }),
       [
         //documentIsNew,
@@ -214,6 +218,7 @@ export const assistFieldActions: DocumentFieldAction = {
         assistSupported,
         imageCaptionAction,
         translateAction,
+        imageGenAction,
       ]
     )
 
@@ -232,7 +237,7 @@ export const assistFieldActions: DocumentFieldAction = {
     )
 
     // If there are no instructions, we don't want to render the group
-    if (instructionsLength === 0 && !imageCaptionAction && !translateAction) {
+    if (instructionsLength === 0 && !imageCaptionAction && !translateAction && !imageGenAction) {
       return emptyAction
     }
 
