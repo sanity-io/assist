@@ -23,6 +23,7 @@ export const featureProduct = defineType({
       ],
     }),
   ],
+  options: {aiWritingAssistance: {translateAction: true}},
 })
 
 export const localizedPte = defineType({
@@ -92,12 +93,12 @@ export const languageArticle = defineType({
       name: 'subtitle',
       type: 'internationalizedArrayString',
       title: 'Subtitle',
-      options: {aiWritingAssistance: {translateAction: true}},
     }),
     defineField({
       name: 'localePte',
       type: localizedPte.name,
       title: 'PTE',
+      options: {aiWritingAssistance: {translateAction: true}},
     }),
     defineField({
       name: 'localeObject',
@@ -108,7 +109,6 @@ export const languageArticle = defineType({
       name: 'featureProduct',
       type: 'internationalizedArrayFeatureProduct',
       title: 'Feature Product',
-      options: {aiWritingAssistance: {translateAction: true}},
     }),
     defineField({
       type: 'image',

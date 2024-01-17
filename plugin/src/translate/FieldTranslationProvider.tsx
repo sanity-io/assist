@@ -81,20 +81,21 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
       }
 
       const preferred = getPreferredToFieldLanguages(from.id)
-      const to = languages
-        .filter((l) => l.id !== from?.id)
-        .filter((l) => !preferred.length || preferred.includes(l.id))
+      const allToLanguages = languages.filter((l) => l.id !== from?.id)
+      const filteredToLanguages = allToLanguages.filter(
+        (l) => !preferred.length || preferred.includes(l.id)
+      )
 
-      setToLanguages(to)
+      setToLanguages(filteredToLanguages)
       const fromId = from?.id
-      const toIds = to?.map((l) => l.id) ?? []
+      const allToIds = allToLanguages?.map((l) => l.id) ?? []
       const docMembers = getDocumentMembersFlat(document, documentSchema)
-      if (fromId && toIds?.length) {
+      if (fromId && allToIds?.length) {
         const transMap = getFieldLanguageMap(
           documentSchema,
           docMembers,
           fromId,
-          toIds,
+          allToIds,
           config?.translationOutputs ?? defaultLanguageOutputs
         )
         setFieldLanguageMaps(transMap)
