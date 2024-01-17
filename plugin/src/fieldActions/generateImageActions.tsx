@@ -47,9 +47,8 @@ export const generateImagActions: DocumentFieldAction = {
           },
           renderAsButton: true,
           disabled: loading,
-          hidden: !imageContext.assetRef,
         })
-      }, [generateImage, pathKey, documentId, loading, imageContext])
+      }, [generateImage, pathKey, documentId, loading])
     }
 
     // works but not supported by types
