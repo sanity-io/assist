@@ -8,7 +8,6 @@ import {RunInstructionRequest} from '../useApiClient'
 import {StudioInstruction} from '../types'
 import {RunInstructionProvider} from './RunInstructionProvider'
 import {ThemeProvider} from '@sanity/ui'
-import {AlphaMigration} from './AlphaMigration'
 import {FieldTranslationProvider} from '../translate/FieldTranslationProvider'
 
 export interface AIStudioLayoutProps extends LayoutProps {
@@ -21,11 +20,9 @@ export type RunInstructionArgs = Omit<RunInstructionRequest, 'instructionKey' | 
 
 export function AssistLayout(props: AIStudioLayoutProps) {
   const [connectors, setConnectors] = useState<Connector[]>([])
-  const migrate = props.config.alphaMigration ?? true
 
   return (
     <AiAssistanceConfigProvider config={props.config}>
-      {migrate ? <AlphaMigration /> : null}
       <RunInstructionProvider>
         <FieldTranslationProvider>
           <ConnectorsProvider onConnectorsChange={setConnectors}>

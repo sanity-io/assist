@@ -22,11 +22,6 @@ export interface AssistPluginConfig {
   translate?: TranslationConfig
 
   /**
-   * Set this to false to disable model migration from the alpha version of this plugin
-   */
-  alphaMigration?: boolean
-
-  /**
    * @internal
    */
   __customApiClient?: (defaultClient: SanityClient) => SanityClient
