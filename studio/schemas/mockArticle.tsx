@@ -11,6 +11,25 @@ import {Stack, Text} from '@sanity/ui'
 import {dataset, projectId} from '../env'
 import {languages} from '../src/lang/languages'
 
+export const simplePte = defineField({
+  name: 'simplePte',
+  title: 'Rich text',
+  type: 'array',
+  of: [
+    defineArrayMember({
+      type: 'block',
+      styles: [{title: 'Normal', value: 'normal'}],
+      marks: {
+        decorators: [
+          {title: 'Bold', value: 'strong'},
+          {title: 'Italic', value: 'em'},
+        ] as any,
+        annotations: [],
+      },
+    }),
+  ],
+})
+
 export const articleImage = defineType({
   type: 'image',
   name: 'articleImage',
@@ -116,6 +135,9 @@ export const todo = defineType({
   },
   components: {
     preview: (props: any) => {
+      if (props.layout === 'inline') {
+        return <div>Article TODOs</div>
+      }
       return (
         <Stack space={2} padding={2}>
           <Text weight="semibold">Article TODOs</Text>
@@ -263,8 +285,17 @@ export const mockArticle = defineType({
       type: 'string',
       name: 'title',
       title: 'Title',
-      options: {
+      /*options: {
         aiWritingAssistance: {translateAction: true},
+      },*/
+    }),
+    defineField({
+      name: 'language',
+      type: 'string',
+      readOnly: false,
+      hidden: false,
+      options: {
+        list: languages.map(({id, title}) => ({value: id, title})),
       },
     }),
     /*    defineField({
@@ -299,6 +330,9 @@ export const mockArticle = defineType({
       name: 'lede',
       title: 'Lede',
       rows: 3,
+      options: {
+        aiWritingAssistance: {translateAction: true},
+      },
     }),
     defineField({
       type: articleImage.name,
@@ -340,6 +374,9 @@ export const mockArticle = defineType({
     defineField({
       name: 'body',
       type: 'array',
+      options: {
+        aiWritingAssistance: {translateAction: true},
+      },
       of: [
         defineArrayMember({
           type: 'block',
@@ -350,7 +387,35 @@ export const mockArticle = defineType({
               {title: 'Italic', value: 'em'},
               {title: 'Code', value: 'code'},
             ] as any,
-            annotations: [],
+            annotations: [
+              defineArrayMember({
+                type: 'object',
+                name: 'test-annotation',
+                fields: [
+                  defineField({
+                    type: 'string',
+                    name: 'fact',
+                    title: 'Fact',
+                  }),
+                  defineField({
+                    type: 'simplePte',
+                    name: 'details',
+                    title: 'Details',
+                  }),
+                ],
+              }),
+            ],
+          },
+        }),
+        defineArrayMember({
+          type: 'reference',
+          name: 'ref',
+          title: 'Article reference',
+          to: [{type: 'mockArticle'}],
+          options: {
+            aiWritingAssistance: {
+              embeddingsIndex: 'articles',
+            },
           },
         }),
         {type: articleImage.name},
@@ -364,27 +429,7 @@ export const mockArticle = defineType({
           title: 'Detail',
           fields: [{name: 'title', title: 'Title', type: 'string'}],
         },
-        defineArrayMember({
-          type: 'reference',
-          name: 'ref',
-          title: 'Article reference',
-          to: [{type: 'mockArticle'}],
-          options: {
-            aiWritingAssistance: {
-              embeddingsIndex: 'articles',
-            },
-          },
-        }),
       ],
-    }),
-    defineField({
-      name: 'language',
-      type: 'string',
-      readOnly: false,
-      hidden: false,
-      options: {
-        list: languages.map(({id, title}) => ({value: id, title})),
-      },
     }),
     defineField({
       type: 'array',

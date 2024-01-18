@@ -1,6 +1,7 @@
 import {
   ArraySchemaType,
   ImageOptions,
+  isArraySchemaType,
   ObjectSchemaType,
   ReferenceOptions,
   ReferenceSchemaType,
@@ -11,12 +12,13 @@ import {
 import {
   assistSerializedFieldTypeName,
   assistSerializedTypeName,
-  SerializedSchemaMember,
   SerializedSchemaType,
   assistSchemaIdPrefix,
+  SerializedSchemaMember,
 } from '../../types'
 import {hiddenTypes} from './schemaUtils'
 import {isAssistSupported} from '../../helpers/assistSupported'
+import {isType} from '../../helpers/typeUtils'
 
 interface Options {
   leanFormat?: boolean
@@ -99,6 +101,14 @@ function getBaseFields(
       'fields' in type && inlineTypes.includes(typeName)
         ? serializeFields(schema, type, options)
         : undefined,
+    annotations:
+      typeName === 'block' && 'fields' in type
+        ? serializeAnnotations(type, schema, options)
+        : undefined,
+    inlineOf:
+      typeName === 'block' && 'fields' in type
+        ? serializeInlineOf(type, schema, options)
+        : undefined,
   })
 }
 
@@ -129,6 +139,39 @@ function serializeMember(
     title: type.title,
     ...getBaseFields(schema, type, typeName, options),
   })
+}
+
+function serializeInlineOf(
+  blockSchemaType: ObjectSchemaType,
+  schema: Schema,
+  options: Options | undefined
+): SerializedSchemaMember[] | undefined {
+  const childrenField = blockSchemaType.fields.find((f) => f.name === 'children')
+  const childrenType = childrenField?.type
+  if (!childrenType || !isArraySchemaType(childrenType)) {
+    return undefined
+  }
+  return arrayOf(
+    {
+      ...childrenType,
+      of: childrenType.of.filter((t) => !isType(t, 'span')),
+    },
+    schema,
+    options
+  )
+}
+
+function serializeAnnotations(
+  blockSchemaType: ObjectSchemaType,
+  schema: Schema,
+  options: Options | undefined
+): SerializedSchemaMember[] | undefined {
+  const markDefs = blockSchemaType.fields.find((f) => f.name === 'markDefs')
+  const marksType = markDefs?.type
+  if (!marksType || !isArraySchemaType(marksType)) {
+    return undefined
+  }
+  return arrayOf(marksType, schema, options)
 }
 
 function arrayOf(

@@ -37,25 +37,23 @@ export const instructionParam = 'instruction' as const
 // other constants
 export const documentRootKey = '<document>'
 
-export interface SerializedSchemaMember {
+export type SerializedSchemaMember = Omit<SerializedSchemaType, 'name' | '_type'> & {
   _type?: typeof assistSerializedFieldTypeName
-  type: string
-  name: string
-  title?: string
-  values?: string[]
-  of?: SerializedSchemaMember[]
-  to?: {type: string}[]
+  name?: string
 }
 
 export interface SerializedSchemaType {
   _type?: typeof assistSerializedTypeName
   _id?: string
   type: string
+  name: string
   title?: string
-  name?: string
   fields?: SerializedSchemaMember[]
-  of?: {type: string}[]
-  to?: {type: string}[]
+  of?: SerializedSchemaMember[]
+  to?: SerializedSchemaMember[]
+  annotations?: SerializedSchemaMember[]
+  inlineOf?: SerializedSchemaMember[]
+  values?: string[] | {value: string; title?: string}[]
   options?: {
     imagePromptField?: string
   }

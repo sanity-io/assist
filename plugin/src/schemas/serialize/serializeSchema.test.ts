@@ -509,4 +509,175 @@ describe('serializeSchema', () => {
 
     expect(serializedTypes).toEqual([])
   })
+
+  test('should serialize annotations', () => {
+    const schema = Schema.compile({
+      name: 'test',
+      types: [
+        defineType({
+          type: 'object',
+          name: 'annotation',
+          fields: [defineField({type: 'string', name: 'fact', title: 'Fact'})],
+        }),
+        defineType({
+          name: 'blockAlias',
+          type: 'block',
+          marks: {annotations: [{type: 'annotation'}]},
+        }),
+        defineType({
+          type: 'document',
+          name: 'article',
+          fields: [
+            {
+              type: 'array',
+              name: 'inlinePte',
+              of: [
+                defineArrayMember({
+                  type: 'block',
+                  marks: {
+                    annotations: [
+                      defineArrayMember({
+                        type: 'object',
+                        name: 'inline-annotation',
+                        fields: [defineField({type: 'string', name: 'fact', title: 'Fact'})],
+                      }),
+                    ],
+                  },
+                }),
+              ],
+            },
+            {type: 'array', name: 'pte', of: [{type: 'blockAlias'}]},
+          ],
+        }),
+      ],
+    })
+
+    const serializedTypes = serializeSchema(schema, {leanFormat: true})
+
+    expect(serializedTypes).toEqual([
+      {
+        name: 'annotation',
+        title: 'Annotation',
+        type: 'object',
+        fields: [{name: 'fact', title: 'Fact', type: 'string'}],
+      },
+      {
+        name: 'article',
+        title: 'Article',
+        type: 'document',
+        fields: [
+          {
+            name: 'inlinePte',
+            title: 'Inline Pte',
+            type: 'array',
+            of: [
+              {
+                name: 'block',
+                title: 'Block',
+                type: 'block',
+                inlineOf: [],
+                annotations: [
+                  {
+                    name: 'inline-annotation',
+                    title: 'Inline Annotation',
+                    type: 'object',
+                    fields: [{name: 'fact', title: 'Fact', type: 'string'}],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: 'pte',
+            of: [{name: 'blockAlias', title: 'Block', type: 'blockAlias'}],
+            title: 'Pte',
+            type: 'array',
+          },
+        ],
+      },
+      {
+        name: 'blockAlias',
+        title: 'Block',
+        type: 'block',
+        annotations: [{name: 'annotation', title: 'Annotation', type: 'annotation'}],
+        inlineOf: [],
+      },
+    ])
+  })
+
+  test('should serialize inline block types', () => {
+    const schema = Schema.compile({
+      name: 'test',
+      types: [
+        defineType({
+          type: 'object',
+          name: 'inline-block',
+          fields: [
+            defineField({type: 'string', name: 'fact', title: 'Fact'}),
+            defineField({type: 'blockAlias', name: 'recurse', title: 'Recursive'}),
+          ],
+        }),
+        defineType({
+          name: 'blockAlias',
+          type: 'block',
+          of: [{type: 'inline-block'}],
+        }),
+        defineType({
+          type: 'document',
+          name: 'article',
+          fields: [{type: 'array', name: 'pte', of: [{type: 'blockAlias'}]}],
+        }),
+      ],
+    })
+
+    const serializedTypes = serializeSchema(schema, {leanFormat: true})
+
+    expect(serializedTypes).toEqual([
+      {
+        name: 'article',
+        title: 'Article',
+        type: 'document',
+        fields: [
+          {
+            name: 'pte',
+            of: [
+              {
+                name: 'blockAlias',
+                title: 'Block',
+                type: 'blockAlias',
+              },
+            ],
+            title: 'Pte',
+            type: 'array',
+          },
+        ],
+      },
+      {
+        name: 'blockAlias',
+        title: 'Block',
+        type: 'block',
+        annotations: [],
+        inlineOf: [
+          {
+            name: 'inline-block',
+            title: 'Inline Block',
+            type: 'inline-block',
+          },
+        ],
+      },
+      {
+        name: 'inline-block',
+        title: 'Inline Block',
+        type: 'object',
+        fields: [
+          {name: 'fact', title: 'Fact', type: 'string'},
+          {
+            name: 'recurse',
+            title: 'Recursive',
+            type: 'blockAlias',
+          },
+        ],
+      },
+    ])
+  })
 })

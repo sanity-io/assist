@@ -380,6 +380,8 @@ The rules can be extracted into an AI Context document and reused in other instr
 
 AI assist offers full document translations, which is ideal for pairing with [@sanity/document-internationalization](https://github.com/sanity-io/document-internationalization).
 
+Translations are done deeply; visiting nested objects, arrays and even Portable text annotations.
+
 ### What AI Assist full document translations solves
 
 Given a document written in one language, AI assist can translate the document in place to a language specified by a language field in the document.
