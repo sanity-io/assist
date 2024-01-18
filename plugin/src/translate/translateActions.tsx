@@ -16,7 +16,6 @@ import {useDocumentPane} from 'sanity/desk'
 import {useFieldTranslation} from './FieldTranslationProvider'
 import {useDraftDelayedTask} from '../assistDocument/RequestRunInstructionProvider'
 import {AssistOptions} from '../schemas/typeDefExtensions'
-import {extractWithPath} from '@sanity/mutator'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -74,7 +73,6 @@ export const translateActions: DocumentFieldAction = {
         if (!languagePath || !documentTranslationEnabled) {
           return undefined
         }
-        const {value: languageId} = extractWithPath(languagePath, documentValue)[0] ?? {}
         const title = path.length ? `Translate` : `Translate document`
         return node({
           type: 'action',
@@ -97,10 +95,7 @@ export const translateActions: DocumentFieldAction = {
             })
           },
           renderAsButton: true,
-          disabled:
-            translationApi.loading || !languageId
-              ? {reason: 'Language is not set for this document'}
-              : undefined,
+          disabled: translationApi.loading,
         })
       }, [
         languagePath,
