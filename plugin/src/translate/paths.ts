@@ -84,6 +84,11 @@ function extractPaths(
   }, [])
 }
 
+/**
+ * Default implementation for plugin config `translate.field.translationOutputs`
+ *
+ * @see FieldTranslationConfig#translationOutputs
+ */
 export const defaultLanguageOutputs: TranslationOutputsFunction = function (
   member,
   enclosingType,
