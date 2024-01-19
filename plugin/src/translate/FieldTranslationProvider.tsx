@@ -7,7 +7,7 @@ import {
   useMemo,
   useState,
 } from 'react'
-import {ObjectSchemaType, Path, SanityDocumentLike, useClient} from 'sanity'
+import {ObjectSchemaType, Path, pathToString, SanityDocumentLike, useClient} from 'sanity'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 import {useApiClient, useTranslate} from '../useApiClient'
 import {Box, Button, Checkbox, Dialog, Flex, Radio, Spinner, Stack, Text, Tooltip} from '@sanity/ui'
@@ -40,6 +40,19 @@ export const FieldTranslationContext = createContext<FieldTranslationContextValu
 
 export function useFieldTranslation() {
   return useContext(FieldTranslationContext)
+}
+
+function hasValuesToTranslate(
+  fieldLanguageMaps: FieldLanguageMap[] | undefined,
+  fromLanguage: Language | undefined,
+  basePath: Path
+) {
+  return fieldLanguageMaps?.some(
+    (map) =>
+      map.inputLanguageId === fromLanguage?.id &&
+      map.inputPath &&
+      pathToString(map.inputPath).startsWith(pathToString(basePath))
+  )
 }
 
 export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
@@ -95,7 +108,7 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
           documentSchema,
           docMembers,
           fromId,
-          allToIds,
+          allToIds.filter((toId) => fromId !== toId),
           config?.translationOutputs ?? defaultLanguageOutputs
         )
         setFieldLanguageMaps(transMap)
@@ -159,7 +172,11 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
   }, [openFieldTranslation])
 
   const runDisabled =
-    !fromLanguage || !toLanguages?.length || !fieldLanguageMaps?.length || !documentId
+    !fromLanguage ||
+    !toLanguages?.length ||
+    !fieldLanguageMaps?.length ||
+    !documentId ||
+    !hasValuesToTranslate(fieldLanguageMaps, fromLanguage, fieldTranslationParams.translatePath)
 
   const onRunTranslation = useCallback(() => {
     const translatePath = fieldTranslationParams?.translatePath
@@ -210,7 +227,7 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
                 <Tooltip
                   content={
                     <Flex padding={2}>
-                      <Text>Nothing to translate.</Text>
+                      <Text>There is nothing to translate in the selected from-language.</Text>
                     </Flex>
                   }
                   placement="top"
@@ -229,36 +246,45 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
                 <Box marginBottom={2}>
                   <Text weight="semibold">From</Text>
                 </Box>
-                {languages?.map((l) => (
-                  <Flex key={l.id} gap={3} align="center">
-                    <Radio
-                      name="fromLang"
-                      value={l.id}
-                      checked={l.id === fromLanguage?.id}
-                      onClick={() => selectFromLanguage(l, languages, fieldTranslationParams)}
-                    />
-                    <Text>{l.title ?? l.id}</Text>
-                  </Flex>
-                ))}
+                {languages?.map((l) => {
+                  return (
+                    <Flex key={l.id} gap={3} align="center" as={'label'}>
+                      <Radio
+                        name="fromLang"
+                        value={l.id}
+                        checked={l.id === fromLanguage?.id}
+                        onChange={() => selectFromLanguage(l, languages, fieldTranslationParams)}
+                      />
+                      <Text>{l.title ?? l.id}</Text>
+                    </Flex>
+                  )
+                })}
               </Stack>
 
               <Stack space={2}>
                 <Box marginBottom={2}>
                   <Text weight="semibold">To</Text>
                 </Box>
-                {languages
-                  ?.filter((l) => l.id !== fromLanguage?.id)
-                  .map((l) => (
-                    <Flex key={l.id} gap={3} align="center">
-                      <Checkbox
-                        name="toLang"
-                        value={l.id}
-                        checked={!!toLanguages?.find((tl) => tl.id === l.id)}
-                        onClick={() => toggleToLanguage(l, toLanguages, languages)}
-                      />
-                      <Text>{l.title ?? l.id}</Text>
-                    </Flex>
-                  ))}
+                {languages.map((l) => (
+                  <Flex
+                    key={l.id}
+                    gap={3}
+                    align="center"
+                    as={'label'}
+                    style={l.id === fromLanguage?.id ? {opacity: 0.5} : undefined}
+                  >
+                    <Checkbox
+                      name="toLang"
+                      value={l.id}
+                      checked={
+                        l.id !== fromLanguage?.id && !!toLanguages?.find((tl) => tl.id === l.id)
+                      }
+                      onChange={() => toggleToLanguage(l, toLanguages, languages)}
+                      disabled={l.id === fromLanguage?.id}
+                    />
+                    <Text muted={l.id === fromLanguage?.id}>{l.title ?? l.id}</Text>
+                  </Flex>
+                ))}
               </Stack>
             </Flex>
           ) : (

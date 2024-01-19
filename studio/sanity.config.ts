@@ -83,7 +83,6 @@ export default defineConfig({
     }),
     internationalizedArray({
       languages,
-      buttonLocations: ['unstable__fieldAction'],
       fieldTypes: ['string', featureProduct.name],
     }),
     embeddingsIndexDashboard(),
