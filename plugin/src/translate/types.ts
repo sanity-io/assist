@@ -9,6 +9,7 @@ export interface DocumentMember {
   schemaType: SchemaType
   path: Path
   name: string
+  value: unknown
 }
 
 export interface TranslationOutput {

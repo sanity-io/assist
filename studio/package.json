@@ -35,7 +35,7 @@
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
     "sanity": "^3.24.1",
-    "sanity-plugin-internationalized-array": "^1.10.4",
+    "sanity-plugin-internationalized-array": "^1.10.5",
     "styled-components": "^6.0.0"
   },
   "devDependencies": {

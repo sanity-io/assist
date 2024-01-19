@@ -39,10 +39,16 @@ function extractPaths(
   return schemaType.fields.reduce<DocumentMember[]>((acc, field) => {
     const fieldPath = [...path, field.name]
     const fieldSchema = field.type
+    const {value} = extractWithPath(pathToString(fieldPath), doc)[0] ?? {}
+    if (!value) {
+      return acc
+    }
+
     const thisFieldWithPath: DocumentMember = {
       path: fieldPath,
       name: field.name,
       schemaType: fieldSchema,
+      value,
     }
 
     if (fieldSchema.jsonType === 'object') {
@@ -68,11 +74,13 @@ function extractPaths(
               itemPath,
               maxDepth
             )
-            arrayPaths = [
-              ...arrayPaths,
-              {path: itemPath, name: item._key, schemaType: arrayItemSchema},
-              ...innerFields,
-            ]
+            const arrayMember = {
+              path: itemPath,
+              name: item._key,
+              schemaType: arrayItemSchema,
+              value: item,
+            }
+            arrayPaths = [...arrayPaths, arrayMember, ...innerFields]
           }
         }
       }

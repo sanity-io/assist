@@ -46,15 +46,14 @@ describe('paths', () => {
       _id: 'na',
       _type: 'article',
       title: 'some title',
+      localeTitle: {
+        en: 'en string',
+      },
       translations: [
         {
           _type: 'internationalizedArrayString',
           _key: 'en',
           value: 'some string',
-        },
-        {
-          _type: 'internationalizedArrayString',
-          _key: 'nb',
         },
       ],
     }
@@ -64,12 +63,14 @@ describe('paths', () => {
       'title',
       'localeTitle',
       'localeTitle.en',
-      'localeTitle.no',
+      // this path has no value in the document, so are not included
+      //'localeTitle.no',
       'translations',
       'translations[_key=="en"]',
       'translations[_key=="en"].value',
-      'translations[_key=="nb"]',
-      'translations[_key=="nb"].value',
+      // these path has no value in the document, so are not included
+      //'translations[_key=="nb"]',
+      //'translations[_key=="nb"].value',
     ])
 
     const transMap = getFieldLanguageMap(docSchema, members, 'en', ['nb'], defaultLanguageOutputs)
