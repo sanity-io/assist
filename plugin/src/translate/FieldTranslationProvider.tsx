@@ -21,11 +21,13 @@ import {PlayIcon} from '@sanity/icons'
 import {Language} from './types'
 import {getLanguageParams} from './getLanguageParams'
 import {getPreferredToFieldLanguages, setPreferredToFieldLanguages} from './languageStore'
+import {ConditionalMemberState} from '../helpers/conditionalMembers'
 
 interface FieldTranslationParams {
   document: SanityDocumentLike
   documentSchema: ObjectSchemaType
   translatePath: Path
+  conditionalMembers: ConditionalMemberState[]
 }
 
 export interface FieldTranslationContextValue {
@@ -183,12 +185,13 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
     if (fieldLanguageMaps && documentId && translatePath) {
       runTranslate({
         documentId,
-        translatePath: fieldTranslationParams?.translatePath,
+        translatePath: translatePath,
         fieldLanguageMap: fieldLanguageMaps.map((map) => ({
           ...map,
           // eslint-disable-next-line max-nested-callbacks
           outputs: map.outputs.filter((out) => !!toLanguages?.find((l) => l.id === out.id)),
         })),
+        conditionalMembers: fieldTranslationParams?.conditionalMembers,
       })
     }
     close()

@@ -31,6 +31,7 @@ import {InspectorOnboarding} from '../onboarding/InspectorOnboarding'
 import {inspectorOnboardingKey, useOnboardingFeature} from '../onboarding/onboardingStore'
 import {TypePathContext} from '../assistDocument/components/AssistDocumentForm'
 import {FieldTitle} from './FieldAutocomplete'
+import {getConditionalMembers} from '../helpers/conditionalMembers'
 
 const CardWithShadowBelow = styled(Card)`
   position: relative;
@@ -199,8 +200,12 @@ export function AssistInspector(props: DocumentInspectorProps) {
     value: docValue,
     schemaType,
     onChange: documentOnChange,
+    formState,
   } = documentPane
   const {published, draft} = useEditState(documentId, documentType, 'low')
+
+  const formStateRef = useRef(formState)
+  formStateRef.current = formState
 
   const assistableDocId = getAssistableDocId(schemaType, documentId)
   const {instructionLoading, requestRunInstruction} = useRequestRunInstruction({
@@ -261,6 +266,7 @@ export function AssistInspector(props: DocumentInspectorProps) {
         typePath,
         assistDocumentId: assistDocumentId(documentType),
         instruction,
+        conditionalMembers: formStateRef.current ? getConditionalMembers(formStateRef.current) : [],
       }),
     [pathKey, instruction, typePath, documentType, assistableDocId, requestRunInstruction]
   )

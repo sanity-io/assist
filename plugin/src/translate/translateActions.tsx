@@ -16,6 +16,7 @@ import {useDocumentPane} from 'sanity/desk'
 import {useFieldTranslation} from './FieldTranslationProvider'
 import {useDraftDelayedTask} from '../assistDocument/RequestRunInstructionProvider'
 import {AssistOptions} from '../schemas/typeDefExtensions'
+import {getConditionalMembers} from '../helpers/conditionalMembers'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -39,6 +40,7 @@ export const translateActions: DocumentFieldAction = {
       documentIsAssistable,
     } = props
     const isDocumentLevel = path.length === 0
+    const readOnly = fieldSchemaType.readOnly === true
 
     const docTransTypes = config.translate?.document?.documentTypes
     const options = fieldSchemaType?.options as AssistOptions | undefined
@@ -56,8 +58,11 @@ export const translateActions: DocumentFieldAction = {
 
     // these checks are stable (ie, does not change after mount), so not breaking rules of hooks
     if (documentSchemaType && (documentTranslationEnabled || fieldTransEnabled)) {
-      const {value: documentValue, onChange: documentOnChange} = useDocumentPane()
+      const {value: documentValue, onChange: documentOnChange, formState} = useDocumentPane()
       const docRef = useRef(documentValue)
+      docRef.current = documentValue
+      const formStateRef = useRef(formState)
+      formStateRef.current = formState
 
       const translationApi = useTranslate(apiClient)
       const translate = useDraftDelayedTask({
@@ -65,7 +70,7 @@ export const translateActions: DocumentFieldAction = {
         isDocAssistable: documentIsAssistable ?? false,
         task: translationApi.translate,
       })
-      docRef.current = documentValue
+
       const languagePath = config.translate?.document?.languageField
 
       // if this is true, it is stable, and not breaking rules of hooks
@@ -92,10 +97,13 @@ export const translateActions: DocumentFieldAction = {
               languagePath,
               translatePath: path,
               documentId: documentId ?? '',
+              conditionalMembers: formStateRef.current
+                ? getConditionalMembers(formStateRef.current)
+                : [],
             })
           },
           renderAsButton: true,
-          disabled: translationApi.loading,
+          disabled: translationApi.loading || readOnly,
         })
       }, [
         languagePath,
@@ -104,8 +112,8 @@ export const translateActions: DocumentFieldAction = {
         translationApi.loading,
         documentTranslationEnabled,
         path,
+        readOnly,
       ])
-
       const fieldTranslate = useFieldTranslation()
       const openFieldTranslation = useDraftDelayedTask({
         documentOnChange,
@@ -130,14 +138,20 @@ export const translateActions: DocumentFieldAction = {
                   if (fieldTranslate.translationLoading || !documentId) {
                     return
                   }
+                  if (formStateRef.current) {
+                    getConditionalMembers(formStateRef.current)
+                  }
                   openFieldTranslation({
                     document: docRef.current,
                     documentSchema: documentSchemaType,
                     translatePath: path,
+                    conditionalMembers: formStateRef.current
+                      ? getConditionalMembers(formStateRef.current)
+                      : [],
                   })
                 },
                 renderAsButton: true,
-                disabled: fieldTranslate.translationLoading,
+                disabled: fieldTranslate.translationLoading || readOnly,
               })
             : undefined,
         [
@@ -147,6 +161,7 @@ export const translateActions: DocumentFieldAction = {
           fieldTranslate.translationLoading,
           fieldTransEnabled,
           path,
+          readOnly,
         ]
       )
 

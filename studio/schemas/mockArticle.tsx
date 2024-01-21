@@ -236,6 +236,8 @@ export const seoObject = defineType({
       type: 'string',
       name: 'seoTitle',
       title: 'SEO title',
+      readOnly: () => false,
+      hidden: () => false,
     }),
     defineField({
       type: 'text',
@@ -259,7 +261,18 @@ export const mockArticle = defineType({
   name: 'mockArticle',
   __experimental_formPreviewTitle: false,
   title: 'Article',
-  fieldsets: [{name: 'group', title: 'SEO', options: {columns: 1}}],
+  hidden: () => false,
+  readOnly: () => false,
+  fieldsets: [
+    {
+      name: 'seo-fieldset',
+      title: 'SEO',
+      options: {columns: 1},
+      readOnly: () => false,
+      hidden: () => false,
+    },
+  ],
+  groups: [{name: 'seo', title: 'SEO', hidden: () => false}],
   preview: {
     select: {
       title: 'title',
@@ -285,6 +298,8 @@ export const mockArticle = defineType({
       type: 'string',
       name: 'title',
       title: 'Title',
+      hidden: () => false,
+      readOnly: () => false,
       /*options: {
         aiWritingAssistance: {translateAction: true},
       },*/
@@ -374,6 +389,7 @@ export const mockArticle = defineType({
     defineField({
       name: 'body',
       type: 'array',
+      readOnly: () => false,
       options: {
         aiWritingAssistance: {translateAction: true},
       },
@@ -401,6 +417,7 @@ export const mockArticle = defineType({
                     type: 'simplePte',
                     name: 'details',
                     title: 'Details',
+                    hidden: ({parent}) => !parent?.fact,
                   }),
                 ],
               }),
@@ -500,9 +517,15 @@ export const mockArticle = defineType({
       type: seoObject.name,
       name: 'seo',
       title: 'SEO',
+      fieldset: 'seo-fieldset',
+      group: 'seo',
+      readOnly: () => false,
+      hidden: () => false,
     }),
     defineField({
       type: 'object',
+      fieldset: 'seo-fieldset',
+      group: 'seo',
       name: 'inline',
       title: 'Inline object',
       fields: [

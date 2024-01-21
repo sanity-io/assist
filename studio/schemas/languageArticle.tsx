@@ -93,6 +93,7 @@ export const languageArticle = defineType({
       name: 'subtitle',
       type: 'internationalizedArrayString',
       title: 'Subtitle',
+      hidden: ({parent}) => !parent?.title,
       options: {aiWritingAssistance: {translateAction: true}},
     }),
     defineField({

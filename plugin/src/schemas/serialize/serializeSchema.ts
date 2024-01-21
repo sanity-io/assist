@@ -10,11 +10,11 @@ import {
   typed,
 } from 'sanity'
 import {
+  assistSchemaIdPrefix,
   assistSerializedFieldTypeName,
   assistSerializedTypeName,
-  SerializedSchemaType,
-  assistSchemaIdPrefix,
   SerializedSchemaMember,
+  SerializedSchemaType,
 } from '../../types'
 import {hiddenTypes} from './schemaUtils'
 import {isAssistSupported} from '../../helpers/assistSupported'
@@ -34,7 +34,6 @@ export function serializeSchema(schema: Schema, options?: Options): SerializedSc
     .filter((t): t is SchemaType => !!t)
     // because a field can override exclude at the type level, we have to also serialize excluded types
     // so don't do this: .filter((t) => isAssistSupported(t))
-    .filter((t) => !t.hidden && !t.readOnly)
     .map((t) => getSchemaStub(t, schema, options))
     .filter((t) => {
       if ('to' in t && t.to && !t.to.length) {
@@ -109,6 +108,14 @@ function getBaseFields(
       typeName === 'block' && 'fields' in type
         ? serializeInlineOf(type, schema, options)
         : undefined,
+    hidden:
+      typeof type.hidden === 'function' ? ('function' as const) : type.hidden ? true : undefined,
+    readOnly:
+      typeof type.readOnly === 'function'
+        ? ('function' as const)
+        : type.readOnly
+        ? true
+        : undefined,
   })
 }
 
@@ -117,10 +124,27 @@ function serializeFields(
   schemaType: ObjectSchemaType,
   options: Options | undefined
 ) {
-  return schemaType.fields
+  const fields = schemaType.fieldsets
+    ? schemaType.fieldsets.flatMap((fs) =>
+        fs.single
+          ? fs.field
+          : fs.fields.map((f) => ({
+              ...f,
+              type: {
+                ...f.type,
+                // if fieldset is (conditionally) hidden, the field must be considered the same way
+                // ie, if the field does not show up in conditionalMembers, it is hidden
+                // regardless of weather or not it is the field function or the fieldset function that hides it
+                hidden:
+                  typeof fs.hidden === 'function' ? fs.hidden : fs.hidden ? true : f.type.hidden,
+              },
+            }))
+      )
+    : schemaType.fields
+
+  return fields
     .filter((f) => !['sanity.imageHotspot', 'sanity.imageCrop'].includes(f.type?.name ?? ''))
     .filter((f) => isAssistSupported(f.type))
-    .filter((f) => !f.type.hidden && !f.type.readOnly)
     .map((field) => serializeMember(schema, field.type, field.name, options))
 }
 

@@ -5,6 +5,7 @@ import {useToast} from '@sanity/ui'
 import {SanityClient} from '@sanity/client'
 import {FieldLanguageMap} from './translate/paths'
 import {documentRootKey} from './types'
+import {ConditionalMemberState} from './helpers/conditionalMembers'
 
 export interface UserTextInstance {
   blockKey: string
@@ -19,6 +20,7 @@ export interface RunInstructionRequest {
   instructionKey: string
   userId?: string
   userTexts?: UserTextInstance[]
+  conditionalMembers?: ConditionalMemberState[]
 }
 
 export interface InstructStatus {
@@ -32,6 +34,7 @@ export interface TranslateRequest {
   translatePath: Path
   languagePath?: string
   fieldLanguageMap?: FieldLanguageMap[]
+  conditionalMembers?: ConditionalMemberState[]
 }
 
 const basePath = '/assist/tasks/instruction'
@@ -52,7 +55,13 @@ export function useTranslate(apiClient: SanityClient) {
   const toast = useToast()
 
   const translate = useCallback(
-    ({documentId, languagePath, translatePath, fieldLanguageMap}: TranslateRequest) => {
+    ({
+      documentId,
+      languagePath,
+      translatePath,
+      fieldLanguageMap,
+      conditionalMembers,
+    }: TranslateRequest) => {
       setLoading(true)
 
       return apiClient
@@ -66,6 +75,7 @@ export function useTranslate(apiClient: SanityClient) {
             types,
             languagePath,
             fieldLanguageMap,
+            conditionalMembers,
             translatePath:
               translatePath.length === 0 ? documentRootKey : pathToString(translatePath),
             userId: user?.id,

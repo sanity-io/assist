@@ -484,7 +484,7 @@ describe('serializeSchema', () => {
     ])
   })
 
-  test('should exclude truthy hidden and readonly', () => {
+  test('should annotate truthy readonly', () => {
     const schema = Schema.compile({
       name: 'test',
       types: [
@@ -492,7 +492,7 @@ describe('serializeSchema', () => {
           type: 'document',
           name: 'article',
           fields: [
-            {type: 'string', name: 'title', hidden: () => true},
+            {type: 'string', name: 'title', readOnly: () => true},
             {type: 'some', name: 'some'},
           ],
         },
@@ -507,7 +507,67 @@ describe('serializeSchema', () => {
 
     const serializedTypes = serializeSchema(schema, {leanFormat: true})
 
-    expect(serializedTypes).toEqual([])
+    expect(serializedTypes).toEqual([
+      {
+        name: 'article',
+        title: 'Article',
+        type: 'document',
+        fields: [
+          {name: 'title', readOnly: 'function', title: 'Title', type: 'string'},
+          {name: 'some', readOnly: true, title: 'Some', type: 'some'},
+        ],
+      },
+      {
+        name: 'some',
+        readOnly: true,
+        title: 'Some',
+        type: 'object',
+        fields: [{name: 'title', title: 'Title', type: 'string'}],
+      },
+    ])
+  })
+
+  test('should annotate truthy hidden', () => {
+    const schema = Schema.compile({
+      name: 'test',
+      types: [
+        {
+          type: 'document',
+          name: 'article',
+          fields: [
+            {type: 'string', name: 'title', hidden: true},
+            {type: 'some', name: 'some'},
+          ],
+        },
+        defineType({
+          type: 'object',
+          name: 'some',
+          hidden: () => true,
+          fields: [{type: 'string', name: 'title'}],
+        }),
+      ],
+    })
+
+    const serializedTypes = serializeSchema(schema, {leanFormat: true})
+
+    expect(serializedTypes).toEqual([
+      {
+        name: 'article',
+        title: 'Article',
+        type: 'document',
+        fields: [
+          {hidden: true, name: 'title', title: 'Title', type: 'string'},
+          {hidden: 'function', name: 'some', title: 'Some', type: 'some'},
+        ],
+      },
+      {
+        hidden: 'function',
+        name: 'some',
+        title: 'Some',
+        type: 'object',
+        fields: [{name: 'title', title: 'Title', type: 'string'}],
+      },
+    ])
   })
 
   test('should serialize annotations', () => {

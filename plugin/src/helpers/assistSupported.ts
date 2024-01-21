@@ -6,36 +6,29 @@ export function isSchemaAssistEnabled(type: SchemaType) {
   return !(type.options as AssistOptions | undefined)?.aiWritingAssistance?.exclude
 }
 
-export function isAssistSupported(type: SchemaType, allowReadonlyHidden = false) {
+export function isAssistSupported(type: SchemaType) {
   if (!isSchemaAssistEnabled(type)) {
     return false
   }
 
-  if (isDisabled(type, allowReadonlyHidden)) {
+  if (isDisabled(type)) {
     return false
   }
 
   if (type.jsonType === 'array') {
-    const unsupportedArray = type.of.every((t) => isDisabled(t, allowReadonlyHidden))
+    const unsupportedArray = type.of.every((t) => isDisabled(t))
     return !unsupportedArray
   }
 
   if (type.jsonType === 'object') {
-    const unsupportedObject = type.fields.every((field) =>
-      isDisabled(field.type, allowReadonlyHidden)
-    )
+    const unsupportedObject = type.fields.every((field) => isDisabled(field.type))
     return !unsupportedObject
   }
   return true
 }
 
-function isDisabled(type: SchemaType, allowReadonlyHidden: boolean) {
-  const readonlyHidden = !!type.readOnly || !!type.hidden
-  return (
-    !isSchemaAssistEnabled(type) ||
-    isUnsupportedType(type) ||
-    (!allowReadonlyHidden && readonlyHidden)
-  )
+function isDisabled(type: SchemaType) {
+  return !isSchemaAssistEnabled(type) || isUnsupportedType(type)
 }
 
 function isUnsupportedType(type: SchemaType) {

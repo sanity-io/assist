@@ -20,7 +20,7 @@ import {
 } from 'sanity'
 import {ComponentType, useContext, useMemo} from 'react'
 import {AssistInspectorRouteParams, documentRootKey, fieldPathParam} from '../types'
-import {usePaneRouter, type PaneRouterContextValue} from 'sanity/desk'
+import {type PaneRouterContextValue, usePaneRouter} from 'sanity/desk'
 import {isAssistSupported} from '../helpers/assistSupported'
 import {isPortableTextArray, isType} from '../helpers/typeUtils'
 import {SelectedFieldContext} from '../assistDocument/components/SelectedFieldContext'
@@ -96,7 +96,7 @@ export function getFieldRefs(
 
       const syntheticFields =
         field.type.jsonType === 'array' ? getSyntheticFields(field.type, fieldRef, depth + 1) : []
-      if (!isAssistSupported(field.type, true)) {
+      if (!isAssistSupported(field.type)) {
         return [...fields, ...syntheticFields]
       }
       return [fieldRef, ...fields, ...syntheticFields]
@@ -125,7 +125,7 @@ function getSyntheticFields(schemaType: ArraySchemaType, parent?: FieldRef, dept
       const fields =
         itemType.jsonType === 'object' ? getFieldRefs(itemType, fieldRef, depth + 1) : []
 
-      if (!isAssistSupported(itemType, true)) {
+      if (!isAssistSupported(itemType)) {
         return fields
       }
       return [fieldRef, ...fields]
