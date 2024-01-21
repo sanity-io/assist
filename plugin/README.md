@@ -16,6 +16,7 @@
   - [Disable for a field](#disable-for-a-field)
   - [Disable for an array type](#disable-for-an-array-type)
   - [Unsupported types](#unsupported-types)
+  - [Hidden and readOnly fields](#hidden-and-readonly-fields)
   - [Reference support](#reference-support)
   - [Troubleshooting](#troubleshooting)
 - [Included document types](#included-document-types)
@@ -186,13 +187,24 @@ The following types are not supported, and behave as excluded types:
 * [File](https://www.sanity.io/docs/file-type) (never supported, even when file has custom fields)
 * [Reference](https://www.sanity.io/docs/reference-type) (supported when configured with embeddingsIndex)
 
-Types and fields with `hidden` or `readonly` with a truthy value (`true` or `function`) are not supported.
-(Hidden and readOnly fields can be referenced in instructions still)
-
 Fields with these types will not be changed by the assistant, do not have AI Assist actions, and cannot be referenced in instructions.
 
 Objects where all fields are excluded or unsupported and arrays where all member types are excluded or unsupported
 will also be excluded.
+
+### Hidden adn readOnly fields
+
+In AI Assist 2.0 and later, conditionally `hidden` and `readOnly` fields can have instructions.
+These fields can be written to by an instruction, as long as the field is non-hidden and writable when the instruction is started.
+
+Fields with `hidden` or `readOnly` set to literal `true` will be skipped by AI Assist.
+
+*Note*: An instruction will not re-evaluate these states during a run.
+Ie, if an instructions writes to a field that will make another field in the studio readonly or hidden,
+the running instruction will still consider these as if in their original state.
+
+If it is essential that AI Assist *never* writes to a conditional field,
+it should be marked with `options.aiWritingAssistance.exclude: true`.
 
 ### Reference support
 

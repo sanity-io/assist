@@ -7,8 +7,8 @@ import {
   useCurrentUser,
 } from 'sanity'
 import {ControlsIcon, SparklesIcon} from '@sanity/icons'
-import {useCallback, useMemo} from 'react'
-import {pluginTitle, pluginTitleShort} from '../constants'
+import {useCallback, useMemo, useRef} from 'react'
+import {pluginTitleShort} from '../constants'
 import {useAssistSupported} from '../helpers/useAssistSupported'
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {getInstructionTitle, usePathKey} from '../helpers/misc'
@@ -27,6 +27,7 @@ import {useSelectedField, useTypePath} from '../assistInspector/helpers'
 import {isSchemaAssistEnabled} from '../helpers/assistSupported'
 import {translateActions, TranslateProps} from '../translate/translateActions'
 import {generateImagActions} from './generateImageActions'
+import {getConditionalMembers} from '../helpers/conditionalMembers'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -60,7 +61,10 @@ export const assistFieldActions: DocumentFieldAction = {
         : // eslint-disable-next-line react-hooks/rules-of-hooks
           useAssistDocumentContext()
 
-    const {value: docValue} = useDocumentPane()
+    const {value: docValue, formState} = useDocumentPane()
+    const formStateRef = useRef(formState)
+    formStateRef.current = formState
+
     const currentUser = useCurrentUser()
     const isHidden = !assistDocument
     const pathKey = usePathKey(props.path)
@@ -77,7 +81,8 @@ export const assistFieldActions: DocumentFieldAction = {
     const assistSupported =
       useAssistSupported(props.path, schemaType) &&
       isSelectable &&
-      isSchemaAssistEnabled(documentSchemaType)
+      isSchemaAssistEnabled(documentSchemaType) &&
+      schemaType.readOnly !== true
 
     const fieldAssist = useMemo(
       () =>
@@ -124,6 +129,9 @@ export const assistFieldActions: DocumentFieldAction = {
           path: pathKey,
           typePath,
           instruction,
+          conditionalMembers: formStateRef.current
+            ? getConditionalMembers(formStateRef.current)
+            : [],
         })
       },
       [requestRunInstruction, assistableDocId, pathKey, typePath, assistDocumentId, fieldAssistKey]
@@ -260,7 +268,7 @@ function instructionItem(props: {
     iconRight: isPrivate ? PrivateIcon : undefined,
     title: getInstructionTitle(instruction),
     onAction: () => onInstructionAction(instruction),
-    disabled: assistSupported ? false : {reason: `${pluginTitle} is not supported for this field`},
+    disabled: !assistSupported,
     hidden,
   })
 }

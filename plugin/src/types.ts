@@ -54,8 +54,11 @@ export interface SerializedSchemaType {
   annotations?: SerializedSchemaMember[]
   inlineOf?: SerializedSchemaMember[]
   values?: string[] | {value: string; title?: string}[]
+  hidden?: boolean | 'function'
+  readOnly?: boolean | 'function'
   options?: {
     imagePromptField?: string
+    embeddingsIndex?: string
   }
 }
 
