@@ -16,7 +16,7 @@
   - [Disable for a field](#disable-for-a-field)
   - [Disable for an array type](#disable-for-an-array-type)
   - [Unsupported types](#unsupported-types)
-  - [Hidden and readOnly fields](#hidden-adn-readonly-fields)
+  - [Hidden and readOnly fields](#hidden-and-readonly-fields)
   - [Reference support](#reference-support)
   - [Troubleshooting](#troubleshooting)
 - [Included document types](#included-document-types)
@@ -192,7 +192,7 @@ Fields with these types will not be changed by the assistant, do not have AI Ass
 Objects where all fields are excluded or unsupported and arrays where all member types are excluded or unsupported
 will also be excluded.
 
-### Hidden adn readOnly fields
+### Hidden and readOnly fields
 
 In AI Assist 2.0 and later, conditionally `hidden` and `readOnly` fields can have instructions.
 These fields can be written to by an instruction, as long as the field is non-hidden and writable when the instruction is started.
