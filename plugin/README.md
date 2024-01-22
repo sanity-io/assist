@@ -16,7 +16,7 @@
   - [Disable for a field](#disable-for-a-field)
   - [Disable for an array type](#disable-for-an-array-type)
   - [Unsupported types](#unsupported-types)
-  - [Hidden and readOnly fields](#hidden-and-readonly-fields)
+  - [Hidden and readOnly fields](#hidden-adn-readonly-fields)
   - [Reference support](#reference-support)
   - [Troubleshooting](#troubleshooting)
 - [Included document types](#included-document-types)
