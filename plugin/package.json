@@ -1,7 +1,7 @@
 {
   "name": "@sanity/assist",
-  "version": "1.2.16",
-  "description": "",
+  "version": "1.2.15",
+  "description": "You create the instructions; Sanity AI Assist does the rest.",
   "keywords": [
     "sanity",
     "sanity-plugin",
@@ -90,7 +90,7 @@
     "semantic-release": "^21.1.2",
     "styled-components": "^6.1.1",
     "typescript": "^5.3.3",
-    "vitest": "^0.34.6"
+    "vitest": "^1.2.1"
   },
   "peerDependencies": {
     "react": "^18",

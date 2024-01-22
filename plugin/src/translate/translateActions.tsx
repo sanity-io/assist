@@ -29,7 +29,7 @@ export type TranslateProps = DocumentFieldActionProps & {
 export const translateActions: DocumentFieldAction = {
   name: 'sanity-assist-translate',
   useAction(props: TranslateProps) {
-    const {config} = useAiAssistanceConfig()
+    const {config, status} = useAiAssistanceConfig()
     const apiClient = useApiClient(config?.__customApiClient)
 
     const {
@@ -48,10 +48,12 @@ export const translateActions: DocumentFieldAction = {
 
     const fieldTransEnabled =
       addFieldAction &&
+      status?.initialized &&
       documentSchemaType &&
       config.translate?.field?.documentTypes?.includes(documentSchemaType.name)
     const documentTranslationEnabled =
       addFieldAction &&
+      status?.initialized &&
       documentSchemaType &&
       ((!docTransTypes && isAssistSupported(fieldSchemaType)) ||
         docTransTypes?.includes(documentSchemaType.name))
