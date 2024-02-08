@@ -84,6 +84,7 @@ export default defineConfig({
     internationalizedArray({
       languages,
       fieldTypes: ['string', featureProduct.name],
+      buttonLocations: ['unstable__fieldAction'],
     }),
     embeddingsIndexDashboard(),
   ],

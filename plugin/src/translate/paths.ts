@@ -65,19 +65,30 @@ function extractPaths(
       let arrayPaths: DocumentMember[] = []
       if ((arrayValue as any)?.length) {
         for (const item of arrayValue as any[]) {
-          const arrayItemSchema = fieldSchema.of.find((t) => t.name === item._type)
-          if (item._key && arrayItemSchema) {
-            const itemPath = [...fieldPath, {_key: item._key}]
+          const itemPath = [...fieldPath, {_key: item._key}]
+          let itemSchema = fieldSchema.of.find((t) => t.name === item._type)
+          if (!item._type) {
+            itemSchema = fieldSchema.of[0]
+            console.warn(
+              'Array item is missing _type - using the first defined type in the array.of schema',
+              {
+                itemPath,
+                item,
+                itemSchema,
+              }
+            )
+          }
+          if (item._key && itemSchema) {
             const innerFields = extractPaths(
               doc,
-              arrayItemSchema as ObjectSchemaType,
+              itemSchema as ObjectSchemaType,
               itemPath,
               maxDepth
             )
             const arrayMember = {
               path: itemPath,
               name: item._key,
-              schemaType: arrayItemSchema,
+              schemaType: itemSchema,
               value: item,
             }
             arrayPaths = [...arrayPaths, arrayMember, ...innerFields]

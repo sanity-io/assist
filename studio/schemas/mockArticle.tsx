@@ -11,7 +11,7 @@ import {Stack, Text} from '@sanity/ui'
 import {dataset, projectId} from '../env'
 import {languages} from '../src/lang/languages'
 
-export const simplePte = defineField({
+export const simplePte = defineType({
   name: 'simplePte',
   title: 'Rich text',
   type: 'array',

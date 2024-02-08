@@ -85,4 +85,49 @@ describe('paths', () => {
       ])
     )
   })
+
+  test('should use first type in array when array item is missing _type', () => {
+    const docSchema: ObjectSchemaType = Schema.compile({
+      name: 'test',
+      types: [
+        defineType({
+          type: 'document',
+          name: 'article',
+          fields: [
+            {
+              type: 'array',
+              name: 'translations',
+              of: [
+                {
+                  type: 'object',
+                  name: 'internationalizedArrayString',
+                  fields: [{type: 'string', name: 'value'}],
+                },
+              ],
+            },
+          ],
+        }),
+      ],
+    }).get('article')
+
+    const doc: SanityDocumentLike = {
+      _id: 'na',
+      _type: 'article',
+      translations: [
+        {
+          //assume type is missing in the data for some reason
+          //_type: 'internationalizedArrayString',
+          _key: 'en',
+          value: 'some string',
+        },
+      ],
+    }
+
+    const members = getDocumentMembersFlat(doc, docSchema)
+    expect(members.map((p) => pathToString(p.path))).toEqual([
+      'translations',
+      'translations[_key=="en"]',
+      'translations[_key=="en"].value',
+    ])
+  })
 })
