@@ -1,9 +1,9 @@
-import {SchemaType} from 'sanity'
+import {ReferenceOptions, SchemaType} from 'sanity'
 import {AssistOptions} from '../schemas/typeDefExtensions'
 import {isType} from './typeUtils'
 
 export function isSchemaAssistEnabled(type: SchemaType) {
-  return !(type.options as AssistOptions | undefined)?.aiWritingAssistance?.exclude
+  return !(type.options as AssistOptions | undefined)?.aiAssist?.exclude
 }
 
 export function isAssistSupported(type: SchemaType) {
@@ -36,7 +36,8 @@ function isUnsupportedType(type: SchemaType) {
     type.jsonType === 'number' ||
     type.name === 'sanity.imageCrop' ||
     type.name === 'sanity.imageHotspot' ||
-    (isType(type, 'reference') && !type?.options?.aiWritingAssistance?.embeddingsIndex) ||
+    (isType(type, 'reference') &&
+      !(type?.options as ReferenceOptions)?.aiAssist?.embeddingsIndex) ||
     isType(type, 'crossDatasetReference') ||
     isType(type, 'slug') ||
     isType(type, 'url') ||

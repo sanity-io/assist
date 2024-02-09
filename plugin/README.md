@@ -21,7 +21,7 @@
   - [Troubleshooting](#troubleshooting)
 - [Included document types](#included-document-types)
 - [Field and type filters](#field-and-type-filters)
-- [Caption generation](#caption-generation)
+- [Image description generation](#image-description-generation)
 - [Image generation](#image-generation)
 - [Full document translation](#full-document-translation)
   - [What it solves](#what-ai-assist-full-document-translations-solves)
@@ -129,7 +129,7 @@ defineType({
  name: 'policy',
   type: 'document',
   options: {
-    aiWritingAssistance: {exclude: true}
+    aiAssist: {exclude: true}
  },
   fields: [
     // ...
@@ -149,7 +149,7 @@ defineType({
       name: 'sku',
       type: 'string',
       options: {
-        aiWritingAssistance: {exclude: true}
+        aiAssist: {exclude: true}
      }
   })
   ]
@@ -168,7 +168,7 @@ defineType({
     defineArrayMember({
       type: 'customProduct',
       options: {
-        aiWritingAssistance: {exclude: true}
+        aiAssist: {exclude: true}
      }
   })
   ]
@@ -204,7 +204,7 @@ Ie, if an instructions writes to a field that will make another field in the stu
 the running instruction will still consider these as if in their original state.
 
 If it is essential that AI Assist *never* writes to a conditional field,
-it should be marked with `options.aiWritingAssistance.exclude: true`.
+it should be marked with `options.aiAssist.exclude: true`.
 
 ### Reference support
 
@@ -215,7 +215,7 @@ with the documents it should be able to reference.
 You can manage your indexes directly in the studio using the [Embeddings Index Dashboard plugin](https://github.com/sanity-io/embeddings-index-ui#embeddings-index-api-dashboard-for-sanity-studio).
 
 #### Set schema options
-Set `options.aiWritingAssistance.embeddingsIndex` for reference fields/types you want to enable reference instructions for. 
+Set `options.aiAssist.embeddingsIndex` for reference fields/types you want to enable reference instructions for. 
 Reference fields with this options set can have instructions attached to them, and will be visited when running instructions for object fields and arrays.
 
 AI assist will use the embeddings-index, filtered by the types allowed by the reference to look up contextually relevant references.
@@ -232,7 +232,7 @@ defineField({
   title: 'Article referene',
   to: [ { type: 'article'} ],
   options: {
-    aiWritingAssistance: {
+    aiAssist: {
       embeddingsIndex: 'article-index'
     },
   },
@@ -281,9 +281,9 @@ Note that if the schema targeted by the instruction changes, the following behav
 * instructions that included all fields or types will automatically also include the new fields or types
 * instructions that have excluded one or more fields or types, will NOT include the new fields or types
 
-## Caption generation
-AI Assist can optionally generate captions for images. This has to be enabled on an image-type/field,
-by setting the `options.captionField` on the image type, where `captionField` is the field name of a
+## Image description generation
+AI Assist can optionally generate descriptions for images. This has to be enabled on an image-type/field,
+by setting the `options.aiAssist.imageDescriptionField` on the image type, where `imageDescriptionField` is the field name of a
 custom string-field on the image object:
 
 ```tsx
@@ -294,19 +294,21 @@ defineField({
     fields: [
       defineField({
         type: 'string',
-        name: 'caption',
-        title: 'Caption',
+        name: 'altText',
+        title: 'Alternative text',
       }),
     ],
     options: {
-      captionField: 'caption', 
+      aiAssist: {
+        imageDescriptionField: 'altText',
+      }
     },
 })
 ```
-This will add a "Generate caption" action to the configured field.
-"Generate caption" action will automatically run whenever the image changes.
+This will add a "Generate image description" action to the configured field.
+"Generate image description" action will automatically run whenever the image changes.
 
-`captionField` can be a nested field, if the image has object field, ie `captionField: 'wrapper.caption'`.
+`imageDescriptionField` can be a nested field, if the image has object field, ie `imageDescriptionField: 'wrapper.altText'`.
 Fields within array items are not supported.
 
 ## Image generation
@@ -319,8 +321,8 @@ or indirectly whenever the image prompt field is written to by an AI Assist inst
 
 ### Configure
 To enable image generation for an image field, the image must:
-- set `options.imagePromptField` to a child-path relative to the image
-- have a `string` or `text` field that corresponds to the `imagePromptField` path
+- set `options.aiAssist.imageInstructionField` to a child-path relative to the image
+- have a `string` or `text` field that corresponds to the `imageInstructionField` path
 
 This will add a "Generate image from prompt" instruction to the image prompt field. Running it will generate and image.
 
@@ -731,7 +733,7 @@ assist({
 By default, “Translate document” and “Translate fields…” instructions are only added to the document instruction dropdown.
 
 These instructions can also be added to fields by setting
-`options.aiWritingAssistance.translateAction: true` for a field or type.
+`options.aiAssist.translateAction: true` for a field or type.
 
 This allows editors to translate only parts of the document, and can be useful to enable on `internatinalizedArrays` or `locale` wrapper object types.
 
@@ -748,7 +750,7 @@ defineField({
     type: 'internationalizedArrayString',
     title: 'Subtitle',
     options: {
-        aiWritingAssistance: {
+        aiAssist: {
             translateAction: true
         }
     },

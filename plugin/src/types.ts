@@ -57,6 +57,7 @@ export interface SerializedSchemaType {
   hidden?: boolean | 'function'
   readOnly?: boolean | 'function'
   options?: {
+    /** equivalent to options.aiAssist.imageDescriptionField - not renamed in the api for backwards compatability */
     imagePromptField?: string
     embeddingsIndex?: string
   }

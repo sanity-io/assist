@@ -23,7 +23,7 @@ export const generateImagActions: DocumentFieldAction = {
 
     const imageContext = useContext(ImageContext)
 
-    if (imageContext && pathKey === imageContext?.imagePromptPath) {
+    if (imageContext && pathKey === imageContext?.imageInstructionPath) {
       //if this is true, it is stable, and not breaking rules of hooks
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const {documentId} = useAssistDocumentContext()

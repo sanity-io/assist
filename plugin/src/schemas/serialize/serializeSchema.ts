@@ -80,9 +80,9 @@ function getBaseFields(
   typeName: string,
   options: Options | undefined
 ) {
-  const schemaOptions = removeUndef({
-    imagePromptField: (type.options as ImageOptions)?.imagePromptField,
-    embeddingsIndex: (type.options as ReferenceOptions)?.aiWritingAssistance?.embeddingsIndex,
+  const schemaOptions: SerializedSchemaType['options'] = removeUndef({
+    imagePromptField: (type.options as ImageOptions)?.aiAssist?.imageInstructionField,
+    embeddingsIndex: (type.options as ReferenceOptions)?.aiAssist?.embeddingsIndex,
   })
   return removeUndef({
     options: Object.keys(schemaOptions).length ? schemaOptions : undefined,

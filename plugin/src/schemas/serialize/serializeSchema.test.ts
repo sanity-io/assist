@@ -32,7 +32,7 @@ describe('serializeSchema', () => {
           name: 'article',
           fields: [{type: 'string', name: 'title'}],
           options: {
-            aiWritingAssistance: {
+            aiAssist: {
               exclude: true,
             },
           },
@@ -123,7 +123,7 @@ describe('serializeSchema', () => {
   })
 
   test('should not serialize excluded fields or types or types with every member excluded', () => {
-    const options: AssistOptions = {aiWritingAssistance: {exclude: true}}
+    const options: AssistOptions = {aiAssist: {exclude: true}}
 
     const schema = Schema.compile({
       name: 'test',
@@ -138,14 +138,14 @@ describe('serializeSchema', () => {
               name: 'excludedObject',
               // all fields excluded should exclude field
               fields: [{type: 'string', name: 'title', options}],
-              options: {aiWritingAssistance: {exclude: true}},
+              options: {aiAssist: {exclude: true}},
             }),
             defineField({
               type: 'array',
               name: 'excludedArray',
               // all items excluded should exclude field
               of: [{type: 'object', name: 'remove', options}, {type: 'excluded'}],
-              options: {aiWritingAssistance: {exclude: true}},
+              options: {aiAssist: {exclude: true}},
             }),
             //image without extra fields should be excluded
             defineField({type: 'image', name: 'image'}),
@@ -169,7 +169,7 @@ describe('serializeSchema', () => {
           type: 'object',
           name: 'excluded',
           fields: [{type: 'string', name: 'title', options}],
-          options: {aiWritingAssistance: {exclude: true}},
+          options: {aiAssist: {exclude: true}},
         }),
         ...mockStudioTypes,
       ],
