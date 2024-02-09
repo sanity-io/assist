@@ -49,8 +49,10 @@ export const articleImage = defineType({
     }),
   ],
   options: {
-    imagePromptField: 'imagePrompt',
-    captionField: 'altText',
+    aiAssist: {
+      imageInstructionField: 'imagePrompt',
+      imageDescriptionField: 'altText',
+    },
   },
 })
 
@@ -59,7 +61,7 @@ export const excludedTypeString = defineType({
   name: 'excludedTypeString',
   title: 'Excluded string type',
   options: {
-    aiWritingAssistance: {
+    aiAssist: {
       exclude: true,
     },
   },
@@ -289,7 +291,7 @@ export const mockArticle = defineType({
     },
   },
   options: {
-    aiWritingAssistance: {
+    aiAssist: {
       exclude: false,
     },
   },
@@ -301,7 +303,7 @@ export const mockArticle = defineType({
       hidden: () => false,
       readOnly: () => false,
       /*options: {
-        aiWritingAssistance: {translateAction: true},
+        aiAssist: {translateAction: true},
       },*/
     }),
     defineField({
@@ -319,7 +321,7 @@ export const mockArticle = defineType({
       title: 'Article reference',
       to: [{type: 'mockArticle'}],
       options: {
-        aiWritingAssistance: {
+        aiAssist: {
           embeddingsIndex: 'articles',
         },
       },
@@ -333,7 +335,7 @@ export const mockArticle = defineType({
           type: 'reference',
           to: [{type: 'category'}],
           options: {
-            aiWritingAssistance: {
+            aiAssist: {
               embeddingsIndex: 'Categories',
             },
           },
@@ -346,7 +348,7 @@ export const mockArticle = defineType({
       title: 'Lede',
       rows: 3,
       options: {
-        aiWritingAssistance: {translateAction: true},
+        aiAssist: {translateAction: true},
       },
     }),
     defineField({
@@ -363,7 +365,7 @@ export const mockArticle = defineType({
       title: 'Category',
       to: [{type: 'category'}],
       options: {
-        aiWritingAssistance: {
+        aiAssist: {
           embeddingsIndex: 'Categories',
         },
       },
@@ -379,7 +381,7 @@ export const mockArticle = defineType({
           title: 'Article reference',
           to: [{type: 'mockArticle'}],
           options: {
-            aiWritingAssistance: {
+            aiAssist: {
               embeddingsIndex: 'articles',
             },
           },
@@ -391,7 +393,7 @@ export const mockArticle = defineType({
       type: 'array',
       readOnly: () => false,
       options: {
-        aiWritingAssistance: {translateAction: true},
+        aiAssist: {translateAction: true},
       },
       of: [
         defineArrayMember({
@@ -430,7 +432,7 @@ export const mockArticle = defineType({
           title: 'Article reference',
           to: [{type: 'mockArticle'}],
           options: {
-            aiWritingAssistance: {
+            aiAssist: {
               embeddingsIndex: 'articles',
             },
           },
@@ -592,7 +594,9 @@ export const mockArticle = defineType({
         }),
       ],
       options: {
-        captionField: 'wrapper.wrapper.caption',
+        aiAssist: {
+          imageDescriptionField: 'wrapper.wrapper.caption',
+        },
       },
     }),
     defineField({

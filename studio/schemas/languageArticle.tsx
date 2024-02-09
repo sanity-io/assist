@@ -23,7 +23,7 @@ export const featureProduct = defineType({
       ],
     }),
   ],
-  options: {aiWritingAssistance: {translateAction: true}},
+  options: {aiAssist: {translateAction: true}},
 })
 
 export const localizedPte = defineType({
@@ -42,7 +42,7 @@ export const localizedPte = defineType({
       ],
     })
   ),
-  options: {aiWritingAssistance: {translateAction: true}},
+  options: {aiAssist: {translateAction: true}},
 })
 
 export const localeObject = defineType({
@@ -69,7 +69,7 @@ export const localeObject = defineType({
       ],
     })
   ),
-  options: {aiWritingAssistance: {translateAction: true}},
+  options: {aiAssist: {translateAction: true}},
 })
 
 export const languageArticle = defineType({
@@ -94,13 +94,13 @@ export const languageArticle = defineType({
       type: 'internationalizedArrayString',
       title: 'Subtitle',
       hidden: ({parent}) => !parent?.title,
-      options: {aiWritingAssistance: {translateAction: true}},
+      options: {aiAssist: {translateAction: true}},
     }),
     defineField({
       name: 'localePte',
       type: localizedPte.name,
       title: 'PTE',
-      options: {aiWritingAssistance: {translateAction: true}},
+      options: {aiAssist: {translateAction: true}},
     }),
     defineField({
       name: 'localeObject',
@@ -124,7 +124,9 @@ export const languageArticle = defineType({
         }),
       ],
       options: {
-        imagePromptField: 'altText',
+        aiAssist: {
+          imageInstructionField: 'altText',
+        },
       },
     }),
     defineField({
@@ -179,7 +181,9 @@ export const languageArticle = defineType({
             }),
           ],
           options: {
-            imagePromptField: 'altText',
+            aiAssist: {
+              imageInstructionField: 'altText',
+            },
           },
         }),
         defineArrayMember({

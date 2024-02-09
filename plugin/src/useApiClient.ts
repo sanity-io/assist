@@ -137,7 +137,7 @@ export function useGenerateCaption(apiClient: SanityClient) {
         .catch((e) => {
           toast.push({
             status: 'error',
-            title: 'Generate caption failed',
+            title: 'Generate image description failed',
             description: e.message,
           })
           setLoading(false)

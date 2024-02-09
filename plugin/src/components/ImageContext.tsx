@@ -1,14 +1,14 @@
 import {createContext, useEffect, useMemo, useState} from 'react'
 import {InputProps, pathToString, useSyncState} from 'sanity'
-import {getCaptionFieldOption, getImagePromptFieldOption} from '../helpers/typeUtils'
+import {getDescriptionFieldOption, getImageInstructionFieldOption} from '../helpers/typeUtils'
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {useApiClient, useGenerateCaption} from '../useApiClient'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 import {publicId} from '../helpers/ids'
 
 export interface ImageContextValue {
-  captionPath?: string
-  imagePromptPath?: string
+  imageDescriptionPath?: string
+  imageInstructionPath?: string
   assetRef?: string
 }
 
@@ -27,19 +27,23 @@ export function ImageContextProvider(props: InputProps) {
   const {isSyncing} = useSyncState(publicId(documentId), documentSchemaType.name)
 
   useEffect(() => {
-    const captionField = getCaptionFieldOption(schemaType)
-    if (assetRef && documentId && captionField && assetRef !== assetRefState && !isSyncing) {
+    const descriptionField = getDescriptionFieldOption(schemaType)
+    if (assetRef && documentId && descriptionField && assetRef !== assetRefState && !isSyncing) {
       setAssetRefState(assetRef)
-      generateCaption({path: pathToString([...path, captionField]), documentId: documentId})
+      generateCaption({path: pathToString([...path, descriptionField]), documentId: documentId})
     }
   }, [schemaType, path, assetRef, assetRefState, documentId, generateCaption, isSyncing])
 
   const context: ImageContextValue = useMemo(() => {
-    const captionField = getCaptionFieldOption(schemaType)
-    const imagePromptField = getImagePromptFieldOption(schemaType)
+    const descriptionField = getDescriptionFieldOption(schemaType)
+    const imageInstructionField = getImageInstructionFieldOption(schemaType)
     return {
-      captionPath: captionField ? pathToString([...path, captionField]) : undefined,
-      imagePromptPath: imagePromptField ? pathToString([...path, imagePromptField]) : undefined,
+      imageDescriptionPath: descriptionField
+        ? pathToString([...path, descriptionField])
+        : undefined,
+      imageInstructionPath: imageInstructionField
+        ? pathToString([...path, imageInstructionField])
+        : undefined,
       assetRef,
     }
   }, [schemaType, path, assetRef])

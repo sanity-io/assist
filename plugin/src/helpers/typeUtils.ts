@@ -18,24 +18,27 @@ export function isImage(schemaType: SchemaType) {
   return isType(schemaType, 'image')
 }
 
-export function getCaptionFieldOption(schemaType: SchemaType | undefined): string | undefined {
+export function getDescriptionFieldOption(schemaType: SchemaType | undefined): string | undefined {
   if (!schemaType) {
     return undefined
   }
-  const captionField = (schemaType.options as ImageOptions)?.captionField
-  if (captionField) {
-    return captionField
+  const descriptionField = (schemaType.options as ImageOptions)?.aiAssist?.imageDescriptionField
+  if (descriptionField) {
+    return descriptionField
   }
-  return getCaptionFieldOption(schemaType.type)
+  return getDescriptionFieldOption(schemaType.type)
 }
 
-export function getImagePromptFieldOption(schemaType: SchemaType | undefined): string | undefined {
+export function getImageInstructionFieldOption(
+  schemaType: SchemaType | undefined
+): string | undefined {
   if (!schemaType) {
     return undefined
   }
-  const imagePromptField = (schemaType.options as ImageOptions)?.imagePromptField
-  if (imagePromptField) {
-    return imagePromptField
+  const imageInstructionField = (schemaType.options as ImageOptions)?.aiAssist
+    ?.imageInstructionField
+  if (imageInstructionField) {
+    return imageInstructionField
   }
-  return getImagePromptFieldOption(schemaType.type)
+  return getImageInstructionFieldOption(schemaType.type)
 }

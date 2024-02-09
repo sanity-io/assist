@@ -44,7 +44,7 @@ export const translateActions: DocumentFieldAction = {
 
     const docTransTypes = config.translate?.document?.documentTypes
     const options = fieldSchemaType?.options as AssistOptions | undefined
-    const addFieldAction = isDocumentLevel || options?.aiWritingAssistance?.translateAction
+    const addFieldAction = isDocumentLevel || options?.aiAssist?.translateAction
 
     const fieldTransEnabled =
       addFieldAction &&
