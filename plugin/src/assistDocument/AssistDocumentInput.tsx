@@ -9,9 +9,10 @@ import {usePathKey} from '../helpers/misc'
 import {ConnectFromRegion} from '../_lib/connector'
 import {assistDocumentTypeName} from '../types'
 import {useMemo} from 'react'
+import {assistFormId} from '../_lib/form/constants'
 
 export function AssistDocumentInputWrapper(props: InputProps) {
-  if (!isType(props.schemaType, 'document') && props.id !== 'root') {
+  if (!isType(props.schemaType, 'document') && props.id !== 'root' && props.id !== assistFormId) {
     return <AssistInput {...props} />
   }
 
