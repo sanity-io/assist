@@ -9,6 +9,7 @@ import {AiFieldPresence} from '../presence/AiFieldPresence'
 import {AssistOnboardingPopover} from '../onboarding/FieldActionsOnboarding'
 import {FirstAssistedPathContext} from '../onboarding/FirstAssistedPathProvider'
 import {fieldOnboardingKey, useOnboardingFeature} from '../onboarding/onboardingStore'
+import {assistFormId} from '../_lib/form/constants'
 
 export function AssistFieldWrapper(props: FieldProps) {
   const {schemaType} = props
@@ -22,7 +23,11 @@ export function AssistFieldWrapper(props: FieldProps) {
   ) {
     return props.renderDefault(props)
   }
-  if (!isType(props.schemaType, 'document') && props.inputId !== 'root') {
+  if (
+    !isType(props.schemaType, 'document') &&
+    props.inputId !== 'root' &&
+    props.inputId !== assistFormId
+  ) {
     return <AssistField {...props}>{props.children}</AssistField>
   }
 

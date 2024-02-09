@@ -45,7 +45,7 @@ import {InstructionOutputInput} from '../assistDocument/components/instruction/I
 export const fieldReference = defineType({
   type: 'object',
   name: fieldReferenceTypeName,
-  title: 'Document field',
+  title: 'Field',
   icon: ThListIcon,
 
   fields: [

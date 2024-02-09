@@ -12,6 +12,7 @@ import {
   useDocumentStore,
 } from 'sanity'
 import {useDocumentPane} from 'sanity/desk'
+import {assistFormId} from './constants'
 
 const preventDefault = (ev: React.FormEvent) => ev.preventDefault()
 
@@ -135,7 +136,7 @@ export function DocumentForm(
             changed={formState.changed}
             focused={formState.focused}
             groups={formState.groups}
-            id="root"
+            id={assistFormId}
             members={formState.members}
             onChange={onChange}
             onFieldGroupSelect={onSetActiveFieldGroup}
