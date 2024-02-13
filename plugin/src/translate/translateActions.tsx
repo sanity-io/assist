@@ -46,14 +46,13 @@ export const translateActions: DocumentFieldAction = {
     const options = fieldSchemaType?.options as AssistOptions | undefined
     const addFieldAction = isDocumentLevel || options?.aiAssist?.translateAction
 
+    //All props used here MUST have the same value always, or we break the rules of hooks (conditional hook usage)
     const fieldTransEnabled =
       addFieldAction &&
-      status?.initialized &&
       documentSchemaType &&
       config.translate?.field?.documentTypes?.includes(documentSchemaType.name)
     const documentTranslationEnabled =
       addFieldAction &&
-      status?.initialized &&
       documentSchemaType &&
       ((!docTransTypes && isAssistSupported(fieldSchemaType)) ||
         docTransTypes?.includes(documentSchemaType.name))
@@ -169,6 +168,9 @@ export const translateActions: DocumentFieldAction = {
 
       // eslint-disable-next-line react-hooks/rules-of-hooks
       return useMemo(() => {
+        if (!status?.initialized) {
+          return undefined as unknown as DocumentFieldActionItem
+        }
         return node({
           type: 'group',
           icon: () => null,
@@ -178,7 +180,7 @@ export const translateActions: DocumentFieldAction = {
           ),
           expanded: true,
         })
-      }, [translateDocumentAction, translateFieldsAction])
+      }, [translateDocumentAction, translateFieldsAction, status])
     }
     // works but not supported by types
     return undefined as unknown as DocumentFieldActionItem
