@@ -202,6 +202,7 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
     close,
     toLanguages,
     fieldTranslationParams?.translatePath,
+    fieldTranslationParams?.conditionalMembers,
   ])
 
   const runButton = (
@@ -249,44 +250,29 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
                 <Box marginBottom={2}>
                   <Text weight="semibold">From</Text>
                 </Box>
-                {languages?.map((l) => {
-                  return (
-                    <Flex key={l.id} gap={3} align="center" as={'label'}>
-                      <Radio
-                        name="fromLang"
-                        value={l.id}
-                        checked={l.id === fromLanguage?.id}
-                        onChange={() => selectFromLanguage(l, languages, fieldTranslationParams)}
-                      />
-                      <Text>{l.title ?? l.id}</Text>
-                    </Flex>
-                  )
-                })}
+                {languages?.map((radioLanguage) => (
+                  <FromLanguageRadio
+                    key={radioLanguage.id}
+                    {...{
+                      radioLanguage,
+                      fromLanguage,
+                      selectFromLanguage,
+                      languages,
+                      fieldTranslationParams,
+                    }}
+                  />
+                ))}
               </Stack>
 
               <Stack space={2}>
                 <Box marginBottom={2}>
                   <Text weight="semibold">To</Text>
                 </Box>
-                {languages.map((l) => (
-                  <Flex
-                    key={l.id}
-                    gap={3}
-                    align="center"
-                    as={'label'}
-                    style={l.id === fromLanguage?.id ? {opacity: 0.5} : undefined}
-                  >
-                    <Checkbox
-                      name="toLang"
-                      value={l.id}
-                      checked={
-                        l.id !== fromLanguage?.id && !!toLanguages?.find((tl) => tl.id === l.id)
-                      }
-                      onChange={() => toggleToLanguage(l, toLanguages, languages)}
-                      disabled={l.id === fromLanguage?.id}
-                    />
-                    <Text muted={l.id === fromLanguage?.id}>{l.title ?? l.id}</Text>
-                  </Flex>
+                {languages.map((checkboxLanguage) => (
+                  <ToLanguageCheckbox
+                    key={checkboxLanguage.id}
+                    {...{checkboxLanguage, fromLanguage, toLanguages, toggleToLanguage, languages}}
+                  />
                 ))}
               </Stack>
             </Flex>
@@ -302,5 +288,73 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
       ) : null}
       {props.children}
     </FieldTranslationContext.Provider>
+  )
+}
+
+function ToLanguageCheckbox(props: {
+  checkboxLanguage: Language
+  fromLanguage: Language | undefined
+  toLanguages: Language[] | undefined
+  toggleToLanguage: (
+    toggledLang: Language,
+    toLanguages: Language[] | undefined,
+    languages: Language[] | undefined
+  ) => void
+  languages: Language[]
+}) {
+  const {checkboxLanguage, fromLanguage, toLanguages, toggleToLanguage, languages} = props
+  const langId = checkboxLanguage.id
+  const onChange = useCallback(
+    () => toggleToLanguage(checkboxLanguage, toLanguages, languages),
+    [toggleToLanguage, checkboxLanguage, toLanguages, languages]
+  )
+  return (
+    <Flex
+      key={langId}
+      gap={3}
+      align="center"
+      as={'label'}
+      style={langId === fromLanguage?.id ? {opacity: 0.5} : undefined}
+    >
+      <Checkbox
+        name="toLang"
+        value={langId}
+        checked={langId !== fromLanguage?.id && !!toLanguages?.find((tl) => tl.id === langId)}
+        onChange={onChange}
+        disabled={langId === fromLanguage?.id}
+      />
+      <Text muted={langId === fromLanguage?.id}>{checkboxLanguage.title ?? langId}</Text>
+    </Flex>
+  )
+}
+
+function FromLanguageRadio(props: {
+  radioLanguage: Language
+  fromLanguage: Language | undefined
+  selectFromLanguage: (
+    from: Language,
+    languages: Language[] | undefined,
+    params: FieldTranslationParams | undefined
+  ) => void
+  languages: Language[] | undefined
+  fieldTranslationParams: FieldTranslationParams | undefined
+}) {
+  const {languages, radioLanguage, selectFromLanguage, fromLanguage, fieldTranslationParams} = props
+  const langId = radioLanguage.id
+
+  const onChange = useCallback(
+    () => selectFromLanguage(radioLanguage, languages, fieldTranslationParams),
+    [selectFromLanguage, radioLanguage, languages, fieldTranslationParams]
+  )
+  return (
+    <Flex key={langId} gap={3} align="center" as={'label'}>
+      <Radio
+        name="fromLang"
+        value={langId}
+        checked={langId === fromLanguage?.id}
+        onChange={onChange}
+      />
+      <Text>{radioLanguage.title ?? radioLanguage.id}</Text>
+    </Flex>
   )
 }

@@ -195,7 +195,7 @@ function Selectable({
   return (
     <Flex gap={2} align="flex-start">
       <Checkbox checked={checked} onChange={handleChange} />
-      <Card marginTop={1} onClick={() => handleChange}>
+      <Card marginTop={1} onClick={handleChange}>
         <Text style={{cursor: 'default'}} size={1}>
           {title}
         </Text>
