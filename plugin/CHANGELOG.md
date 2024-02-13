@@ -5,6 +5,51 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0](https://github.com/sanity-io/assist/compare/v1.2.16...v2.0.0) (2024-02-13)
+
+### ⚠ BREAKING CHANGES
+
+- all AI Assist schema options now live under options.aiAssist:
+- options.aiWritingAssistance.exclude -> options.aiAssist.exclude
+- options.aiWritingAssistance.embeddingsIndex -> options.aiAssist.embeddingsIndex
+- options.aiWritingAssistance.translateAction -> options.aiAssist.translateAction
+- options.imagePromptField -> options.aiAssist.imageInstructionField
+- options.captionField -> options.aiAssist.imageDescriptionField
+
+If you where using any of these, please update your schema definitions.
+
+- minimum sanity version is now 3.26
+- conditionally hidden and read-only types are now supported. See README for details.
+- removed migration code has no impact when upgrading from 1.x version of the plugin
+- to enable translation features, please consult the README.
+
+### Features
+
+- adds support for adding translation actions to fields via options ([eb1fe04](https://github.com/sanity-io/assist/commit/eb1fe0497281ccc859ced252fe602f3c46ef4f56))
+- adds support for generating images based on image prompt field ([158cebb](https://github.com/sanity-io/assist/commit/158cebb5c686f0ef1d23cefa6719523f3f2ac8ba))
+- assist support for references with aiWritingAssistance.embeddingsIndex option ([8124e53](https://github.com/sanity-io/assist/commit/8124e537b1c18835d5fbceb3ff7426681ade242c))
+- instructions can now explicitly filter which types and fields can be used ([314f5bf](https://github.com/sanity-io/assist/commit/314f5bff21fa30a322e4ce96a8ab9033dc907a46))
+- schema options moved from options.aiWritingAssistance to options.aiAssist ([4902df9](https://github.com/sanity-io/assist/commit/4902df9b28eb676fd36674fb8a8bef759c8ca0b3))
+- stores selected languages for field translations per language ([4f9a00b](https://github.com/sanity-io/assist/commit/4f9a00b915d2b5b2e135e6c0ea54e4b9f18f8936))
+- stores selected languages for field translations per language ([1c3eb44](https://github.com/sanity-io/assist/commit/1c3eb44335d45ac82ef252cc0d40049b097c35ac))
+- support for conditional hidden and readonly schema types ([9af0173](https://github.com/sanity-io/assist/commit/9af017339430aae326da9b5cd421e11e07ad0766))
+- translation instructions for documents and fields ([c699f1a](https://github.com/sanity-io/assist/commit/c699f1ac8b4f9389beae7491551bf333d3b0db25))
+- translation support for pte annotations and inline objects ([a578eb3](https://github.com/sanity-io/assist/commit/a578eb364b3db61f33f6ed207443d673919384af))
+
+### Bug Fixes
+
+- always show generate image instruction when enabled ([740c1bf](https://github.com/sanity-io/assist/commit/740c1bfb42e697e2c5b6eb7da4403d1fdfda5101))
+- disables translate action when assist is uninitialized ([254e512](https://github.com/sanity-io/assist/commit/254e512927b6de9134fb13cfad2eadfd0534f6d0))
+- ensures that document is draft when starting translation instructions ([cd660ae](https://github.com/sanity-io/assist/commit/cd660aef24883c1b24c1d38a7e9fda8cc30f3351))
+- field filter is now called allowed fields ([a293760](https://github.com/sanity-io/assist/commit/a293760d89b2b659be74ab516b32acb2502463f0))
+- field language maps updates correctly when toggling languages ([18a0a78](https://github.com/sanity-io/assist/commit/18a0a780cf5e7f9e9d2fdc84a125f3c1d7d20bc9))
+- improved translate fields dialog interactions ([b7dd790](https://github.com/sanity-io/assist/commit/b7dd790b539db671131d8fb03dca05cdb3a23fcc))
+- instruction blocks are now non-collapsed for the default inspector width ([3387ef8](https://github.com/sanity-io/assist/commit/3387ef847a8b0ca0f512cf91609f43f8c3b593c5))
+- missing \_type in array items no longer disable field translations ([ce3a466](https://github.com/sanity-io/assist/commit/ce3a466f9458d02e000d9a084b8359463717a253))
+- only a single ai presence icon is now shown per field ([1078035](https://github.com/sanity-io/assist/commit/107803502d2aa6e5915047105077e00a79877449))
+- removed code for migrating from alpha version of plugin ([a7f6c63](https://github.com/sanity-io/assist/commit/a7f6c63c47c958e5ce4f77e439424066d0a5623e))
+- removed unused validation state from assist document ([fca2f5b](https://github.com/sanity-io/assist/commit/fca2f5b974813c4f022d70997ac2931151855140))
+
 ## [1.2.16](https://github.com/sanity-io/assist/compare/v1.2.15...v1.2.16) (2023-12-20)
 
 ### Bug Fixes
