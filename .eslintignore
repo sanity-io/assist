@@ -5,3 +5,4 @@ dist
 lint-staged.config.js
 package.config.ts
 node_modules/
+dist/

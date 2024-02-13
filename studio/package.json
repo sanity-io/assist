@@ -12,7 +12,7 @@
     "compile": "tsc --noEmit",
     "deploy": "sanity deploy",
     "dev": "sanity dev --port 3334",
-    "lint": "eslint ./**/* --ext .tsx,.ts",
+    "lint": "eslint ./src/**/* --ext .tsx,.ts",
     "start": "sanity start"
   },
   "prettier": {
