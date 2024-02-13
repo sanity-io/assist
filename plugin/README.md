@@ -37,9 +37,9 @@
 
 ## About Sanity AI Assist
 
-Free your team to do more of what they’re great at (and less busy work) with the AI assistant that works with structured content. Attach reusable AI instructions to fields and documents to supercharge your editorial workflow.
+Free your team to do more of what they’re great at (and less busywork) with the AI assistant that works with structured content. Attach reusable AI instructions to fields and documents to supercharge your editorial workflow.
 
-You create the instructions; Sanity AI Assist does the rest. [Learn more about writing instructions in the Sanity documentation](https://www.sanity.io/guides/getting-started-with-ai-assist-instructions?utm_source=github.com&utm_medium=organic_social&utm_campaign=ai-assist&utm_content=).
+You create the instructions; Sanity AI Assist does the rest. [Learn more about writing instructions in the Sanity documentation](https://www.sanity.io/docs/ai-assist?utm_source=github.com&utm_medium=organic_social&utm_campaign=ai-assist&utm_content=).
 
 [Read the release announcement here.](https://www.sanity.io/blog/sanity-ai-assist-announcement?utm_source=github.com&utm_medium=organic_social&utm_campaign=ai-assist&utm_content=)
 
@@ -116,9 +116,8 @@ themselves can edit can be changed by the instruction instance.
 
 ## Schema configuration
 
-By default, most object, array, and string field types have AI writing assistance enabled. Your assistant can write to all compatible fields that it detects.
+By default, most string, object, and array field types (including Portable Text!) have AI writing assistance enabled. Your assistant can write to all compatible fields that it detects.
 
-The assistant can also create array items, including Portable Text blocks, when the type has been imported to the Studio's schema as a custom type ([learn more about strict schemas](https://www.sanity.io/docs/graphql#33ec7103289a)).
 
 ### Disable AI Assist for a schema type
 
@@ -195,12 +194,12 @@ will also be excluded.
 ### Hidden and readOnly fields
 
 In AI Assist 2.0 and later, conditionally `hidden` and `readOnly` fields can have instructions.
-These fields can be written to by an instruction, as long as the field is non-hidden and writable when the instruction is started.
+These fields can be written to by an instruction, as long as the field is non-hidden and writable when the instruction starts running.
 
 Fields with `hidden` or `readOnly` set to literal `true` will be skipped by AI Assist.
 
 *Note*: An instruction will not re-evaluate these states during a run.
-Ie, if an instructions writes to a field that will make another field in the studio readonly or hidden,
+I.e., if an instruction makes a change during its execution that triggers another field to change its `hidden` or `readOnly` status,
 the running instruction will still consider these as if in their original state.
 
 If it is essential that AI Assist *never* writes to a conditional field,
@@ -210,16 +209,16 @@ it should be marked with `options.aiAssist.exclude: true`.
 
 #### Create an Embeddings-index
 To enable AI assist for references, first, your project must have an existing [embeddings-index](https://www.sanity.io/docs/embeddings-index-api-overview)
-with the documents it should be able to reference.
+that includes the document types it should be able to reference.
 
 You can manage your indexes directly in the studio using the [Embeddings Index Dashboard plugin](https://github.com/sanity-io/embeddings-index-ui#embeddings-index-api-dashboard-for-sanity-studio).
 
 #### Set schema options
 Set `options.aiAssist.embeddingsIndex` for reference fields/types you want to enable reference instructions for. 
-Reference fields with this options set can have instructions attached to them, and will be visited when running instructions for object fields and arrays.
+Reference fields with this option set can have instructions attached and will be visited when running instructions for object fields and arrays.
 
-AI assist will use the embeddings-index, filtered by the types allowed by the reference to look up contextually relevant references.
-For arrays or portable text fields with references, one more references can be added. Use the instruction text to control this.
+AI Assist will use the embeddings-index, further filtered by the types allowed by the reference, to look up contextually relevant references.
+For arrays or portable text fields with references, one or more references can be added. Use the instruction text to control this.
 
 Example:
 
@@ -229,7 +228,7 @@ import {defineArrayMember} from 'sanity'
 defineField({
   type: 'reference',
   name: 'articleReference',
-  title: 'Article referene',
+  title: 'Article reference',
   to: [ { type: 'article'} ],
   options: {
     aiAssist: {
@@ -242,15 +241,15 @@ defineField({
 An example instruction attached to this field could be:
 `Given <Document field: Title> suggest a related article`
 
-Running it would use the `article-index` to find an related article based on the current document title.
+Running it would use the `article-index` to find a related article based on the current document title.
 
 ### Troubleshooting
 
-There are limits to how much text the AI can process when processing an instruction. Under the hood, the AI Assist will add information about your schema, which adds to what's commonly referred to as “the context window.”
+There are limits to how much text the assistant can handle when processing an instruction. Under the hood, AI Assist will add information about your schema, which adds to what's commonly referred to as “the context window.”
 
 If you have a very large schema (that is, many document and field types), it can be necessary to exclude types to limit how much of the context window is used for the schema itself.
 
-We recommend excluding any and all types which rarely would benefit from automated workflows. A quick win is typically to exclude array types. It can be a good idea to exclude most non-block types from Portable Text arrays. This will ensure that the Sanity Assist outputs mostly formatted text.
+We recommend excluding any and all types that aren't likely to benefit from automated workflows. A quick win is typically to exclude array types. It can be a good idea to exclude most non-block types from Portable Text arrays. This will ensure that AI Assist outputs mostly formatted text.
 
 It is also possible to exclude fields/types when creating an instruction. See [Field and type filters](#field-and-type-filters) for more. 
 
@@ -271,15 +270,15 @@ S.documentTypeListItem(contextDocumentTypeName)
 
 ## Field and type filters
 
-When creating instructions for a document, objects fields, array fields or portable text fields, you can explicitly control what will be visited by AI Assist.
-By default, all fields and types configured for assist will be included. 
+When creating instructions for documents, object fields, array fields, or portable text fields, you can explicitly control what will be visited by AI Assist.
+By default, the assistant will include all compatible fields and types. 
 
 Opting out fields/types per instruction is done using the respective field/type filter checkboxes under the instruction.
-When using these filters, it is not necessary to tell Assist what to include in the instruction text itself.  
+When using these filters, it is not necessary to tell AI Assist what to include in the instruction text itself.  
 
-Note that if the schema targeted by the instruction changes, the following behavior applies:
-* instructions that included all fields or types will automatically also include the new fields or types
-* instructions that have excluded one or more fields or types, will NOT include the new fields or types
+Note that once the schema targeted by the instruction changes, the following behavior applies:
+* instructions that include all fields or types will automatically also include the new fields or types
+* instructions that have excluded one or more fields or types will NOT include the new fields or types
 
 ## Image description generation
 AI Assist can optionally generate descriptions for images. This has to be enabled on an image-type/field,
@@ -305,10 +304,10 @@ defineField({
     },
 })
 ```
-This will add a "Generate image description" action to the configured field.
-"Generate image description" action will automatically run whenever the image changes.
+This will add a **Generate image description** action to the configured field.
+The **Generate image description** action will automatically run whenever the image changes.
 
-`imageDescriptionField` can be a nested field, if the image has object field, ie `imageDescriptionField: 'wrapper.altText'`.
+`imageDescriptionField` can be a nested field, if the image has an object field, i.e. `imageDescriptionField: 'wrapper.altText'`.
 Fields within array items are not supported.
 
 ## Image generation
@@ -316,7 +315,7 @@ Fields within array items are not supported.
 
 AI Assist can generate assets for images configured with a prompt field.
 
-An image is generated directly by using the "Generate image from prompt" instruction on the prompt field, 
+An image is generated directly by using the **Generate image from prompt** instruction on the prompt field, 
 or indirectly whenever the image prompt field is written to by an AI Assist instruction.
 
 ### Configure
@@ -324,14 +323,14 @@ To enable image generation for an image field, the image must:
 - set `options.aiAssist.imageInstructionField` to a child-path relative to the image
 - have a `string` or `text` field that corresponds to the `imageInstructionField` path
 
-This will add a "Generate image from prompt" instruction to the image prompt field. Running it will generate and image.
+This will add a **Generate image from prompt** instruction to the image prompt field. Running it will generate an image.
 
-Additionally, whenever an AI Assist instruction writes to the image prompt field, the image will be generated.
+Additionally, whenever an AI Assist instruction writes to the image prompt field, the image will be re-generated.
 
 This could be a document instruction, an instruction for the image field or parent object, or directly on the image prompt field.
 
-A common styleguide can achieved by adding an instruction to the image prompt field that rewrites whatever value is there, to include a common style.
-Use AI context documents to apply a reusable styleguide to the prompt rewriting as needed.
+A common style guide can achieved by adding an instruction to the image prompt field that rewrites its value to include instructions on common style rules.
+Use AI context documents to apply a reusable style guide to the prompt rewriting as needed.
 
 #### Example
 
@@ -402,17 +401,17 @@ Given a document written in one language, AI assist can translate the document i
 
 When the document translation feature is enabled, AI Assist will go through the document field by field, translating all string and portable text fields into the language specified in the document's language field.
 
-This works well with [@sanity/document-internationalization](https://github.com/sanity-io/document-internationalization), where documents are duplicated from a source language and set a hidden language field.
+This works especially well with [@sanity/document-internationalization](https://github.com/sanity-io/document-internationalization), which uses a strategy of creating copies of the source document for each separate language to be translated into and uses a hidden string field to set the language for each copy.
 
-AI assist allows editors to translate these documents into the desired language immediately.
+AI Assist allows editors to translate these documents into the desired language immediately.
 
 ### Configure document translations
 
 To enable full document translations, set `translate.document.languageField` to the path of the language field in your documents.
 
-All documents with a language field will get a "Translate document" instruction added to the assist drop-down for the document.
+All documents with a corresponding language field will get a "Translate document" instruction added to the AI Assist drop-down for the document.
 
-To limit which document types get "Translate document" further, provide `translate.document.documentTypes` with an array of document type names.
+To further limit which document types should be enabled for translation instructions, provide an array of document type names to `translate.document.documentTypes`.
 
 If the studio is using [@sanity/document-internationalization](https://github.com/sanity-io/document-internationalization), these options should be the same as those used for that plugin.
 
@@ -477,7 +476,7 @@ assist({
 
 <img width="250" alt="Translate fields dialog" src="https://github.com/sanity-io/assist/assets/835514/fe3d289c-49b6-46dd-ae2f-cd509a01534a">
 
-AI assist offers field-level translations, which is ideal for using alongside with[sanity-plugin-internationalized-array](https://github.com/sanity-io/sanity-plugin-internationalized-array?tab=readme-ov-file#sanity-plugin-internationalized-array) and (@sanity/language-filter)[https://github.com/sanity-io/language-filter]
+AI assist offers field-level translations, which is ideal for use in conjunction with [sanity-plugin-internationalized-array](https://github.com/sanity-io/sanity-plugin-internationalized-array?tab=readme-ov-file#sanity-plugin-internationalized-array) and [@sanity/language-filter](https://github.com/sanity-io/language-filter)
 
 ### What AI Assist field-level translations solves
 
@@ -506,11 +505,11 @@ assist({
  })
 ```
 
-These documents will get a "Translate fields" instruction added to the document AI Assist dropdown.
+These documents will get a **Translate fields** instruction added to the document AI Assist dropdown.
 
-Out of the box, this is sufficient config for document types using `internationalizedArray*` types for localization [sanity-plugin-internationalized-array](https://github.com/sanity-io/sanity-plugin-internationalized-array?tab=readme-ov-file#sanity-plugin-internationalized-array).
+Out of the box, this is sufficient config for document types using the `internationalizedArray*` types provided by [sanity-plugin-internationalized-array](https://github.com/sanity-io/sanity-plugin-internationalized-array?tab=readme-ov-file#sanity-plugin-internationalized-array).
 
-It will also work without further config for object types named "locale*", with one field per language:
+It will also work without further config for object types named `locale*`, (e.g. `localeTitle`, `localeDescription`) with one field per language:
 
 *Example locale object supported by default*
 
@@ -535,7 +534,7 @@ defineType({
 })
 ```
 
-**If your schema is not using either of these structures**, confer [Custom language fields](#custom-language-fields).
+**If your schema is not using either of these structures**, refer to the section on [Custom language fields](#custom-language-fields).
 
 ### Loading field languages
 Languages must be an array of objects with an id and title.
@@ -568,7 +567,7 @@ assist({
  })
 ```
 
-The async function contains a configured Sanity Client in the first parameter, allowing you to store Language options as documents. Your query should return an array of objects with an id and title.
+The async function contains a configured Sanity client in the first parameter, allowing you to store language options as documents. Your query should return an array of objects with an id and title.
 
 
 ```ts
@@ -608,22 +607,22 @@ assist({
 ```
 
 ### Custom language fields
-By providing a function to `translate.field.translationOutputs`, complete control over which fields belong to which language is given.
+By providing a function to `translate.field.translationOutputs`, you have complete control over which fields belong to which language.
 
-`translationOutputs` is used when an editor uses the "Translate fields" instruction.
+`translationOutputs` is used when an editor uses the **Translate fields** instruction.
 
-It determines the relationships between document paths: Given a document path and a language, it should return into which sibling paths translations are output.
+It determines the relationships between document paths: Given a document path and a language, it should return the approriate sibling paths into which translations are output.
 
-`translationOutputs` is invoked once per path in the document (limited to a depth of 6), with the following:
+`translationOutputs` is invoked once per path in the document (limited to a depth of 6), with the following arguments:
 
-* `documentMember` - the field or array item for a given path; contains the path and its schemaType,
+* `documentMember` - the field or array item for a given path; contains the path and its `schemaType`
 * `enclosingType` - the schema type of the parent holding the member
-* `translateFromLanguageId` - the languageId for the language the users want to to translate from
-* `translateToLanguageIds` - all languageIds the user can translate to
+* `translateFromLanguageId` - the `languageId` for the language the users want to translate from
+* `translateToLanguageIds` - all `languageId`s the user can translate to
 
-The function should return a `TranslationOutput[]` array that contains all the paths where translations from `documentMember` (in the language given by translateFromLanguageId) should be output.
+The function should return a `TranslationOutput[]` array that contains all the paths where translations from `documentMember` (in the language received in `translateFromLanguageId`) should be output.
 
-The function should return `undefined` for all documentMembers that should not be directly translated, or are nested fields under a translated path.
+The function should return `undefined` for all document members that should not be directly translated, or are nested fields under a translated path.
 
 #### Default function
 
@@ -665,7 +664,7 @@ The following parameters will be the same every invocation:
 4. `{path: 'titles.en.subtitle', name: 'subtitle', schemaType: StringSchemaType}`, `ObjectSchemaType`
 5. `{path: 'titles.de', name: 'de', schemaType: ObjectSchemaType}`, `ObjectSchemaType`
 
-To indicate that you want everything under `title.en` to be translated into `title.de`, `translationOutputs` needs to return [id: 'de', outputPath: 'titles.de'] when invoked with `documentMember.path: 'titles.en'`.
+To indicate that you want everything under `title.en` to be translated into `title.de`, `translationOutputs` needs to return `[id: 'de', outputPath: 'titles.de']` when invoked with `documentMember.path: 'titles.en'`.
 
 The following function enables this:
 
@@ -730,16 +729,16 @@ assist({
 
 <img width="250" alt="Translate fields action on field" src="https://github.com/sanity-io/assist/assets/835514/acc5fa23-2022-4eae-922d-5c83dda7379c">
 
-By default, “Translate document” and “Translate fields…” instructions are only added to the document instruction dropdown.
+By default, **Translate document** and **Translate fields…** instructions are only added to the top-level document instruction menu.
 
 These instructions can also be added to fields by setting
 `options.aiAssist.translateAction: true` for a field or type.
 
-This allows editors to translate only parts of the document, and can be useful to enable on `internatinalizedArrays` or `locale` wrapper object types.
+This allows editors to translate only parts of the document and can be useful to enable for `internationalizedArrays` or `locale` wrapper object types.
 
-For document types configured for full document translations, a "Translate" action will be added. Running it will translate the field to the language set in the language field
+For document types configured for full document translations, a **Translate** action will be added. Running it will translate the field to the language set in the language field
 
-For document types configured for field translations, a "Translate fields..." action will be added. Running it will open a dialog with language selectors.
+For document types configured for field translations, a **Translate fields...** action will be added. Running it will open a dialog with language selectors.
 
 
 #### Example
@@ -764,7 +763,7 @@ but some common caveats to the field that you may run into using AI Assist are:
 
 * Limits to instruction length: Long instructions on deep content structures may exhaust model context
 * Timeouts: To be able to write structured content, we're using the largest language models - long-running results may time out or intermittently fail
-* Limited capacity: The underlying LLM APIs used by AI Assist are resource constrained
+* Limited capacity: The underlying LLM APIs used by AI Assist are resource-constrained
 
 
 ## Third party sub-processors
