@@ -2,7 +2,7 @@
 
 Free your team to do more of what they’re great at (and less busy work) with the AI assistant that works with structured content. Attach reusable AI instructions to fields and documents to supercharge your editorial workflow.
 
-You create the instructions; Sanity AI Assist does the rest. [Learn more about writing instructions in the Sanity documentation](https://www.sanity.io/guides/getting-started-with-ai-assist-instructions?utm_source=github.com&utm_medium=organic_social&utm_campaign=ai-assist&utm_content=).
+You create the instructions; Sanity AI Assist does the rest. [Learn how to install, configure, and use AI Assist in the Sanity documentation][docs].
 
 [Read the release announcement here.](https://www.sanity.io/blog/sanity-ai-assist-announcement?utm_source=github.com&utm_medium=organic_social&utm_campaign=ai-assist&utm_content=)
 
@@ -15,11 +15,11 @@ The `@sanity/assist` package lives in the [plugin directory](./plugin).
 
 ## Installation & usage
 
-Follow the instructions for the Sanity plugin [here](./plugin).
+Follow [the instructions in the Sanity docs][docs].
 
 ## Third party sub-processors
 
-This version of the feature uses OpenAI.com as a third-party sub-processor. Their security posture has been vetted by Sanity's security team, and approved for use.
+This version of the feature uses OpenAI.com as a third-party sub-processor. Sanity's security team has vetted their security posture, and approved for use.
 
 ## Local development
 
@@ -39,3 +39,5 @@ The studio will hot-reload whenever the plugin code changes.
 
 ### Custom API host
 To use a custom API host for the plugin, set `SANITY_STUDIO_PLUGIN_API_HOST` env variable.
+
+[docs]: https://www.sanity.io/docs/ai-assist?utm_source=github.com&utm_medium=organic_social&utm_campaign=ai-assist&utm_content=
