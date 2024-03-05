@@ -2,11 +2,14 @@ import {DocumentFieldAction, DocumentFieldActionGroup, DocumentFieldActionItem} 
 import {ImageIcon} from '@sanity/icons'
 import {useContext, useMemo} from 'react'
 import {usePathKey} from '../helpers/misc'
-import {useApiClient, useGenerateCaption} from '../useApiClient'
+import {canUseAssist, useApiClient, useGenerateCaption} from '../useApiClient'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {ImageContext} from '../components/ImageContext'
 import {Box, Spinner} from '@sanity/ui'
+import {useDocumentPane} from 'sanity/desk'
+import {aiInspectorId} from '../assistInspector/constants'
+import {fieldPathParam, instructionParam} from '../types'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -16,11 +19,11 @@ export const generateCaptionsActions: DocumentFieldAction = {
   name: 'sanity-assist-generate-captions',
   useAction(props) {
     const pathKey = usePathKey(props.path)
+    const {openInspector} = useDocumentPane()
 
-    const {config} = useAiAssistanceConfig()
+    const {config, status} = useAiAssistanceConfig()
     const apiClient = useApiClient(config?.__customApiClient)
     const {generateCaption, loading} = useGenerateCaption(apiClient)
-
     const imageContext = useContext(ImageContext)
 
     if (imageContext && pathKey === imageContext?.imageDescriptionPath) {
@@ -43,13 +46,21 @@ export const generateCaptionsActions: DocumentFieldAction = {
             if (loading) {
               return
             }
+            if (!canUseAssist(status)) {
+              openInspector(aiInspectorId, {
+                [fieldPathParam]: pathKey,
+                [instructionParam]: undefined as any,
+              })
+              return
+            }
+
             generateCaption({path: pathKey, documentId: documentId ?? ''})
           },
           renderAsButton: true,
           disabled: loading,
           hidden: !imageContext.assetRef,
         })
-      }, [generateCaption, pathKey, documentId, loading, imageContext])
+      }, [generateCaption, pathKey, documentId, loading, imageContext, status, openInspector])
     }
 
     // works but not supported by types
