@@ -68,14 +68,42 @@ export interface AssistDocument extends SanityDocument {
   instructions?: StudioInstruction[]
 }
 
-export interface StudioAssistDocument {
+export interface PresetInstruction {
+  _key: string
+  prompt?: PromptTextBlock[]
+
+  title?: string
+  /**
+   * String key from @sanity/icons IconMap
+   */
+  icon?: string
+
+  /**
+   * Type/field filter
+   */
+  output?: (OutputFieldItem | OutputTypeItem)[]
+}
+
+export interface PresetField {
+  path?: string
+  instructions?: PresetInstruction[]
+}
+
+export interface AssistPreset {
+  fields?: PresetField[]
+}
+
+export interface SanityAssistDocument {
   _id: string
   _type: typeof assistDocumentTypeName
   fields?: StudioAssistField[]
+}
 
-  // added
+export interface StudioAssistDocument extends SanityAssistDocument {
+  // added after loading
   tasks?: InstructionTask[]
 }
+
 export interface AssistField {
   _key: string
   _type: typeof assistFieldTypeName
@@ -113,7 +141,10 @@ export interface UserInputBlock {
 }
 
 export type InlinePromptBlock = PortableTextSpan | FieldRef | UserInputBlock | ContextBlock
-export type PromptTextBlock = PortableTextBlock<never, InlinePromptBlock, 'normal', never>
+export type PromptTextBlock = Omit<
+  PortableTextBlock<never, InlinePromptBlock, 'normal', never>,
+  '_type'
+> & {_type: 'block'}
 
 export type PromptBlock = PromptTextBlock | FieldRef | ContextBlock | UserInputBlock
 

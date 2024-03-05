@@ -6,6 +6,7 @@ import {
   documentRootKey,
   fieldPathParam,
   instructionParam,
+  StudioInstruction,
 } from '../../types'
 import {createContext, useContext, useEffect, useMemo, useRef} from 'react'
 import {
@@ -16,6 +17,7 @@ import {
   KeyedSegment,
   ObjectInputProps,
   ObjectSchemaType,
+  PatchEvent,
   Path,
   SchemaType,
   set,
@@ -30,6 +32,7 @@ import {useAiPaneRouter} from '../../assistInspector/helpers'
 import {SelectedFieldContextProvider, SelectedFieldContextValue} from './SelectedFieldContext'
 import {Card, Stack, Text} from '@sanity/ui'
 import {documentTypeFromAiDocumentId} from '../../helpers/ids'
+import {useAiAssistanceConfig} from '../../assistLayout/AiAssistanceConfigContext'
 
 const EMPTY_FIELDS: AssistField[] = []
 
@@ -104,8 +107,6 @@ function AssistDocumentFormEditable(props: ObjectInputProps) {
     }
   }, [title, documentSchema, onChange, id])
 
-  const fieldExists = !!fields?.some((f) => f._key === typePath)
-
   const {onPathOpen, ...formCallbacks} = useFormCallbacks()
 
   const newCallbacks: FormCallbacksValue = useMemo(
@@ -141,7 +142,8 @@ function AssistDocumentFormEditable(props: ObjectInputProps) {
           key={typePath}
           pathKey={typePath}
           activePath={activePath}
-          fieldExists={fieldExists}
+          fields={fields}
+          documentSchema={documentSchema}
           onChange={onChange}
         />
         {instruction && <BackToInstructionListLink />}
@@ -195,36 +197,78 @@ function useSelectedSchema(
 function FieldsInitializer({
   pathKey,
   activePath,
-  fieldExists,
+  fields,
+  documentSchema,
   onChange,
 }: {
   pathKey?: string
   activePath?: Path
-  fieldExists: boolean
+  fields: AssistField[] | undefined
+  documentSchema: ObjectSchemaType | undefined
   onChange: ObjectInputProps['onChange']
 }) {
+  const {
+    config: {__presets: presets},
+  } = useAiAssistanceConfig()
+
+  const existingField = fields?.find((f) => f._key === pathKey)
+  const documentPresets = !!documentSchema?.name && presets?.[documentSchema?.name]
+
+  const missingPresetInstructions = useMemo(() => {
+    if (!documentPresets || !pathKey) {
+      return undefined
+    }
+    const existingInstructions = existingField?.instructions
+    const presetField = documentPresets.fields?.find((f) => f.path === pathKey)
+    return presetField?.instructions?.filter(
+      (i) => !existingInstructions?.some((ei) => ei._key === i._key)
+    )
+  }, [documentPresets, pathKey, existingField])
+
   // need this to not fire onChange twice in React strict mode
   const initialized = useRef(false)
   useEffect(() => {
-    if (initialized.current || fieldExists || activePath || !pathKey) {
+    if (initialized.current || !pathKey) {
       return
     }
-    onChange([
-      setIfMissing([], ['fields']),
-      insert(
-        [
-          typed<AssistField>({
-            _key: pathKey,
-            _type: assistFieldTypeName,
-            path: pathKey,
-          }),
-        ],
-        'after',
-        ['fields', -1]
-      ),
-    ])
+    if (existingField && !missingPresetInstructions?.length) {
+      return
+    }
+
+    let event = PatchEvent.from([setIfMissing([], ['fields'])])
+    if (!existingField) {
+      event = event.append(
+        insert(
+          [
+            typed<AssistField>({
+              _key: pathKey,
+              _type: assistFieldTypeName,
+              path: pathKey,
+            }),
+          ],
+          'after',
+          ['fields', -1]
+        )
+      )
+    }
+    if (missingPresetInstructions?.length) {
+      event = event.append(
+        insert(
+          missingPresetInstructions.map(
+            (preset): StudioInstruction => ({
+              ...preset,
+              _type: 'sanity.assist.instruction',
+              prompt: preset.prompt?.map((p) => ({markDefs: [], ...p})),
+            })
+          ),
+          'after',
+          ['fields', {_key: pathKey}, 'instructions', -1]
+        )
+      )
+    }
+    onChange(event)
     initialized.current = true
-  }, [activePath, onChange, pathKey, fieldExists])
+  }, [activePath, onChange, pathKey, existingField, missingPresetInstructions])
 
   return null
 }
