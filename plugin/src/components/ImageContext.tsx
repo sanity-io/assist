@@ -2,7 +2,7 @@ import {createContext, useEffect, useMemo, useState} from 'react'
 import {InputProps, pathToString, useSyncState} from 'sanity'
 import {getDescriptionFieldOption, getImageInstructionFieldOption} from '../helpers/typeUtils'
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
-import {useApiClient, useGenerateCaption} from '../useApiClient'
+import {canUseAssist, useApiClient, useGenerateCaption} from '../useApiClient'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 import {publicId} from '../helpers/ids'
 
@@ -20,7 +20,7 @@ export function ImageContextProvider(props: InputProps) {
   const [assetRefState, setAssetRefState] = useState<string | undefined>(assetRef)
 
   const {documentId, documentSchemaType} = useAssistDocumentContext()
-  const {config} = useAiAssistanceConfig()
+  const {config, status} = useAiAssistanceConfig()
   const apiClient = useApiClient(config?.__customApiClient)
   const {generateCaption} = useGenerateCaption(apiClient)
 
@@ -28,11 +28,18 @@ export function ImageContextProvider(props: InputProps) {
 
   useEffect(() => {
     const descriptionField = getDescriptionFieldOption(schemaType)
-    if (assetRef && documentId && descriptionField && assetRef !== assetRefState && !isSyncing) {
+    if (
+      assetRef &&
+      documentId &&
+      descriptionField &&
+      assetRef !== assetRefState &&
+      !isSyncing &&
+      canUseAssist(status)
+    ) {
       setAssetRefState(assetRef)
       generateCaption({path: pathToString([...path, descriptionField]), documentId: documentId})
     }
-  }, [schemaType, path, assetRef, assetRefState, documentId, generateCaption, isSyncing])
+  }, [schemaType, path, assetRef, assetRefState, documentId, generateCaption, isSyncing, status])
 
   const context: ImageContextValue = useMemo(() => {
     const descriptionField = getDescriptionFieldOption(schemaType)

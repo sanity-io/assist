@@ -39,6 +39,10 @@ export interface TranslateRequest {
 
 const basePath = '/assist/tasks/instruction'
 
+export function canUseAssist(status: InstructStatus | undefined) {
+  return status?.enabled && status.initialized && status.validToken
+}
+
 export function useApiClient(customApiClient?: (defaultClient: SanityClient) => SanityClient) {
   const client = useClient({apiVersion: '2023-06-05'})
   return useMemo(
