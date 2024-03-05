@@ -16,7 +16,7 @@ import {isSchemaAssistEnabled} from './helpers/assistSupported'
 import {isImage} from './helpers/typeUtils'
 import {ImageContextProvider} from './components/ImageContext'
 import {TranslationConfig} from './translate/types'
-import {assistDocumentTypeName} from './types'
+import {assistDocumentTypeName, AssistPreset} from './types'
 
 export interface AssistPluginConfig {
   translate?: TranslationConfig
@@ -25,6 +25,11 @@ export interface AssistPluginConfig {
    * @internal
    */
   __customApiClient?: (defaultClient: SanityClient) => SanityClient
+
+  /**
+   * @internal
+   */
+  __presets?: Record<string, AssistPreset>
 }
 
 export const assist = definePlugin<AssistPluginConfig | void>((config) => {
