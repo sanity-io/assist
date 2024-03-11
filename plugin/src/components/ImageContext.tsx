@@ -28,16 +28,11 @@ export function ImageContextProvider(props: InputProps) {
 
   useEffect(() => {
     const descriptionField = getDescriptionFieldOption(schemaType)
-    if (
-      assetRef &&
-      documentId &&
-      descriptionField &&
-      assetRef !== assetRefState &&
-      !isSyncing &&
-      canUseAssist(status)
-    ) {
+    if (assetRef && documentId && descriptionField && assetRef !== assetRefState && !isSyncing) {
       setAssetRefState(assetRef)
-      generateCaption({path: pathToString([...path, descriptionField]), documentId: documentId})
+      if (canUseAssist(status)) {
+        generateCaption({path: pathToString([...path, descriptionField]), documentId: documentId})
+      }
     }
   }, [schemaType, path, assetRef, assetRefState, documentId, generateCaption, isSyncing, status])
 

@@ -244,6 +244,7 @@ function FieldsInitializer({
               _key: pathKey,
               _type: assistFieldTypeName,
               path: pathKey,
+              instructions: [],
             }),
           ],
           'after',
@@ -251,6 +252,11 @@ function FieldsInitializer({
         )
       )
     }
+
+    if (!existingField?.instructions?.length) {
+      event = event.append([setIfMissing([], ['fields', {_key: pathKey}, 'instructions'])])
+    }
+
     if (missingPresetInstructions?.length) {
       event = event.append(
         insert(
