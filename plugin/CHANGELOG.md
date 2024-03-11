@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/sanity-io/assist/compare/v2.0.1...v2.0.2) (2024-03-11)
+
+### Bug Fixes
+
+- image caption should no longer trigger automatically just after enabling the plugin ([79c3d46](https://github.com/sanity-io/assist/commit/79c3d462461de2bbc5b59154e978597773ef52ed))
+
 ## [2.0.1](https://github.com/sanity-io/assist/compare/v2.0.0...v2.0.1) (2024-03-05)
 
 ### Bug Fixes
