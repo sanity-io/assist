@@ -5,6 +5,7 @@ import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {canUseAssist, useApiClient, useGenerateCaption} from '../useApiClient'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 import {publicId} from '../helpers/ids'
+import {usePaneRouter} from 'sanity/desk'
 
 export interface ImageContextValue {
   imageDescriptionPath?: string
@@ -15,7 +16,7 @@ export interface ImageContextValue {
 export const ImageContext = createContext<ImageContextValue>({})
 
 export function ImageContextProvider(props: InputProps) {
-  const {schemaType, path, value} = props
+  const {schemaType, path, value, readOnly} = props
   const assetRef = (value as any)?.asset?._ref
   const [assetRefState, setAssetRefState] = useState<string | undefined>(assetRef)
 
@@ -26,15 +27,37 @@ export function ImageContextProvider(props: InputProps) {
 
   const {isSyncing} = useSyncState(publicId(documentId), documentSchemaType.name)
 
+  const router = usePaneRouter()
+  const isShowingOlderRevision = !!router.params?.rev
+
   useEffect(() => {
     const descriptionField = getDescriptionFieldOption(schemaType)
-    if (assetRef && documentId && descriptionField && assetRef !== assetRefState && !isSyncing) {
+    if (
+      assetRef &&
+      documentId &&
+      descriptionField &&
+      assetRef !== assetRefState &&
+      !isSyncing &&
+      !isShowingOlderRevision &&
+      !readOnly
+    ) {
       setAssetRefState(assetRef)
       if (canUseAssist(status)) {
         generateCaption({path: pathToString([...path, descriptionField]), documentId: documentId})
       }
     }
-  }, [schemaType, path, assetRef, assetRefState, documentId, generateCaption, isSyncing, status])
+  }, [
+    schemaType,
+    path,
+    assetRef,
+    assetRefState,
+    documentId,
+    generateCaption,
+    isSyncing,
+    status,
+    readOnly,
+    isShowingOlderRevision,
+  ])
 
   const context: ImageContextValue = useMemo(() => {
     const descriptionField = getDescriptionFieldOption(schemaType)
