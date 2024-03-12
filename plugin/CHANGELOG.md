@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.3](https://github.com/sanity-io/assist/compare/v2.0.2...v2.0.3) (2024-03-12)
+
+### Bug Fixes
+
+- image description is no longer regenerated when switching between old revisions ([24f3e58](https://github.com/sanity-io/assist/commit/24f3e5809015c02f5e2952e2a1080efa5fed8dda))
+
 ## [2.0.2](https://github.com/sanity-io/assist/compare/v2.0.1...v2.0.2) (2024-03-11)
 
 ### Bug Fixes
