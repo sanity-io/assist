@@ -6,6 +6,8 @@ import {
   fieldReference,
   instruction,
   instructionTask,
+  outputFieldType,
+  outputTypeType,
   prompt,
   promptContext,
   userInput,
@@ -57,6 +59,8 @@ const instructionForm = [
 
 export const schemaTypes = [
   ...instructionForm,
+  outputFieldType,
+  outputTypeType,
   assistDocumentSchema,
   documentInstructionStatus,
   instructionTask,
