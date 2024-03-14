@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.4](https://github.com/sanity-io/assist/compare/v2.0.3...v2.0.4) (2024-03-14)
+
+### Bug Fixes
+
+- add support for `sanity graphql deploy` ([83777b5](https://github.com/sanity-io/assist/commit/83777b5b2950d49ea62623f27a254e059397c059))
+
 ## [2.0.3](https://github.com/sanity-io/assist/compare/v2.0.2...v2.0.3) (2024-03-12)
 
 ### Bug Fixes
