@@ -218,6 +218,32 @@ export const prompt = defineType({
   ],
 })
 
+export const outputFieldType = defineType({
+  type: 'object',
+  name: outputFieldTypeName,
+  title: 'Output field',
+  fields: [
+    defineField({
+      type: 'string',
+      name: 'path',
+      title: 'Path',
+    }),
+  ],
+})
+
+export const outputTypeType = defineType({
+  type: 'object',
+  name: outputTypeTypeName,
+  title: 'Output type',
+  fields: [
+    defineField({
+      type: 'string',
+      name: 'type',
+      title: 'Type',
+    }),
+  ],
+})
+
 export const instruction = defineType({
   type: 'object',
   name: instructionTypeName,
@@ -342,30 +368,8 @@ export const instruction = defineType({
         field: InstructionOutputField,
       },
       of: [
-        defineArrayMember({
-          type: 'object' as const,
-          name: outputFieldTypeName,
-          title: 'Output field',
-          fields: [
-            {
-              type: 'string',
-              name: 'path',
-              title: 'Path',
-            },
-          ],
-        }),
-        defineArrayMember({
-          type: 'object' as const,
-          name: outputTypeTypeName,
-          title: 'Output type',
-          fields: [
-            {
-              type: 'string',
-              name: 'type',
-              title: 'Type',
-            },
-          ],
-        }),
+        defineArrayMember({type: outputFieldType.name}),
+        defineArrayMember({type: outputTypeType.name}),
       ],
     }),
   ],

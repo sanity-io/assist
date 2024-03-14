@@ -34,7 +34,6 @@
 - [Develop \& test](#develop--test)
   - [Release new version](#release-new-version)
 
-
 ## About Sanity AI Assist
 
 Free your team to do more of what they’re great at (and less busywork) with the AI assistant that works with structured content. Attach reusable AI instructions to fields and documents to supercharge your editorial workflow.
@@ -68,14 +67,14 @@ This plugin requires `sanity` version `3.26` or greater.
 In `sanity.config.ts`, add `assist` to the `plugins` array:
 
 ```tsx
-import { assist } from '@sanity/assist'
+import {assist} from '@sanity/assist'
 
 export default defineConfig({
   /* other config */
   plugins: [
     /* other plugins */
-    assist()
-  ]
+    assist(),
+  ],
 })
 ```
 
@@ -83,14 +82,14 @@ export default defineConfig({
 
 After installing and adding the plugin and having the AI Assist feature enabled for your project and its datasets, you need to create a token for the plugin to access the AI Assist API. This needs to be done by a member of the project with token creation permissions (typically someone with an admin or developer role).
 
-* Start the studio and open any document
-* Click *the sparkle icon** (✨) in the document header near the close document X-button
-* Then select **Manage instructions**
+- Start the studio and open any document
+- Click \*the sparkle icon\*\* (✨) in the document header near the close document X-button
+- Then select **Manage instructions**
 
 <img width="210" alt="The AI Assist document menu showing 'Manage instructions' highlighted" src="https://github.com/sanity-io/sanity/assets/835514/58c177ca-4530-4f44-abe0-4adcd9e11c8b">
 
-* Selecting **Manage instructions** will open an inspector panel
-* Click the **Enable AI assistance** button to create a token and enable AI Assist for everyone with access to the project
+- Selecting **Manage instructions** will open an inspector panel
+- Click the **Enable AI assistance** button to create a token and enable AI Assist for everyone with access to the project
 
 <img width="339" alt="The 'Enable Sanity AI Assist' button" src="https://github.com/sanity-io/sanity/assets/835514/38b81861-6a7c-49a2-a7c5-f46816d0c0a8">
 
@@ -118,21 +117,20 @@ themselves can edit can be changed by the instruction instance.
 
 By default, most string, object, and array field types (including Portable Text!) have AI writing assistance enabled. Your assistant can write to all compatible fields that it detects.
 
-
 ### Disable AI Assist for a schema type
 
 ```tsx
 // this will disable AI assistance wherever it is used,
 // ie: as field, document, array types
 defineType({
- name: 'policy',
+  name: 'policy',
   type: 'document',
   options: {
-    aiAssist: {exclude: true}
- },
+    aiAssist: {exclude: true},
+  },
   fields: [
     // ...
-  ]
+  ],
 })
 ```
 
@@ -141,17 +139,17 @@ defineType({
 ```tsx
 // this disables AI assistance only for the specific field
 defineType({
- name: 'product',
+  name: 'product',
   type: 'object',
   fields: [
     defineField({
       name: 'sku',
       type: 'string',
       options: {
-        aiAssist: {exclude: true}
-     }
-  })
-  ]
+        aiAssist: {exclude: true},
+      },
+    }),
+  ],
 })
 ```
 
@@ -161,30 +159,31 @@ defineType({
 // this disables AI assistance for the specific array member
 // if all types in the `of` array are excluded, the array type is also considered excluded
 defineType({
- name: 'product',
+  name: 'product',
   type: 'array',
   of: [
     defineArrayMember({
       type: 'customProduct',
       options: {
-        aiAssist: {exclude: true}
-     }
-  })
-  ]
+        aiAssist: {exclude: true},
+      },
+    }),
+  ],
 })
 ```
 
 ### Unsupported types
 
 The following types are not supported, and behave as excluded types:
-* [Number](https://www.sanity.io/docs/number-type)
-* [Slug](https://www.sanity.io/docs/slug-type)
-* [Url](https://www.sanity.io/docs/url-type)
-* [Date](https://www.sanity.io/docs/date-type)
-* [Datetime](https://www.sanity.io/docs/datetime-type)
-* [Image](https://www.sanity.io/docs/image-type) (supported when image has custom fields)
-* [File](https://www.sanity.io/docs/file-type) (never supported, even when file has custom fields)
-* [Reference](https://www.sanity.io/docs/reference-type) (supported when configured with embeddingsIndex)
+
+- [Number](https://www.sanity.io/docs/number-type)
+- [Slug](https://www.sanity.io/docs/slug-type)
+- [Url](https://www.sanity.io/docs/url-type)
+- [Date](https://www.sanity.io/docs/date-type)
+- [Datetime](https://www.sanity.io/docs/datetime-type)
+- [Image](https://www.sanity.io/docs/image-type) (supported when image has custom fields)
+- [File](https://www.sanity.io/docs/file-type) (never supported, even when file has custom fields)
+- [Reference](https://www.sanity.io/docs/reference-type) (supported when configured with embeddingsIndex)
 
 Fields with these types will not be changed by the assistant, do not have AI Assist actions, and cannot be referenced in instructions.
 
@@ -198,23 +197,25 @@ These fields can be written to by an instruction, as long as the field is non-hi
 
 Fields with `hidden` or `readOnly` set to literal `true` will be skipped by AI Assist.
 
-*Note*: An instruction will not re-evaluate these states during a run.
+_Note_: An instruction will not re-evaluate these states during a run.
 I.e., if an instruction makes a change during its execution that triggers another field to change its `hidden` or `readOnly` status,
 the running instruction will still consider these as if in their original state.
 
-If it is essential that AI Assist *never* writes to a conditional field,
+If it is essential that AI Assist _never_ writes to a conditional field,
 it should be marked with `options.aiAssist.exclude: true`.
 
 ### Reference support
 
 #### Create an Embeddings-index
+
 To enable AI assist for references, first, your project must have an existing [embeddings-index](https://www.sanity.io/docs/embeddings-index-api-overview)
 that includes the document types it should be able to reference.
 
 You can manage your indexes directly in the studio using the [Embeddings Index Dashboard plugin](https://github.com/sanity-io/embeddings-index-ui#embeddings-index-api-dashboard-for-sanity-studio).
 
 #### Set schema options
-Set `options.aiAssist.embeddingsIndex` for reference fields/types you want to enable reference instructions for. 
+
+Set `options.aiAssist.embeddingsIndex` for reference fields/types you want to enable reference instructions for.
 Reference fields with this option set can have instructions attached and will be visited when running instructions for object fields and arrays.
 
 AI Assist will use the embeddings-index, further filtered by the types allowed by the reference, to look up contextually relevant references.
@@ -229,10 +230,10 @@ defineField({
   type: 'reference',
   name: 'articleReference',
   title: 'Article reference',
-  to: [ { type: 'article'} ],
+  to: [{type: 'article'}],
   options: {
     aiAssist: {
-      embeddingsIndex: 'article-index'
+      embeddingsIndex: 'article-index',
     },
   },
 })
@@ -251,59 +252,63 @@ If you have a very large schema (that is, many document and field types), it can
 
 We recommend excluding any and all types that aren't likely to benefit from automated workflows. A quick win is typically to exclude array types. It can be a good idea to exclude most non-block types from Portable Text arrays. This will ensure that AI Assist outputs mostly formatted text.
 
-It is also possible to exclude fields/types when creating an instruction. See [Field and type filters](#field-and-type-filters) for more. 
+It is also possible to exclude fields/types when creating an instruction. See [Field and type filters](#field-and-type-filters) for more.
 
 ## Included document types
 
-This plugin adds an `AI Context` document type. 
+This plugin adds an `AI Context` document type.
 
 If your Studio uses [Structure Builder](https://www.sanity.io/docs/structure-builder-introduction) to configure the studio structure,
 you might have to add this document type to your structure.
 
 The document type name can be imported from the plugin:
+
 ```ts
 import {contextDocumentTypeName} from '@sanity/assist'
 
-// put into structure in structure  
+// put into structure in structure
 S.documentTypeListItem(contextDocumentTypeName)
 ```
 
 ## Field and type filters
 
 When creating instructions for documents, object fields, array fields, or portable text fields, you can explicitly control what will be visited by AI Assist.
-By default, the assistant will include all compatible fields and types. 
+By default, the assistant will include all compatible fields and types.
 
 Opting out fields/types per instruction is done using the respective field/type filter checkboxes under the instruction.
-When using these filters, it is not necessary to tell AI Assist what to include in the instruction text itself.  
+When using these filters, it is not necessary to tell AI Assist what to include in the instruction text itself.
 
 Note that once the schema targeted by the instruction changes, the following behavior applies:
-* instructions that include all fields or types will automatically also include the new fields or types
-* instructions that have excluded one or more fields or types will NOT include the new fields or types
+
+- instructions that include all fields or types will automatically also include the new fields or types
+- instructions that have excluded one or more fields or types will NOT include the new fields or types
 
 ## Image description generation
+
 AI Assist can optionally generate descriptions for images. This has to be enabled on an image-type/field,
 by setting the `options.aiAssist.imageDescriptionField` on the image type, where `imageDescriptionField` is the field name of a
 custom string-field on the image object:
 
 ```tsx
 defineField({
-    type: 'image',
-    name: 'inlineImage',
-    title: 'Image',
-    fields: [
-      defineField({
-        type: 'string',
-        name: 'altText',
-        title: 'Alternative text',
-      }),
-    ],
-    options: {
-      aiAssist: {
-        imageDescriptionField: 'altText',
-      }
+  type: 'image',
+  name: 'inlineImage',
+  title: 'Image',
+  fields: [
+    defineField({
+      type: 'string',
+      name: 'altText',
+      title: 'Alternative text',
+    }),
+  ],
+  options: {
+    aiAssist: {
+      imageDescriptionField: 'altText',
     },
+  },
 })
 ```
+
 This will add a **Generate image description** action to the configured field.
 The **Generate image description** action will automatically run whenever the image changes.
 
@@ -311,15 +316,18 @@ The **Generate image description** action will automatically run whenever the im
 Fields within array items are not supported.
 
 ## Image generation
+
 <img width="600" alt="image" src="https://github.com/sanity-io/assist/assets/835514/c4de6791-f530-4cd1-b0c2-96ef988bc256">
 
 AI Assist can generate assets for images configured with a prompt field.
 
-An image is generated directly by using the **Generate image from prompt** instruction on the prompt field, 
+An image is generated directly by using the **Generate image from prompt** instruction on the prompt field,
 or indirectly whenever the image prompt field is written to by an AI Assist instruction.
 
 ### Configure
+
 To enable image generation for an image field, the image must:
+
 - set `options.aiAssist.imageInstructionField` to a child-path relative to the image
 - have a `string` or `text` field that corresponds to the `imageInstructionField` path
 
@@ -335,36 +343,38 @@ Use AI context documents to apply a reusable style guide to the prompt rewriting
 #### Example
 
 Given the following document schema
+
 ```ts
 defineType({
   type: 'document',
-	name: 'article',
-	fields: [
-		defineField({
-		  type: 'image',
-		  name: 'articleImage',
-		  fields: [
-		    defineField({
-		      type: 'text',
-		      name: 'imagePrompt',
-		      title: 'Image prompt',
-		      rows: 2,
-		    }),
-		  ],
-		  options: {
-		    imagePromptField: 'imagePromptField',
-		  },
-		})
-	] 
+  name: 'article',
+  fields: [
+    defineField({
+      type: 'image',
+      name: 'articleImage',
+      fields: [
+        defineField({
+          type: 'text',
+          name: 'imagePrompt',
+          title: 'Image prompt',
+          rows: 2,
+        }),
+      ],
+      options: {
+        imagePromptField: 'imagePromptField',
+      },
+    }),
+  ],
 })
 ```
 
-To directly generate an image based on the value in the prompt field, 
+To directly generate an image based on the value in the prompt field,
 run the "Generate image from prompt" instruction that is automatically added.
 
 For better image results or to ensure a consistent style, rewrite the prompt before generating the image:
 
 ### Example prompt expansion instruction
+
 <img width="267" alt="image" src="https://github.com/sanity-io/assist/assets/835514/dabc6910-80d3-4a69-940f-49ac5cae9ade">
 
 For better image results, use an instruction that expands the prompt to be more detailed.
@@ -388,7 +398,9 @@ The prompt to rewrite is:
 ```
 
 The rules can be extracted into an AI Context document and reused in other instructions as needed. This approach can also be used to inform a reusable styleguide for image generation.
+
 ## Full document translation
+
 <img width="250" alt="Translate document action" src="https://github.com/sanity-io/assist/assets/835514/932968ee-1a8c-4389-8822-338188f88b40">
 
 AI assist offers full document translations, which is ideal for pairing with [@sanity/document-internationalization](https://github.com/sanity-io/document-internationalization).
@@ -420,27 +432,28 @@ If the studio is using [@sanity/document-internationalization](https://github.co
 ```ts
 // This will add a "Translate document" instruction to all documents with a language field
 assist({
-    translate: {
-        document: {
-            languageField: 'language'
-        }
-    }
+  translate: {
+    document: {
+      languageField: 'language',
+    },
+  },
 })
 ```
 
 ```ts
 // This will add a "Translate document" instruction only to the 'article' document type
 assist({
-    translate: {
-        document: {
-            languageField: 'language',
-            documentTypes: ['article']
-        }
-    }
+  translate: {
+    document: {
+      languageField: 'language',
+      documentTypes: ['article'],
+    },
+  },
 })
 ```
 
 **All configuration params**
+
 ```ts
 assist({
     translate: {
@@ -472,6 +485,7 @@ assist({
 ```
 
 ## Field level translations
+
 <img width="250" alt="Translate fields action" src="https://github.com/sanity-io/assist/assets/835514/99819cd4-578e-43b2-8c70-8e39afff5f09">
 
 <img width="250" alt="Translate fields dialog" src="https://github.com/sanity-io/assist/assets/835514/fe3d289c-49b6-46dd-ae2f-cd509a01534a">
@@ -489,20 +503,21 @@ AI Assist supports complex values, so language fields that hold nested objects, 
 When initiating translations, editors select a language to translate from and which languages to translate to. This means that AI Assist supports partial translations in cases where editors are responsible for only some languages in the document.
 
 ### Configure field translations
+
 To enable field-level translations, set `translate.field.documentTypes` to an array with which document types should get field translations, and `translate.field.languages`
 
 ```ts
 assist({
-      translate: {
-        field: {
-          documentTypes: ['article'],
-          languages: [
-						{id: 'en', title: 'English'},
-						{id: 'de', title: 'German'}
-					]
-        },
-      },
- })
+  translate: {
+    field: {
+      documentTypes: ['article'],
+      languages: [
+        {id: 'en', title: 'English'},
+        {id: 'de', title: 'German'},
+      ],
+    },
+  },
+})
 ```
 
 These documents will get a **Translate fields** instruction added to the document AI Assist dropdown.
@@ -511,76 +526,76 @@ Out of the box, this is sufficient config for document types using the `internat
 
 It will also work without further config for object types named `locale*`, (e.g. `localeTitle`, `localeDescription`) with one field per language:
 
-*Example locale object supported by default*
+_Example locale object supported by default_
 
 ```ts
 // Object type with name starting with 'locale', and one field per language language
 defineType({
-	type: 'object',
+  type: 'object',
   name: 'localeString',
   fields: [
-		defineField({
+    defineField({
       // these do not have to be string, could be any type
-			type: 'string',
+      type: 'string',
       name: 'en',
-			title: 'English'
-		}),
-		defineField({
-			type: 'string',
+      title: 'English',
+    }),
+    defineField({
+      type: 'string',
       name: 'de',
-			title: 'German'
-		})
-	]
+      title: 'German',
+    }),
+  ],
 })
 ```
 
 **If your schema is not using either of these structures**, refer to the section on [Custom language fields](#custom-language-fields).
 
 ### Loading field languages
+
 Languages must be an array of objects with an id and title.
 
 ```ts
 assist({
-      translate: {
-        field: {
-          languages: [
-						{id: 'en', title: 'English'},
-						{id: 'de', title: 'German'}
-					]
-        },
-      },
- })
+  translate: {
+    field: {
+      languages: [
+        {id: 'en', title: 'English'},
+        {id: 'de', title: 'German'},
+      ],
+    },
+  },
+})
 ```
 
 Or an asynchronous function that returns an array of objects with an id and title.
 
 ```ts
 assist({
-      translate: {
-        field: {
-          languages: async () => {
-					  const response = await fetch('https://example.com/languages')
-					  return response.json()
-					}
-        },
+  translate: {
+    field: {
+      languages: async () => {
+        const response = await fetch('https://example.com/languages')
+        return response.json()
       },
- })
+    },
+  },
+})
 ```
 
 The async function contains a configured Sanity client in the first parameter, allowing you to store language options as documents. Your query should return an array of objects with an id and title.
 
-
 ```ts
 assist({
-      translate: {
-        field: {
-          languages: async () => {
-					    const response = await client.fetch(`*[_type == "language"]{ id, title }`)
-						  return response
-					}
-        },
+  translate: {
+    field: {
+      languages: async () => {
+        const response = await client.fetch(`*[_type == "language"]{ id, title }`)
+        return response
       },
- })
+    },
+  },
+})
 ```
 
 Additionally, you can "pick" fields from a document, to pass into the query. For example, if you have a concept of "Markets" where only certain language fields are required in certain markets.
@@ -589,24 +604,25 @@ In this example, each language document has an array of strings called markets t
 
 ```ts
 assist({
-      translate: {
-        field: {
-          selectLanguageParams: {
-					  market: 'market'
-					},
-					languages: async (client, {market = ``}) => {
-					  const response = await client.fetch(
-							`*[_type == "language" && $market in markets]{ id, title }`,
-					    {market}
-					  )
-					  return response
-					},
-        },
+  translate: {
+    field: {
+      selectLanguageParams: {
+        market: 'market',
       },
- })
+      languages: async (client, {market = ``}) => {
+        const response = await client.fetch(
+          `*[_type == "language" && $market in markets]{ id, title }`,
+          {market}
+        )
+        return response
+      },
+    },
+  },
+})
 ```
 
 ### Custom language fields
+
 By providing a function to `translate.field.translationOutputs`, you have complete control over which fields belong to which language.
 
 `translationOutputs` is used when an editor uses the **Translate fields** instruction.
@@ -615,10 +631,10 @@ It determines the relationships between document paths: Given a document path an
 
 `translationOutputs` is invoked once per path in the document (limited to a depth of 6), with the following arguments:
 
-* `documentMember` - the field or array item for a given path; contains the path and its `schemaType`
-* `enclosingType` - the schema type of the parent holding the member
-* `translateFromLanguageId` - the `languageId` for the language the users want to translate from
-* `translateToLanguageIds` - all `languageId`s the user can translate to
+- `documentMember` - the field or array item for a given path; contains the path and its `schemaType`
+- `enclosingType` - the schema type of the parent holding the member
+- `translateFromLanguageId` - the `languageId` for the language the users want to translate from
+- `translateToLanguageIds` - all `languageId`s the user can translate to
 
 The function should return a `TranslationOutput[]` array that contains all the paths where translations from `documentMember` (in the language received in `translateFromLanguageId`) should be output.
 
@@ -635,7 +651,7 @@ Given the following document:
 ```ts
 {
 	titles: {
-		_type: 'languageObject',		
+		_type: 'languageObject',
 		en: {
 			_type: 'titleObject',
 			title: 'Some title',
@@ -653,8 +669,8 @@ invoked multiple times.
 
 The following parameters will be the same every invocation:
 
-* `translateFromLanguageId` will be `'en'`
-* `translateToLanguageIds` will be `['de']`
+- `translateFromLanguageId` will be `'en'`
+- `translateToLanguageIds` will be `['de']`
 
 `documentMember` and `enclosingType` will change between each invocation, and take the following values:
 
@@ -669,22 +685,27 @@ To indicate that you want everything under `title.en` to be translated into `tit
 The following function enables this:
 
 ```ts
-function translationOutputs(member, enclosingType, translateFromLanguageId, translateToLanguageIds) {
-  const parentIsLanguageWrapper = enclosingType.jsonType === 'object' && enclosingType.name.startsWith('language')
+function translationOutputs(
+  member,
+  enclosingType,
+  translateFromLanguageId,
+  translateToLanguageIds
+) {
+  const parentIsLanguageWrapper =
+    enclosingType.jsonType === 'object' && enclosingType.name.startsWith('language')
 
-	if (parentIsLanguageWrapper && translateFromLanguageId === member.name) {
-
+  if (parentIsLanguageWrapper && translateFromLanguageId === member.name) {
     // [id: 'de', ]
-		return translateToLanguageIds.map((translateToId) => ({
-								id: translateToId,
-                // in this example, member.path is 'titles.en' 	
-								// so this changes titles.en -> titles.de
-		            outputPath: [...member.path.slice(0, -1), translateToId],
-		       }))
-	}
+    return translateToLanguageIds.map((translateToId) => ({
+      id: translateToId,
+      // in this example, member.path is 'titles.en'
+      // so this changes titles.en -> titles.de
+      outputPath: [...member.path.slice(0, -1), translateToId],
+    }))
+  }
 
-  // ignore other members 
-	return undefined
+  // ignore other members
+  return undefined
 }
 ```
 
@@ -692,35 +713,36 @@ function translationOutputs(member, enclosingType, translateFromLanguageId, tran
 
 ```ts
 assist({
-      translate: {
-        field: {
-          documentTypes: ['article'],
-          selectLanguageParams: {market: 'market'},
-					apiVersion: '2023-01-01',
-					languages: (client, {market}) => {
-            return client.fetch(
-								`*[_type == "language" && $market in markets]{ id, title }`,
-							  {market}
-					  )
-          },
-					translationOutputs: (member, enclosingType, fromLanguageId, toLanguageIds) => {
-					   // When the document member is named the same as fromLangagueId
-             // and it is a field in a object with a name starting with "language"
-             // then we return the paths to all other sibling language fields (and their langauge id)
-						// It is ok that the member is an object, then all child fields will be translated
-							if (translateFromLanguageId === member.name && enclosingType.jsonType === 'object' && enclosingType.name.startsWith('locale')) {
-					      return translateToLanguageIds.map((translateToId) => ({
-					         id: translateToId,
-									 	//changes path.to.en -> path.to.de (for instance)
-					         outputPath: [...member.path.slice(0, -1), translateToId],
-					   }))
-					   }
-						// all other member paths are skipped
-				   return undefined
-				 }
-        },
+  translate: {
+    field: {
+      documentTypes: ['article'],
+      selectLanguageParams: {market: 'market'},
+      apiVersion: '2023-01-01',
+      languages: (client, {market}) => {
+        return client.fetch(`*[_type == "language" && $market in markets]{ id, title }`, {market})
       },
- })
+      translationOutputs: (member, enclosingType, fromLanguageId, toLanguageIds) => {
+        // When the document member is named the same as fromLangagueId
+        // and it is a field in a object with a name starting with "language"
+        // then we return the paths to all other sibling language fields (and their langauge id)
+        // It is ok that the member is an object, then all child fields will be translated
+        if (
+          translateFromLanguageId === member.name &&
+          enclosingType.jsonType === 'object' &&
+          enclosingType.name.startsWith('locale')
+        ) {
+          return translateToLanguageIds.map((translateToId) => ({
+            id: translateToId,
+            //changes path.to.en -> path.to.de (for instance)
+            outputPath: [...member.path.slice(0, -1), translateToId],
+          }))
+        }
+        // all other member paths are skipped
+        return undefined
+      },
+    },
+  },
+})
 ```
 
 ## Adding translation actions to fields
@@ -740,31 +762,29 @@ For document types configured for full document translations, a **Translate** ac
 
 For document types configured for field translations, a **Translate fields...** action will be added. Running it will open a dialog with language selectors.
 
-
 #### Example
 
 ```ts
 defineField({
-    name: 'subtitle',
-    type: 'internationalizedArrayString',
-    title: 'Subtitle',
-    options: {
-        aiAssist: {
-            translateAction: true
-        }
+  name: 'subtitle',
+  type: 'internationalizedArrayString',
+  title: 'Subtitle',
+  options: {
+    aiAssist: {
+      translateAction: true,
     },
+  },
 })
 ```
 
 ## Caveats
 
-Large Language Models (LLMs) are a new technology. Constraints and limitations are still being explored, 
+Large Language Models (LLMs) are a new technology. Constraints and limitations are still being explored,
 but some common caveats to the field that you may run into using AI Assist are:
 
-* Limits to instruction length: Long instructions on deep content structures may exhaust model context
-* Timeouts: To be able to write structured content, we're using the largest language models - long-running results may time out or intermittently fail
-* Limited capacity: The underlying LLM APIs used by AI Assist are resource-constrained
-
+- Limits to instruction length: Long instructions on deep content structures may exhaust model context
+- Timeouts: To be able to write structured content, we're using the largest language models - long-running results may time out or intermittently fail
+- Limited capacity: The underlying LLM APIs used by AI Assist are resource-constrained
 
 ## Third party sub-processors
 
@@ -781,7 +801,6 @@ with default configuration for build & watch scripts.
 
 See [Testing a plugin in Sanity Studio](https://github.com/sanity-io/plugin-kit#testing-a-plugin-in-sanity-studio)
 on how to run this plugin with hotreload in the studio.
-
 
 ### Release new version
 
