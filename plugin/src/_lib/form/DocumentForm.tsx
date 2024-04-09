@@ -1,17 +1,18 @@
-import {Box, BoxProps, Flex, focusFirstDescendant, Spinner, Text} from '@sanity/ui'
-import React, {HTMLProps, useEffect, useMemo, useRef} from 'react'
+import {Box, type BoxProps, Flex, focusFirstDescendant, Spinner, Text} from '@sanity/ui'
+import type React from 'react'
+import {type HTMLProps, useEffect, useMemo, useRef} from 'react'
 import {tap} from 'rxjs/operators'
 import {
   createPatchChannel,
-  DocumentMutationEvent,
-  DocumentRebaseEvent,
+  type DocumentMutationEvent,
+  type DocumentRebaseEvent,
   FormBuilder,
   fromMutationPatches,
-  PatchMsg,
+  type PatchMsg,
   useDocumentPresence,
   useDocumentStore,
 } from 'sanity'
-import {useDocumentPane} from 'sanity/desk'
+import {useDocumentPane} from 'sanity/structure'
 
 import {assistFormId} from './constants'
 

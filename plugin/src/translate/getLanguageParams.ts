@@ -1,5 +1,5 @@
-import get from 'lodash/get'
-import {SanityDocumentLike} from 'sanity'
+import {get} from 'lodash'
+import type {SanityDocumentLike} from 'sanity'
 
 export const getLanguageParams = (
   select: Record<string, string> | undefined,

@@ -1,8 +1,8 @@
 import {ImageIcon} from '@sanity/icons'
 import {Box, Spinner} from '@sanity/ui'
 import {useContext, useMemo} from 'react'
-import {DocumentFieldAction, DocumentFieldActionGroup, DocumentFieldActionItem} from 'sanity'
-import {useDocumentPane} from 'sanity/desk'
+import type {DocumentFieldAction, DocumentFieldActionGroup, DocumentFieldActionItem} from 'sanity'
+import {useDocumentPane} from 'sanity/structure'
 
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {aiInspectorId} from '../assistInspector/constants'

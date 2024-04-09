@@ -18,15 +18,15 @@ import {
   useGlobalKeyDown,
   useLayer,
 } from '@sanity/ui'
-import {createElement, ForwardedRef, forwardRef, useCallback, useMemo, useState} from 'react'
-import {StatusButton, StatusButtonProps, typed, useClient} from 'sanity'
-import styled, {keyframes} from 'styled-components'
+import {createElement, type ForwardedRef, forwardRef, useCallback, useMemo, useState} from 'react'
+import {StatusButton, type StatusButtonProps, typed, useClient} from 'sanity'
+import {keyframes, styled} from 'styled-components'
 
 import {TimeAgo} from '../components/TimeAgo'
 import {maxHistoryVisibilityMs, pluginTitle} from '../constants'
 import {assistTasksStatusId} from '../helpers/ids'
 import {getInstructionTitle} from '../helpers/misc'
-import {AssistTasksStatus, InstructionTask, StudioInstruction, TaskEndedReason} from '../types'
+import type {AssistTasksStatus, InstructionTask, StudioInstruction, TaskEndedReason} from '../types'
 
 export interface InstructionTaskHistoryButtonProps {
   documentId?: string

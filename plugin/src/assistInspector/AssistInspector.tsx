@@ -2,18 +2,18 @@ import {ArrowRightIcon, CloseIcon, PlayIcon, RetryIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Spinner, Stack, Text} from '@sanity/ui'
 import {useCallback, useMemo, useRef} from 'react'
 import {
-  DocumentInspectorProps,
+  type DocumentInspectorProps,
   PresenceOverlay,
   useEditState,
   VirtualizerScrollInstanceProvider,
 } from 'sanity'
 import {
   DocumentInspectorHeader,
-  DocumentPaneNode,
+  type DocumentPaneNode,
   DocumentPaneProvider,
   useDocumentPane,
-} from 'sanity/desk'
-import styled from 'styled-components'
+} from 'sanity/structure'
+import {styled} from 'styled-components'
 
 import {DocumentForm} from '../_lib/form'
 import {TypePathContext} from '../assistDocument/components/AssistDocumentForm'
@@ -31,7 +31,13 @@ import {InspectorOnboarding} from '../onboarding/InspectorOnboarding'
 import {inspectorOnboardingKey, useOnboardingFeature} from '../onboarding/onboardingStore'
 import {assistDocumentTypeName, fieldPathParam, instructionParam} from '../types'
 import {FieldTitle} from './FieldAutocomplete'
-import {FieldRef, getFieldTitle, useAiPaneRouter, useSelectedField, useTypePath} from './helpers'
+import {
+  type FieldRef,
+  getFieldTitle,
+  useAiPaneRouter,
+  useSelectedField,
+  useTypePath,
+} from './helpers'
 import {InstructionTaskHistoryButton} from './InstructionTaskHistoryButton'
 
 const CardWithShadowBelow = styled(Card)`

@@ -1,9 +1,9 @@
 import {purple} from '@sanity/color'
 import {SparklesIcon} from '@sanity/icons'
 import {Text} from '@sanity/ui'
-import {CSSProperties, useMemo} from 'react'
+import {type CSSProperties, useMemo} from 'react'
 import {useColorSchemeValue} from 'sanity'
-import styled, {keyframes} from 'styled-components'
+import {keyframes, styled} from 'styled-components'
 
 const Root = styled.span`
   display: block;

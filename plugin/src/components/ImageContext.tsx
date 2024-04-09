@@ -1,6 +1,6 @@
 import {createContext, useEffect, useMemo, useState} from 'react'
-import {InputProps, pathToString, useSyncState} from 'sanity'
-import {usePaneRouter} from 'sanity/desk'
+import {type InputProps, pathToString, useSyncState} from 'sanity'
+import {usePaneRouter} from 'sanity/structure'
 
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
