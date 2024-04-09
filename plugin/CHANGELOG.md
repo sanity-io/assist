@@ -5,6 +5,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.5](https://github.com/sanity-io/assist/compare/v2.0.4...v2.0.5) (2024-04-09)
+
+### Bug Fixes
+
+- add provenance ([02f5265](https://github.com/sanity-io/assist/commit/02f5265f742c88c124b1b36bc3dbc3c1efa366e7))
+- **deps:** update dependency @sanity/language-filter to v4 ([#37](https://github.com/sanity-io/assist/issues/37)) ([5c10edc](https://github.com/sanity-io/assist/commit/5c10edc3226317a3e06e94e00f3eab183d4e8d4a))
+- **deps:** update dependency sanity-plugin-internationalized-array to v2 ([#38](https://github.com/sanity-io/assist/issues/38)) ([2c8d4ae](https://github.com/sanity-io/assist/commit/2c8d4ae527ffa4cfbc855c85acc5e77b331d1822))
+
 ## [2.0.4](https://github.com/sanity-io/assist/compare/v2.0.3...v2.0.4) (2024-03-14)
 
 ### Bug Fixes
