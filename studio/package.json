@@ -24,7 +24,7 @@
   "dependencies": {
     "@portabletext/types": "^2.0.12",
     "@sanity/code-input": "^4.1.3",
-    "@sanity/document-internationalization": "^2.1.1",
+    "@sanity/document-internationalization": "^3.0.0",
     "@sanity/embeddings-index-ui": "^1.1.8",
     "@sanity/icons": "^2.11.7",
     "@sanity/language-filter": "^4.0.0",
