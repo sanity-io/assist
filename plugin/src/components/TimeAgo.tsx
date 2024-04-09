@@ -1,4 +1,4 @@
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import {formatDistanceToNow} from 'date-fns'
 import {useEffect, useReducer} from 'react'
 
 function useInterval(ms: number) {
