@@ -1,9 +1,10 @@
-import {BlockProps, PatchEvent, useFormCallbacks} from 'sanity'
-import {useAssistPresence} from '../presence/useAssistPresence'
 import {Box, Flex} from '@sanity/ui'
-import {ErrorWrapper} from '../components/SafeValueInput'
 import {useCallback} from 'react'
+import {BlockProps, PatchEvent, useFormCallbacks} from 'sanity'
+
+import {ErrorWrapper} from '../components/SafeValueInput'
 import {AiFieldPresence} from '../presence/AiFieldPresence'
+import {useAssistPresence} from '../presence/useAssistPresence'
 
 export function AssistFormBlock(props: BlockProps) {
   const presence = useAssistPresence(props.path, true)
@@ -16,7 +17,7 @@ export function AssistFormBlock(props: BlockProps) {
       }
       onChange(PatchEvent.from(patchEvent).prefixAll({_key: key}))
     },
-    [onChange, key]
+    [onChange, key],
   )
   const singlePresence = presence[0]
   return (

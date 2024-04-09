@@ -30,7 +30,7 @@ export const FadeInContent = forwardRef(function FadeInContent(
     ms?: number
     durationMs?: number
   },
-  ref: any
+  ref: any,
 ): ReactElement {
   return (
     <FadeInDiv ref={ref} style={{animationDuration: `${durationMs}ms`}}>

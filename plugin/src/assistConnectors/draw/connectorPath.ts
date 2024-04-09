@@ -4,7 +4,7 @@ export function drawArrowPath(
   options: ConnectorOptions,
   x: number,
   y: number,
-  dir: number
+  dir: number,
 ): string {
   return [
     `M ${x - options.arrow.size} ${y - options.arrow.size * dir} `,
@@ -54,19 +54,19 @@ export function drawConnectorPath(options: ConnectorOptions, line: ConnectorLine
     cmds.push(
       moveTo(
         fromX + options.arrow.marginX,
-        fromY - options.arrow.threshold + options.arrow.marginY
+        fromY - options.arrow.threshold + options.arrow.marginY,
       ),
       lineTo(fromX + options.arrow.marginX, fromY - r0),
-      quadCurve(fromX + options.arrow.marginX, fromY, fromX + options.arrow.marginX + r0, fromY)
+      quadCurve(fromX + options.arrow.marginX, fromY, fromX + options.arrow.marginX + r0, fromY),
     )
   } else if (from.isBelow) {
     cmds.push(
       moveTo(
         fromX + options.arrow.marginX,
-        fromY + options.arrow.threshold - options.arrow.marginY
+        fromY + options.arrow.threshold - options.arrow.marginY,
       ),
       lineTo(fromX + options.arrow.marginX, fromY + r0),
-      quadCurve(fromX + options.arrow.marginX, fromY, fromX + options.arrow.marginX + r0, fromY)
+      quadCurve(fromX + options.arrow.marginX, fromY, fromX + options.arrow.marginX + r0, fromY),
     )
   } else {
     cmds.push(moveTo(fromX, fromY))
@@ -82,13 +82,13 @@ export function drawConnectorPath(options: ConnectorOptions, line: ConnectorLine
         quadCurve(dividerX, toY, dividerX + r1, toY),
         lineTo(dividerX - cornerRadius, toY),
         quadCurve(dividerX, toY, dividerX, toY - cornerRadius),
-        lineTo(dividerX, toY - options.arrow.threshold + options.arrow.marginY)
+        lineTo(dividerX, toY - options.arrow.threshold + options.arrow.marginY),
       )
     } else {
       cmds.push(
         lineTo(dividerX - cornerRadius, fromY),
         quadCurve(dividerX, fromY, dividerX, fromY - cornerRadius),
-        lineTo(dividerX, toY - options.arrow.threshold + options.arrow.marginY)
+        lineTo(dividerX, toY - options.arrow.threshold + options.arrow.marginY),
       )
     }
   } else if (to.isBelow) {
@@ -100,24 +100,24 @@ export function drawConnectorPath(options: ConnectorOptions, line: ConnectorLine
           dividerX - options.arrow.marginX,
           fromY,
           dividerX - options.arrow.marginX,
-          fromY - r1
+          fromY - r1,
         ),
         lineTo(dividerX - options.arrow.marginX, toY + r1),
         quadCurve(
           dividerX - options.arrow.marginX,
           toY,
           dividerX - options.arrow.marginX + r1,
-          toY
+          toY,
         ),
         lineTo(dividerX - cornerRadius, toY),
         quadCurve(dividerX, toY, dividerX, toY + cornerRadius),
-        lineTo(dividerX, toY + options.arrow.threshold - options.arrow.marginY)
+        lineTo(dividerX, toY + options.arrow.threshold - options.arrow.marginY),
       )
     } else {
       cmds.push(
         lineTo(dividerX - cornerRadius, fromY),
         quadCurve(dividerX, fromY, dividerX, fromY + cornerRadius),
-        lineTo(dividerX, toY + options.arrow.threshold - options.arrow.marginY)
+        lineTo(dividerX, toY + options.arrow.threshold - options.arrow.marginY),
       )
     }
   } else if (fromY < toY) {
@@ -126,7 +126,7 @@ export function drawConnectorPath(options: ConnectorOptions, line: ConnectorLine
       quadCurve(dividerX, fromY, dividerX, fromY + r1),
       lineTo(dividerX, toY - r1),
       quadCurve(dividerX, toY, dividerX + r1, toY),
-      lineTo(toX, toY)
+      lineTo(toX, toY),
     )
   } else {
     cmds.push(
@@ -134,7 +134,7 @@ export function drawConnectorPath(options: ConnectorOptions, line: ConnectorLine
       quadCurve(dividerX, fromY, dividerX, fromY - Math.min(r0, r1)),
       lineTo(dividerX, toY + r1),
       quadCurve(dividerX, toY, dividerX + r1, toY),
-      lineTo(toX, toY)
+      lineTo(toX, toY),
     )
   }
 

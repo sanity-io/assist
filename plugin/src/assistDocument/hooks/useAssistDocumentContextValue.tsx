@@ -1,20 +1,21 @@
-import {getPublishedId, ObjectSchemaType, useEditState} from 'sanity'
-import {useStudioAssistDocument} from './useStudioAssistDocument'
-import {AssistDocumentContextValue} from '../AssistDocumentContext'
 import {useMemo} from 'react'
-import {isDocAssistable} from '../RequestRunInstructionProvider'
+import {getPublishedId, ObjectSchemaType, useEditState} from 'sanity'
 import {useDocumentPane} from 'sanity/desk'
+
 import {useAiPaneRouter} from '../../assistInspector/helpers'
 import {fieldPathParam} from '../../types'
+import {AssistDocumentContextValue} from '../AssistDocumentContext'
+import {isDocAssistable} from '../RequestRunInstructionProvider'
+import {useStudioAssistDocument} from './useStudioAssistDocument'
 
 export function useAssistDocumentContextValue(
   documentId: string,
-  documentSchemaType: ObjectSchemaType
+  documentSchemaType: ObjectSchemaType,
 ) {
   const {published, draft} = useEditState(
     getPublishedId(documentId),
     documentSchemaType.name,
-    'low'
+    'low',
   )
   const assistableDocumentId = draft?._id || published?._id || documentId
   const documentIsNew = Boolean(!draft?._id && !published?._id)

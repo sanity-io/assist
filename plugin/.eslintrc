@@ -22,6 +22,7 @@
     "func-name-matching": "off",
     "no-use-before-define": "off",
     "no-nested-ternary": "off",
-    "no-empty-function": "off"
+    "no-empty-function": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }

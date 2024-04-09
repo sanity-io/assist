@@ -1,9 +1,10 @@
 import {SearchIcon} from '@sanity/icons'
 import {Autocomplete, Box, Breadcrumbs, Card, Flex, Text} from '@sanity/ui'
 import {createElement, useCallback, useMemo} from 'react'
-import {FieldRef, getFieldRefs, getFieldRefsWithDocument} from './helpers'
 import {ObjectSchemaType} from 'sanity'
+
 import {isType} from '../helpers/typeUtils'
+import {FieldRef, getFieldRefs, getFieldRefsWithDocument} from './helpers'
 
 interface FieldSelectorProps {
   id: string
@@ -25,7 +26,7 @@ export function FieldAutocomplete(props: FieldSelectorProps) {
   }, [schemaType, includeDocument])
   const currentField = useMemo(
     () => fieldRefs.find((f) => f.key === fieldPath),
-    [fieldPath, fieldRefs]
+    [fieldPath, fieldRefs],
   )
 
   const autocompleteOptions = useMemo(
@@ -34,7 +35,7 @@ export function FieldAutocomplete(props: FieldSelectorProps) {
         .filter((field) => (filter ? filter(field) : true))
         .filter((f) => !isType(f.schemaType, 'reference'))
         .map((field) => ({value: field.key, field})),
-    [fieldRefs, filter]
+    [fieldRefs, filter],
   )
 
   const renderOption = useCallback((option: {value: string; field: FieldRef}) => {

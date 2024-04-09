@@ -1,5 +1,10 @@
-import {AssistTasksStatus, InstructionTask, StudioInstruction, TaskEndedReason} from '../types'
-import {createElement, ForwardedRef, forwardRef, useCallback, useMemo, useState} from 'react'
+import {
+  CheckmarkCircleIcon,
+  ClockIcon,
+  CloseCircleIcon,
+  ErrorOutlineIcon,
+  SyncIcon,
+} from '@sanity/icons'
 import {
   Box,
   Button,
@@ -13,19 +18,15 @@ import {
   useGlobalKeyDown,
   useLayer,
 } from '@sanity/ui'
-import {
-  CheckmarkCircleIcon,
-  ClockIcon,
-  CloseCircleIcon,
-  ErrorOutlineIcon,
-  SyncIcon,
-} from '@sanity/icons'
-import {TimeAgo} from '../components/TimeAgo'
+import {createElement, ForwardedRef, forwardRef, useCallback, useMemo, useState} from 'react'
 import {StatusButton, StatusButtonProps, typed, useClient} from 'sanity'
-import {getInstructionTitle} from '../helpers/misc'
 import styled, {keyframes} from 'styled-components'
-import {assistTasksStatusId} from '../helpers/ids'
+
+import {TimeAgo} from '../components/TimeAgo'
 import {maxHistoryVisibilityMs, pluginTitle} from '../constants'
+import {assistTasksStatusId} from '../helpers/ids'
+import {getInstructionTitle} from '../helpers/misc'
+import {AssistTasksStatus, InstructionTask, StudioInstruction, TaskEndedReason} from '../types'
 
 export interface InstructionTaskHistoryButtonProps {
   documentId?: string
@@ -96,7 +97,7 @@ export function InstructionTaskHistoryButton(props: InstructionTaskHistoryButton
         .commit()
         .catch(console.error)
     },
-    [client, documentId]
+    [client, documentId],
   )
 
   const titledTasks = useMemo(() => {
@@ -105,7 +106,7 @@ export function InstructionTaskHistoryButton(props: InstructionTaskHistoryButton
         ?.filter(
           (task) =>
             task.started &&
-            new Date().getTime() - new Date(task.started).getTime() < maxHistoryVisibilityMs
+            new Date().getTime() - new Date(task.started).getTime() < maxHistoryVisibilityMs,
         )
         .map((task): CancelableInstructionTask => {
           const instruction = instructions?.find((i) => i._key === task.instructionKey)
@@ -124,7 +125,7 @@ export function InstructionTaskHistoryButton(props: InstructionTaskHistoryButton
   const isRunning = useMemo(() => titledTasks.some((r) => !r.ended), [titledTasks])
   const hasErrors = useMemo(
     () => titledTasks.some((r) => r.reason === 'error' || r.reason === 'timeout'),
-    [titledTasks]
+    [titledTasks],
   )
 
   const [open, setOpen] = useState(false)
@@ -179,7 +180,7 @@ const TaskStatusButton = forwardRef(function TaskStatusButton(
     onClick: () => void
     selected: boolean
   },
-  ref: ForwardedRef<HTMLButtonElement>
+  ref: ForwardedRef<HTMLButtonElement>,
 ) {
   const {disabled, hasErrors, isRunning, onClick, selected} = props
 
@@ -210,8 +211,8 @@ function TaskList(props: {onEscape: () => void; tasks: CancelableInstructionTask
           onEscape()
         }
       },
-      [isTopLayer, onEscape]
-    )
+      [isTopLayer, onEscape],
+    ),
   )
 
   return (

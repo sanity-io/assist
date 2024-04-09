@@ -143,11 +143,7 @@ export const todo = defineType({
       return (
         <Stack space={2} padding={2}>
           <Text weight="semibold">Article TODOs</Text>
-          <ul>
-            {props?.items?.map((todo: string) => (
-              <li key={todo}>{todo}</li>
-            ))}
-          </ul>
+          <ul>{props?.items?.map((todo: string) => <li key={todo}>{todo}</li>)}</ul>
         </Stack>
       )
     },
@@ -220,7 +216,7 @@ export const timeline = defineType({
                 <li key={event?._key}>
                   {event?.title ?? 'No title'} - {event?.periodDescription ?? 'No description'}
                 </li>
-              )
+              ),
             )}
           </ul>
         </Stack>

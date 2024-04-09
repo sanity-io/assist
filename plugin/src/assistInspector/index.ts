@@ -1,9 +1,10 @@
 import {SparklesIcon} from '@sanity/icons'
 import {DocumentInspector, typed} from 'sanity'
-import {aiInspectorId} from './constants'
-import {AssistInspectorWrapper} from './AssistInspector'
-import {AssistInspectorRouteParams, fieldPathParam, instructionParam} from '../types'
+
 import {pluginTitle} from '../constants'
+import {AssistInspectorRouteParams, fieldPathParam, instructionParam} from '../types'
+import {AssistInspectorWrapper} from './AssistInspector'
+import {aiInspectorId} from './constants'
 
 export const assistInspector: DocumentInspector = {
   name: aiInspectorId,

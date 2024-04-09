@@ -1,3 +1,4 @@
+import {useCallback, useContext, useState} from 'react'
 import {
   ArrayFieldProps,
   ArraySchemaType,
@@ -5,7 +6,7 @@ import {
   isObjectSchemaType,
   ObjectSchemaType,
 } from 'sanity'
-import {useCallback, useContext, useState} from 'react'
+
 import {SelectedFieldContext} from '../SelectedFieldContext'
 
 export function InstructionOutputField(props: ArrayFieldProps) {

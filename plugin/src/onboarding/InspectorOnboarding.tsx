@@ -1,7 +1,8 @@
-import {Box, Button, Container, Flex, Stack, Text} from '@sanity/ui'
 import {SparklesIcon} from '@sanity/icons'
-import {releaseAnnouncementUrl} from '../constants'
+import {Box, Button, Container, Flex, Stack, Text} from '@sanity/ui'
 import styled from 'styled-components'
+
+import {releaseAnnouncementUrl} from '../constants'
 
 const SparklesIllustration = styled(SparklesIcon)({
   fontSize: '3.125em',

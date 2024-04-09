@@ -9,6 +9,9 @@ import {
   SchemaType,
   typed,
 } from 'sanity'
+
+import {isAssistSupported} from '../../helpers/assistSupported'
+import {isType} from '../../helpers/typeUtils'
 import {
   assistSchemaIdPrefix,
   assistSerializedFieldTypeName,
@@ -17,8 +20,6 @@ import {
   SerializedSchemaType,
 } from '../../types'
 import {hiddenTypes} from './schemaUtils'
-import {isAssistSupported} from '../../helpers/assistSupported'
-import {isType} from '../../helpers/typeUtils'
 
 interface Options {
   leanFormat?: boolean
@@ -54,7 +55,7 @@ export function serializeSchema(schema: Schema, options?: Options): SerializedSc
 function getSchemaStub(
   schemaType: SchemaType,
   schema: Schema,
-  options?: Options
+  options?: Options,
 ): SerializedSchemaType {
   if (!schemaType.type?.name) {
     console.error('Missing type name', schemaType.type)
@@ -78,7 +79,7 @@ function getBaseFields(
   schema: Schema,
   type: SchemaType,
   typeName: string,
-  options: Options | undefined
+  options: Options | undefined,
 ) {
   const schemaOptions: SerializedSchemaType['options'] = removeUndef({
     imagePromptField: (type.options as ImageOptions)?.aiAssist?.imageInstructionField,
@@ -88,7 +89,7 @@ function getBaseFields(
     options: Object.keys(schemaOptions).length ? schemaOptions : undefined,
     values: Array.isArray(type?.options?.list)
       ? type?.options?.list.map((v: string | {value: string; title: string}) =>
-          typeof v === 'string' ? v : v.value ?? `${v.title}`
+          typeof v === 'string' ? v : v.value ?? `${v.title}`,
         )
       : undefined,
     of: 'of' in type && typeName === 'array' ? arrayOf(type, schema, options) : undefined,
@@ -114,15 +115,15 @@ function getBaseFields(
       typeof type.readOnly === 'function'
         ? ('function' as const)
         : type.readOnly
-        ? true
-        : undefined,
+          ? true
+          : undefined,
   })
 }
 
 function serializeFields(
   schema: Schema,
   schemaType: ObjectSchemaType,
-  options: Options | undefined
+  options: Options | undefined,
 ) {
   const fields = schemaType.fieldsets
     ? schemaType.fieldsets.flatMap((fs) =>
@@ -138,7 +139,7 @@ function serializeFields(
                 hidden:
                   typeof fs.hidden === 'function' ? fs.hidden : fs.hidden ? true : f.type.hidden,
               },
-            }))
+            })),
       )
     : schemaType.fields
 
@@ -152,7 +153,7 @@ function serializeMember(
   schema: Schema,
   type: SchemaType,
   name: string,
-  options: Options | undefined
+  options: Options | undefined,
 ): SerializedSchemaMember {
   const typeNameExists = !!schema.get(type?.name)
   const typeName = typeNameExists ? type.name : type.type?.name ?? ''
@@ -168,7 +169,7 @@ function serializeMember(
 function serializeInlineOf(
   blockSchemaType: ObjectSchemaType,
   schema: Schema,
-  options: Options | undefined
+  options: Options | undefined,
 ): SerializedSchemaMember[] | undefined {
   const childrenField = blockSchemaType.fields.find((f) => f.name === 'children')
   const childrenType = childrenField?.type
@@ -181,14 +182,14 @@ function serializeInlineOf(
       of: childrenType.of.filter((t) => !isType(t, 'span')),
     },
     schema,
-    options
+    options,
   )
 }
 
 function serializeAnnotations(
   blockSchemaType: ObjectSchemaType,
   schema: Schema,
-  options: Options | undefined
+  options: Options | undefined,
 ): SerializedSchemaMember[] | undefined {
   const markDefs = blockSchemaType.fields.find((f) => f.name === 'markDefs')
   const marksType = markDefs?.type
@@ -201,7 +202,7 @@ function serializeAnnotations(
 function arrayOf(
   arrayType: ArraySchemaType,
   schema: Schema,
-  options: Options | undefined
+  options: Options | undefined,
 ): SerializedSchemaMember[] {
   return arrayType.of
     .filter((type) => isAssistSupported(type))

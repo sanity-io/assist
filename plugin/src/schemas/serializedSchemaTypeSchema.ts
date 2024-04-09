@@ -1,6 +1,7 @@
-import {defineField, defineType} from 'sanity'
-import {assistSerializedFieldTypeName, assistSerializedTypeName} from '../types'
 import {CodeIcon, StarIcon} from '@sanity/icons'
+import {defineField, defineType} from 'sanity'
+
+import {assistSerializedFieldTypeName, assistSerializedTypeName} from '../types'
 
 export const serializedSchemaField = defineType({
   type: 'object',

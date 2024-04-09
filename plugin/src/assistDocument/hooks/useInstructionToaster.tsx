@@ -1,10 +1,11 @@
-import {useEffect, useRef} from 'react'
-import {InstructionTask} from '../../types'
-import {addSeconds, isAfter} from 'date-fns'
-import {getInstructionTitle} from '../../helpers/misc'
-import {useStudioAssistDocument} from './useStudioAssistDocument'
-import {ObjectSchemaType, useCurrentUser} from 'sanity'
 import {useToast} from '@sanity/ui'
+import {addSeconds, isAfter} from 'date-fns'
+import {useEffect, useRef} from 'react'
+import {ObjectSchemaType, useCurrentUser} from 'sanity'
+
+import {getInstructionTitle} from '../../helpers/misc'
+import {InstructionTask} from '../../types'
+import {useStudioAssistDocument} from './useStudioAssistDocument'
 
 const NO_TASKS: InstructionTask[] = []
 
@@ -24,7 +25,7 @@ export function useInstructionToaster(documentId: string, documentSchemaType: Ob
 
     if (previousTasks.current !== 'initial') {
       const prevTaskByKey = Object.fromEntries(
-        (previousTasks.current ?? NO_TASKS).map((run) => [run._key, run])
+        (previousTasks.current ?? NO_TASKS).map((run) => [run._key, run]),
       )
       const endedTasks = tasks
         ?.filter((task) => task.startedByUserId === currentUser?.id)

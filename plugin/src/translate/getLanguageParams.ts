@@ -1,9 +1,9 @@
-import {SanityDocumentLike} from 'sanity'
 import get from 'lodash/get'
+import {SanityDocumentLike} from 'sanity'
 
 export const getLanguageParams = (
   select: Record<string, string> | undefined,
-  document: SanityDocumentLike | undefined
+  document: SanityDocumentLike | undefined,
 ): Record<string, unknown> => {
   if (!select || !document) {
     return {}
@@ -16,7 +16,7 @@ export const getLanguageParams = (
     if (Array.isArray(value)) {
       // If there are references in the array, ensure they have `_ref` set, otherwise they are considered empty and can safely be ignored
       value = value.filter((item) =>
-        typeof item === 'object' ? item?._type !== 'reference' || '_ref' in item : true
+        typeof item === 'object' ? item?._type !== 'reference' || '_ref' in item : true,
       )
     }
     selectedValue[key] = value

@@ -1,9 +1,10 @@
-import {useClient, useSchema} from 'sanity'
+import {SyncIcon} from '@sanity/icons'
 import {Box, Button, Card, Flex, Label, Spinner, Stack} from '@sanity/ui'
 import {useCallback, useMemo, useState} from 'react'
-import {assistSerializedTypeName, SerializedSchemaType} from '../../types'
-import {SyncIcon} from '@sanity/icons'
+import {useClient, useSchema} from 'sanity'
+
 import {useListeningQuery} from '../../_lib/useListeningQuery'
+import {assistSerializedTypeName, SerializedSchemaType} from '../../types'
 import {serializeSchema} from './serializeSchema'
 
 const NO_DATA: SerializedSchemaType[] = []

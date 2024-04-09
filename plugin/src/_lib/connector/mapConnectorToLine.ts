@@ -9,7 +9,7 @@ import {
 function getConnectorLinePoint(
   options: ConnectorOptions,
   rect: Rect,
-  bounds: Rect
+  bounds: Rect,
 ): ConnectorLinePoint {
   const centerY = rect.y + rect.h / 2
   const isAbove = rect.y + rect.h < bounds.y + options.arrow.marginY
@@ -30,7 +30,7 @@ function getConnectorLinePoint(
 
 export function mapConnectorToLine(
   options: ConnectorOptions,
-  connector: {from: ConnectorRegionRects; to: ConnectorRegionRects}
+  connector: {from: ConnectorRegionRects; to: ConnectorRegionRects},
 ): ConnectorLine {
   const fromBounds: Rect = {
     y: connector.from.bounds.y + options.arrow.threshold,

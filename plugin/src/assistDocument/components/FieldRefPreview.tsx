@@ -1,9 +1,10 @@
-import {useContext} from 'react'
-import {useSelectedField} from '../../assistInspector/helpers'
 import {Box, Flex, Text} from '@sanity/ui'
+import {useContext} from 'react'
 import {PreviewProps} from 'sanity'
-import {SelectedFieldContext} from './SelectedFieldContext'
+
 import {InlineBlockValueContext} from '../../assistFormComponents/AssistInlineFormBlock'
+import {useSelectedField} from '../../assistInspector/helpers'
+import {SelectedFieldContext} from './SelectedFieldContext'
 
 export function FieldRefPreview(props: PreviewProps & {path?: string}) {
   const documentSchema = useContext(SelectedFieldContext)?.documentSchema

@@ -22,7 +22,7 @@ export function dismissFeatureOnboarding(featureKey: string) {
 
 export function useOnboardingFeature(featureKey: string) {
   const [showOnboarding, setShowOnboarding] = useState(
-    () => !isFeatureOnboardingDismissed(featureKey)
+    () => !isFeatureOnboardingDismissed(featureKey),
   )
   const dismissOnboarding = useCallback(() => {
     setShowOnboarding(false)

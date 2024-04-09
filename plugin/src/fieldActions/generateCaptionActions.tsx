@@ -1,15 +1,16 @@
-import {DocumentFieldAction, DocumentFieldActionGroup, DocumentFieldActionItem} from 'sanity'
 import {ImageIcon} from '@sanity/icons'
-import {useContext, useMemo} from 'react'
-import {usePathKey} from '../helpers/misc'
-import {canUseAssist, useApiClient, useGenerateCaption} from '../useApiClient'
-import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
-import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
-import {ImageContext} from '../components/ImageContext'
 import {Box, Spinner} from '@sanity/ui'
+import {useContext, useMemo} from 'react'
+import {DocumentFieldAction, DocumentFieldActionGroup, DocumentFieldActionItem} from 'sanity'
 import {useDocumentPane} from 'sanity/desk'
+
+import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {aiInspectorId} from '../assistInspector/constants'
+import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
+import {ImageContext} from '../components/ImageContext'
+import {usePathKey} from '../helpers/misc'
 import {fieldPathParam, instructionParam} from '../types'
+import {canUseAssist, useApiClient, useGenerateCaption} from '../useApiClient'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node

@@ -1,6 +1,7 @@
-import {documentRootKey, StudioInstruction} from '../types'
-import {Path, pathToString} from 'sanity'
 import {useMemo} from 'react'
+import {Path, pathToString} from 'sanity'
+
+import {documentRootKey, StudioInstruction} from '../types'
 
 export function usePathKey(path: Path | string) {
   return useMemo(() => {

@@ -1,6 +1,7 @@
-import {useRunInstruction} from '../assistLayout/RunInstructionProvider'
 import {useCallback, useEffect, useState} from 'react'
 import {ObjectSchemaType, PatchEvent, SanityDocument, unset} from 'sanity'
+
+import {useRunInstruction} from '../assistLayout/RunInstructionProvider'
 import {publicId} from '../helpers/ids'
 
 export interface DraftDelayedTaskArgs<T> {
@@ -13,7 +14,7 @@ export interface DraftDelayedTaskArgs<T> {
 export function isDocAssistable(
   documentSchemaType: ObjectSchemaType,
   published?: SanityDocument | null,
-  draft?: SanityDocument | null
+  draft?: SanityDocument | null,
 ) {
   return !!(documentSchemaType.liveEdit ? published : draft)
 }
@@ -61,6 +62,6 @@ export function useDraftDelayedTask<T>(args: DraftDelayedTaskArgs<T>) {
       documentOnChange(PatchEvent.from([unset(['_force_document_creation'])]))
       setQueuedArgs(taskArgs)
     },
-    [setQueuedArgs, documentOnChange]
+    [setQueuedArgs, documentOnChange],
   )
 }

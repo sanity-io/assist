@@ -1,4 +1,3 @@
-import {defineArrayMember, defineField, defineType, ObjectSchemaType} from 'sanity'
 import {
   ArrowRightIcon,
   CodeIcon,
@@ -9,6 +8,25 @@ import {
   SparklesIcon,
   ThListIcon,
 } from '@sanity/icons'
+import {Box, Flex, Stack, Text, Tooltip} from '@sanity/ui'
+import {createElement} from 'react'
+import {defineArrayMember, defineField, defineType, ObjectSchemaType} from 'sanity'
+
+import {AssistDocumentForm} from '../assistDocument/components/AssistDocumentForm'
+import {FieldRefPreview} from '../assistDocument/components/FieldRefPreview'
+import {HiddenFieldTitle} from '../assistDocument/components/generic/HiddenFieldTitle'
+import {IconInput} from '../assistDocument/components/instruction/appearance/IconInput'
+import {InstructionVisibility} from '../assistDocument/components/instruction/appearance/InstructionVisibility'
+import {FieldRefPathInput} from '../assistDocument/components/instruction/FieldRefInput'
+import {InstructionInput} from '../assistDocument/components/instruction/InstructionInput'
+import {InstructionOutputField} from '../assistDocument/components/instruction/InstructionOutputField'
+import {InstructionOutputInput} from '../assistDocument/components/instruction/InstructionOutputInput'
+import {PromptInput} from '../assistDocument/components/instruction/PromptInput'
+import {InstructionsArrayField} from '../assistDocument/components/InstructionsArrayField'
+import {InstructionsArrayInput} from '../assistDocument/components/InstructionsArrayInput'
+import {getFieldRefsWithDocument} from '../assistInspector/helpers'
+import {instructionGuideUrl} from '../constants'
+import {getInstructionTitle} from '../helpers/misc'
 import {
   assistDocumentIdPrefix,
   assistDocumentTypeName,
@@ -23,24 +41,7 @@ import {
   promptTypeName,
   userInputTypeName,
 } from '../types'
-import {Box, Flex, Stack, Text, Tooltip} from '@sanity/ui'
-import {getInstructionTitle} from '../helpers/misc'
-import {AssistDocumentForm} from '../assistDocument/components/AssistDocumentForm'
-import {InstructionInput} from '../assistDocument/components/instruction/InstructionInput'
-import {HiddenFieldTitle} from '../assistDocument/components/generic/HiddenFieldTitle'
-import {InstructionVisibility} from '../assistDocument/components/instruction/appearance/InstructionVisibility'
-import {IconInput} from '../assistDocument/components/instruction/appearance/IconInput'
-import {FieldRefPathInput} from '../assistDocument/components/instruction/FieldRefInput'
-import {InstructionsArrayInput} from '../assistDocument/components/InstructionsArrayInput'
-import {FieldRefPreview} from '../assistDocument/components/FieldRefPreview'
-import {createElement} from 'react'
 import {contextDocumentSchema} from './contextDocumentSchema'
-import {PromptInput} from '../assistDocument/components/instruction/PromptInput'
-import {instructionGuideUrl} from '../constants'
-import {InstructionsArrayField} from '../assistDocument/components/InstructionsArrayField'
-import {getFieldRefsWithDocument} from '../assistInspector/helpers'
-import {InstructionOutputField} from '../assistDocument/components/instruction/InstructionOutputField'
-import {InstructionOutputInput} from '../assistDocument/components/instruction/InstructionOutputInput'
 
 export const fieldReference = defineType({
   type: 'object',
@@ -346,7 +347,7 @@ export const instruction = defineType({
       initialValue: (params, context) => context.currentUser?.id ?? '',
       readOnly: (context) =>
         Boolean(
-          context.parent?.createdById && context.parent?.createdById !== context.currentUser?.id
+          context.parent?.createdById && context.parent?.createdById !== context.currentUser?.id,
         ),
     }),
     defineField({

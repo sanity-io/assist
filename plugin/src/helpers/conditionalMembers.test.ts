@@ -1,6 +1,7 @@
-import {describe, expect, test} from 'vitest'
 import {Schema} from '@sanity/schema'
 import {ArraySchemaType, defineField, defineType, ObjectSchemaType} from 'sanity'
+import {describe, expect, test} from 'vitest'
+
 import {getConditionalMembers} from './conditionalMembers'
 
 describe('conditionalMembers', () => {

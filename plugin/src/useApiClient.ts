@@ -47,7 +47,7 @@ export function useApiClient(customApiClient?: (defaultClient: SanityClient) => 
   const client = useClient({apiVersion: '2023-06-05'})
   return useMemo(
     () => (customApiClient ? customApiClient(client) : client),
-    [client, customApiClient]
+    [client, customApiClient],
   )
 }
 
@@ -102,7 +102,7 @@ export function useTranslate(apiClient: SanityClient) {
           }, 2000)
         })
     },
-    [setLoading, apiClient, toast, user, types]
+    [setLoading, apiClient, toast, user, types],
   )
 
   return useMemo(
@@ -110,7 +110,7 @@ export function useTranslate(apiClient: SanityClient) {
       translate,
       loading,
     }),
-    [translate, loading]
+    [translate, loading],
   )
 }
 
@@ -155,7 +155,7 @@ export function useGenerateCaption(apiClient: SanityClient) {
           }, 2000)
         })
     },
-    [setLoading, apiClient, toast, user, types]
+    [setLoading, apiClient, toast, user, types],
   )
 
   return useMemo(
@@ -163,7 +163,7 @@ export function useGenerateCaption(apiClient: SanityClient) {
       generateCaption,
       loading,
     }),
-    [generateCaption, loading]
+    [generateCaption, loading],
   )
 }
 
@@ -208,7 +208,7 @@ export function useGenerateImage(apiClient: SanityClient) {
           }, 2000)
         })
     },
-    [setLoading, apiClient, toast, user, types]
+    [setLoading, apiClient, toast, user, types],
   )
 
   return useMemo(
@@ -216,7 +216,7 @@ export function useGenerateImage(apiClient: SanityClient) {
       generateImage,
       loading,
     }),
-    [generateImage, loading]
+    [generateImage, loading],
   )
 }
 
@@ -301,7 +301,7 @@ export function useRunInstructionApi(apiClient: SanityClient) {
           setLoading(false)
         })
     },
-    [apiClient, types, user, toast]
+    [apiClient, types, user, toast],
   )
 
   return useMemo(
@@ -309,6 +309,6 @@ export function useRunInstructionApi(apiClient: SanityClient) {
       runInstruction,
       loading,
     }),
-    [runInstruction, loading]
+    [runInstruction, loading],
   )
 }

@@ -1,7 +1,8 @@
-import {defineArrayMember, defineField, defineType} from 'sanity'
-import {contextDocumentTypeName} from '../types'
 import {DocumentTextIcon, TokenIcon} from '@sanity/icons'
+import {defineArrayMember, defineField, defineType} from 'sanity'
+
 import {HideReferenceChangedBannerInput} from '../components/HideReferenceChangedBannerInput'
+import {contextDocumentTypeName} from '../types'
 
 export const contextDocumentSchema = defineType({
   type: 'document',

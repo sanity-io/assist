@@ -1,22 +1,23 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
+import {TranslateIcon} from '@sanity/icons'
+import {Box, Spinner} from '@sanity/ui'
+import {useMemo, useRef} from 'react'
+import type {
   DocumentFieldAction,
   DocumentFieldActionGroup,
   DocumentFieldActionItem,
   DocumentFieldActionProps,
   ObjectSchemaType,
 } from 'sanity'
-import {TranslateIcon} from '@sanity/icons'
-import {useMemo, useRef} from 'react'
-import {useApiClient, useTranslate} from '../useApiClient'
-import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
-import {Box, Spinner} from '@sanity/ui'
-import {isAssistSupported} from '../helpers/assistSupported'
 import {useDocumentPane} from 'sanity/desk'
-import {useFieldTranslation} from './FieldTranslationProvider'
+
 import {useDraftDelayedTask} from '../assistDocument/RequestRunInstructionProvider'
-import {AssistOptions} from '../schemas/typeDefExtensions'
+import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
+import {isAssistSupported} from '../helpers/assistSupported'
 import {getConditionalMembers} from '../helpers/conditionalMembers'
+import type {AssistOptions} from '../schemas/typeDefExtensions'
+import {useApiClient, useTranslate} from '../useApiClient'
+import {useFieldTranslation} from './FieldTranslationProvider'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -163,7 +164,7 @@ export const translateActions: DocumentFieldAction = {
           fieldTransEnabled,
           path,
           readOnly,
-        ]
+        ],
       )
 
       // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -176,7 +177,7 @@ export const translateActions: DocumentFieldAction = {
           icon: () => null,
           title: 'Translation',
           children: [translateDocumentAction, translateFieldsAction].filter(
-            (c): c is DocumentFieldActionItem => !!c
+            (c): c is DocumentFieldActionItem => !!c,
           ),
           expanded: true,
         })

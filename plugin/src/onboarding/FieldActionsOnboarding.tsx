@@ -1,7 +1,8 @@
+import {ArrowRightIcon, CheckmarkIcon, SparklesIcon} from '@sanity/icons'
 import {Button, Card, Flex, Popover, Stack, Text} from '@sanity/ui'
 import {useRef} from 'react'
+
 import {AssistFeatureBadge} from '../components/AssistFeatureBadge'
-import {ArrowRightIcon, CheckmarkIcon, SparklesIcon} from '@sanity/icons'
 import {pluginTitle, releaseAnnouncementUrl} from '../constants'
 
 export interface FieldActionsOnboardingProps {

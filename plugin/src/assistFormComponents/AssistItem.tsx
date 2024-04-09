@@ -1,7 +1,8 @@
-import {ItemProps} from 'sanity'
-import {useAssistPresence} from '../presence/useAssistPresence'
 import {Box, Flex} from '@sanity/ui'
+import {ItemProps} from 'sanity'
+
 import {AiFieldPresence} from '../presence/AiFieldPresence'
+import {useAssistPresence} from '../presence/useAssistPresence'
 
 export function AssistItem(props: ItemProps) {
   const {path} = props

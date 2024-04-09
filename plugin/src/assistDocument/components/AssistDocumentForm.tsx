@@ -1,13 +1,4 @@
-import {
-  AssistDocument,
-  AssistField,
-  assistFieldTypeName,
-  AssistInspectorRouteParams,
-  documentRootKey,
-  fieldPathParam,
-  instructionParam,
-  StudioInstruction,
-} from '../../types'
+import {Card, Stack, Text} from '@sanity/ui'
 import {createContext, useContext, useEffect, useMemo, useRef} from 'react'
 import {
   FormCallbacksProvider,
@@ -27,12 +18,22 @@ import {
   useFormCallbacks,
   useSchema,
 } from 'sanity'
-import {BackToInstructionListLink} from './instruction/BackToInstructionsLink'
+
 import {useAiPaneRouter} from '../../assistInspector/helpers'
-import {SelectedFieldContextProvider, SelectedFieldContextValue} from './SelectedFieldContext'
-import {Card, Stack, Text} from '@sanity/ui'
-import {documentTypeFromAiDocumentId} from '../../helpers/ids'
 import {useAiAssistanceConfig} from '../../assistLayout/AiAssistanceConfigContext'
+import {documentTypeFromAiDocumentId} from '../../helpers/ids'
+import {
+  AssistDocument,
+  AssistField,
+  assistFieldTypeName,
+  AssistInspectorRouteParams,
+  documentRootKey,
+  fieldPathParam,
+  instructionParam,
+  StudioInstruction,
+} from '../../types'
+import {BackToInstructionListLink} from './instruction/BackToInstructionsLink'
+import {SelectedFieldContextProvider, SelectedFieldContextValue} from './SelectedFieldContext'
 
 const EMPTY_FIELDS: AssistField[] = []
 
@@ -96,7 +97,7 @@ function AssistDocumentFormEditable(props: ObjectInputProps) {
       documentSchema,
       fieldSchema: fieldSchema ?? documentSchema,
     }),
-    [fieldSchema, documentSchema]
+    [fieldSchema, documentSchema],
   )
 
   const title = value?.title
@@ -118,7 +119,7 @@ function AssistDocumentFormEditable(props: ObjectInputProps) {
             typed<AssistInspectorRouteParams>({
               ...params,
               [instructionParam]: (path[3] as KeyedSegment)?._key,
-            }) as Record<keyof AssistInspectorRouteParams, string | undefined>
+            }) as Record<keyof AssistInspectorRouteParams, string | undefined>,
           )
           onPathOpen([])
         } else {
@@ -126,7 +127,7 @@ function AssistDocumentFormEditable(props: ObjectInputProps) {
         }
       },
     }),
-    [formCallbacks, onPathOpen, params, setParams, instruction]
+    [formCallbacks, onPathOpen, params, setParams, instruction],
   )
 
   useEffect(() => {
@@ -164,7 +165,7 @@ function AssistDocumentFormEditable(props: ObjectInputProps) {
 
 function useSelectedSchema(
   fieldPath: string | undefined,
-  documentSchema: ObjectSchemaType | undefined
+  documentSchema: ObjectSchemaType | undefined,
 ): SchemaType | undefined {
   return useMemo(() => {
     if (!fieldPath) {
@@ -221,7 +222,7 @@ function FieldsInitializer({
     const existingInstructions = existingField?.instructions
     const presetField = documentPresets.fields?.find((f) => f.path === pathKey)
     return presetField?.instructions?.filter(
-      (i) => !existingInstructions?.some((ei) => ei._key === i._key)
+      (i) => !existingInstructions?.some((ei) => ei._key === i._key),
     )
   }, [documentPresets, pathKey, existingField])
 
@@ -248,8 +249,8 @@ function FieldsInitializer({
             }),
           ],
           'after',
-          ['fields', -1]
-        )
+          ['fields', -1],
+        ),
       )
     }
 
@@ -265,11 +266,11 @@ function FieldsInitializer({
               ...preset,
               _type: 'sanity.assist.instruction',
               prompt: preset.prompt?.map((p) => ({markDefs: [], ...p})),
-            })
+            }),
           ),
           'after',
-          ['fields', {_key: pathKey}, 'instructions', -1]
-        )
+          ['fields', {_key: pathKey}, 'instructions', -1],
+        ),
       )
     }
     onChange(event)

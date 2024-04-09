@@ -7,6 +7,8 @@ import {
   OlistIcon,
   StringIcon,
 } from '@sanity/icons'
+import {extractWithPath} from '@sanity/mutator'
+import {ComponentType, useContext, useMemo} from 'react'
 import {
   ArraySchemaType,
   isKeySegment,
@@ -18,13 +20,12 @@ import {
   SchemaType,
   stringToPath,
 } from 'sanity'
-import {ComponentType, useContext, useMemo} from 'react'
-import {AssistInspectorRouteParams, documentRootKey, fieldPathParam} from '../types'
 import {type PaneRouterContextValue, usePaneRouter} from 'sanity/desk'
+
+import {SelectedFieldContext} from '../assistDocument/components/SelectedFieldContext'
 import {isAssistSupported} from '../helpers/assistSupported'
 import {isPortableTextArray, isType} from '../helpers/typeUtils'
-import {SelectedFieldContext} from '../assistDocument/components/SelectedFieldContext'
-import {extractWithPath} from '@sanity/mutator'
+import {AssistInspectorRouteParams, documentRootKey, fieldPathParam} from '../types'
 
 export interface FieldRef {
   key: string
@@ -74,7 +75,7 @@ export function getFieldRefsWithDocument(schemaType: ObjectSchemaType): FieldRef
 export function getFieldRefs(
   schemaType: ObjectSchemaType,
   parent?: FieldRef,
-  depth = 0
+  depth = 0,
 ): FieldRef[] {
   if (depth >= maxDepth) {
     return []
@@ -171,14 +172,14 @@ export function useTypePath(doc: SanityDocumentLike, pathString: string) {
 
 export function useSelectedField(
   documentSchemaType?: SchemaType,
-  path?: string
+  path?: string,
 ): FieldRef | undefined {
   const selectableFields = useMemo(
     () =>
       documentSchemaType && isObjectSchemaType(documentSchemaType)
         ? getFieldRefsWithDocument(documentSchemaType)
         : [],
-    [documentSchemaType]
+    [documentSchemaType],
   )
 
   return useMemo(() => {
@@ -207,7 +208,7 @@ export function useAiPaneRouter() {
   const paneRouter = usePaneRouter()
 
   return useMemo(
-    () => ({...paneRouter, params: paneRouter.params ?? {}} as AiPaneRouter),
-    [paneRouter]
+    () => ({...paneRouter, params: paneRouter.params ?? {}}) as AiPaneRouter,
+    [paneRouter],
   )
 }

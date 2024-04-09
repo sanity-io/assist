@@ -1,15 +1,15 @@
 /* eslint-disable max-depth */
 import {
-  ArrayOfObjectsFormNode,
-  ArrayOfObjectsItemMember,
-  ArrayOfPrimitivesFormNode,
-  DocumentFormNode,
-  FieldsetState,
+  type ArrayOfObjectsFormNode,
+  type ArrayOfObjectsItemMember,
+  type ArrayOfPrimitivesFormNode,
+  type DocumentFormNode,
+  type FieldsetState,
   isObjectSchemaType,
-  ObjectFormNode,
-  Path,
+  type ObjectFormNode,
+  type Path,
   pathToString,
-  SchemaType,
+  type SchemaType,
 } from 'sanity'
 
 const MAX_DEPTH = 8
@@ -44,9 +44,12 @@ export function getConditionalMembers(docState: DocumentFormNode): ConditionalMe
     readOnly: !!docState.readOnly,
     conditional: typeof docState.schemaType.hidden === 'function',
   }
-  return [doc, ...extractConditionalPaths(docState, MAX_DEPTH)]
-    .filter((v) => v.conditional)
-    .map(({conditional, ...state}) => ({...state}))
+  return (
+    [doc, ...extractConditionalPaths(docState, MAX_DEPTH)]
+      .filter((v) => v.conditional)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .map(({conditional, ...state}) => ({...state}))
+  )
 }
 
 function isConditional(schemaType: SchemaType) {
@@ -68,7 +71,7 @@ function conditionalState(memberState: {
 
 function extractConditionalPaths(
   node: ObjectFormNode | FieldsetState,
-  maxDepth: number
+  maxDepth: number,
 ): ConditionalMemberInnerState[] {
   if (node.path.length >= maxDepth) {
     return []
@@ -90,7 +93,7 @@ function extractConditionalPaths(
 
         let arrayPaths: ConditionalMemberInnerState[] = []
         const isObjectsArray = array.members.some(
-          (m) => m.kind === 'item' && isObjectSchemaType(m.item.schemaType)
+          (m) => m.kind === 'item' && isObjectSchemaType(m.item.schemaType),
         )
         if (!array.readOnly) {
           for (const arrayMember of array.members) {
@@ -112,7 +115,7 @@ function extractConditionalPaths(
       return [...acc, conditionalState(member.field)]
     } else if (member.kind === 'fieldSet') {
       const conditionalFieldset = !!(node as ObjectFormNode).schemaType?.fieldsets?.some(
-        (f) => !f.single && f.name === member.fieldSet.name && typeof f.hidden === 'function'
+        (f) => !f.single && f.name === member.fieldSet.name && typeof f.hidden === 'function',
       )
       const innerFields = extractConditionalPaths(member.fieldSet, maxDepth).map((f) => ({
         ...f,

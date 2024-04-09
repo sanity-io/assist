@@ -1,7 +1,7 @@
 import {icons} from '@sanity/icons'
-import {set, StringInputProps} from 'sanity'
 import {Button, Menu, MenuButton, MenuItem} from '@sanity/ui'
 import {ElementType, ReactNode, useCallback, useId, useMemo} from 'react'
+import {set, StringInputProps} from 'sanity'
 
 export function IconInput(props: StringInputProps) {
   const {value, onChange} = props
@@ -11,7 +11,7 @@ export function IconInput(props: StringInputProps) {
       Object.entries(icons).map(([key, icon]) => (
         <IconItem key={key} iconKey={key} icon={icon} onChange={onChange} />
       )),
-    [onChange]
+    [onChange],
   )
 
   const selectedIcon = useMemo(() => getIcon(value), [value])

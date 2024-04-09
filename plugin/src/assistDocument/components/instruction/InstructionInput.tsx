@@ -1,7 +1,8 @@
-import {FieldError, FieldMember, ObjectInputMember, ObjectInputProps} from 'sanity'
-import {findFieldMember, findFieldsetMember} from '../helpers'
 import {Box, Flex, Stack, Text} from '@sanity/ui'
 import {useId, useMemo} from 'react'
+import {FieldError, FieldMember, ObjectInputMember, ObjectInputProps} from 'sanity'
+
+import {findFieldMember, findFieldsetMember} from '../helpers'
 
 export function InstructionInput(props: ObjectInputProps) {
   return (

@@ -1,5 +1,6 @@
-import {DocumentInspector, ObjectSchemaType, PatchEvent} from 'sanity'
 import {createContext, useContext} from 'react'
+import {DocumentInspector, ObjectSchemaType, PatchEvent} from 'sanity'
+
 import {StudioAssistDocument} from '../types'
 
 export type AssistDocumentContextValue = (
@@ -19,7 +20,7 @@ export type AssistDocumentContextValue = (
 }
 
 export const AssistDocumentContext = createContext<AssistDocumentContextValue | undefined>(
-  undefined
+  undefined,
 )
 
 export function useAssistDocumentContext(): AssistDocumentContextValue {

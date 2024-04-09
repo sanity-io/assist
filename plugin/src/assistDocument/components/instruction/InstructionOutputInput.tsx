@@ -1,3 +1,5 @@
+import {Card, Checkbox, Flex, Stack, Text} from '@sanity/ui'
+import {useCallback, useContext, useEffect, useMemo} from 'react'
 import {
   ArrayOfObjectsInputProps,
   ArraySchemaType,
@@ -11,12 +13,11 @@ import {
   typed,
   unset,
 } from 'sanity'
-import {useCallback, useContext, useEffect, useMemo} from 'react'
-import {SelectedFieldContext} from '../SelectedFieldContext'
-import {Card, Checkbox, Flex, Stack, Text} from '@sanity/ui'
-import {isType} from '../../../helpers/typeUtils'
+
 import {isAssistSupported} from '../../../helpers/assistSupported'
+import {isType} from '../../../helpers/typeUtils'
 import {OutputFieldItem, outputFieldTypeName, OutputTypeItem} from '../../../types'
+import {SelectedFieldContext} from '../SelectedFieldContext'
 
 export function InstructionOutputInput(props: ArrayOfObjectsInputProps) {
   const {fieldSchema} = useContext(SelectedFieldContext) ?? {}
@@ -38,13 +39,13 @@ export function InstructionOutputInput(props: ArrayOfObjectsInputProps) {
 function useEmptySelectAllValue(
   value: (OutputTypeItem | OutputFieldItem)[],
   allowedValues: {name: string}[],
-  onChange: (patch: FormPatch | FormPatch[] | PatchEvent) => void
+  onChange: (patch: FormPatch | FormPatch[] | PatchEvent) => void,
 ) {
   useEffect(() => {
     const validValues = value?.filter((v) =>
       allowedValues.find(
-        (f) => f.name === (v._type === outputFieldTypeName ? v.relativePath : v.type)
-      )
+        (f) => f.name === (v._type === outputFieldTypeName ? v.relativePath : v.type),
+      ),
     )
     const valueLength = value?.length ?? 0
     const validLength = validValues?.length ?? 0
@@ -65,7 +66,7 @@ function ObjectOutputInput({
 
   const fields = useMemo(
     () => fieldSchema.fields.filter((field) => isAssistSupported(field.type)),
-    [fieldSchema.fields]
+    [fieldSchema.fields],
   )
 
   useEmptySelectAllValue(value as OutputTypeItem[], fields, onChange)
@@ -84,7 +85,7 @@ function ObjectOutputInput({
                 _key: field.name,
                 _type: 'sanity.assist.output.field',
                 relativePath: field.name,
-              })
+              }),
             )
           onChange(PatchEvent.from([setIfMissing([]), insert(items, 'after', [-1])]))
         }
@@ -97,7 +98,7 @@ function ObjectOutputInput({
         onChange(PatchEvent.from([setIfMissing([]), insert([patchValue], 'after', [-1])]))
       }
     },
-    [onChange, value, fields]
+    [onChange, value, fields],
   )
 
   return (
@@ -126,7 +127,7 @@ function ArrayOutputInput({
 
   const ofItems = useMemo(
     () => fieldSchema.of.filter((itemType) => isAssistSupported(itemType)),
-    [fieldSchema.of]
+    [fieldSchema.of],
   )
 
   useEmptySelectAllValue(value as OutputTypeItem[], ofItems, onChange)
@@ -145,7 +146,7 @@ function ArrayOutputInput({
                 _key: field.name,
                 _type: 'sanity.assist.output.type',
                 type: field.name,
-              })
+              }),
             )
           onChange(PatchEvent.from([setIfMissing([]), insert(items, 'after', [-1])]))
         }
@@ -158,7 +159,7 @@ function ArrayOutputInput({
         onChange(PatchEvent.from([setIfMissing([]), insert([patchValue], 'after', [-1])]))
       }
     },
-    [onChange, value, ofItems]
+    [onChange, value, ofItems],
   )
   return (
     <Stack space={2}>

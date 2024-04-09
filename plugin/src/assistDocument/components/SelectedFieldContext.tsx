@@ -1,5 +1,5 @@
-import {ObjectSchemaType, SchemaType} from 'sanity'
 import {createContext} from 'react'
+import {ObjectSchemaType, SchemaType} from 'sanity'
 
 export interface SelectedFieldContextValue {
   documentSchema?: ObjectSchemaType

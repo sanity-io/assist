@@ -612,7 +612,7 @@ assist({
       languages: async (client, {market = ``}) => {
         const response = await client.fetch(
           `*[_type == "language" && $market in markets]{ id, title }`,
-          {market}
+          {market},
         )
         return response
       },
@@ -689,7 +689,7 @@ function translationOutputs(
   member,
   enclosingType,
   translateFromLanguageId,
-  translateToLanguageIds
+  translateToLanguageIds,
 ) {
   const parentIsLanguageWrapper =
     enclosingType.jsonType === 'object' && enclosingType.name.startsWith('language')

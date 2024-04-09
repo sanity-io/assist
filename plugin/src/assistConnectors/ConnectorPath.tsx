@@ -1,5 +1,6 @@
 import {rgba, useTheme} from '@sanity/ui'
 import {useMemo} from 'react'
+
 import {ConnectorOptions, mapConnectorToLine, Rect} from '../_lib/connector'
 import {arrowPath} from './draw/arrowPath'
 import {drawConnectorPath} from './draw/connectorPath'
@@ -35,7 +36,7 @@ export function ConnectorPath(props: {
             options,
             line.from.x + options.arrow.marginX,
             line.from.bounds.y - options.arrow.threshold + options.arrow.marginY,
-            -1
+            -1,
           )}
           stroke={theme.sanity.color.base.border}
           strokeWidth={strokeWidth}
@@ -51,7 +52,7 @@ export function ConnectorPath(props: {
               line.from.bounds.h +
               options.arrow.threshold -
               options.arrow.marginY,
-            1
+            1,
           )}
           stroke={theme.sanity.color.base.border}
           strokeWidth={strokeWidth}

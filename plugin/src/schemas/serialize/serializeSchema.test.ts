@@ -1,8 +1,9 @@
-import {describe, expect, test} from 'vitest'
 import {Schema} from '@sanity/schema'
-import {serializeSchema} from './serializeSchema'
 import {defineArrayMember, defineField, defineType} from 'sanity'
+import {describe, expect, test} from 'vitest'
+
 import {AssistOptions} from '../typeDefExtensions'
+import {serializeSchema} from './serializeSchema'
 
 const mockStudioTypes = [
   defineField({

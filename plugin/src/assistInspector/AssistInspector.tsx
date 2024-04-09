@@ -13,25 +13,26 @@ import {
   DocumentPaneProvider,
   useDocumentPane,
 } from 'sanity/desk'
-import {DocumentForm} from '../_lib/form'
-import {assistDocumentTypeName, fieldPathParam, instructionParam} from '../types'
-import {FieldRef, getFieldTitle, useAiPaneRouter, useSelectedField, useTypePath} from './helpers'
 import styled from 'styled-components'
+
+import {DocumentForm} from '../_lib/form'
+import {TypePathContext} from '../assistDocument/components/AssistDocumentForm'
 import {useStudioAssistDocument} from '../assistDocument/hooks/useStudioAssistDocument'
-import {InstructionTaskHistoryButton} from './InstructionTaskHistoryButton'
-import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
-import {giveFeedbackUrl, pluginTitle, releaseAnnouncementUrl, salesUrl} from '../constants'
-import {assistDocumentId} from '../helpers/ids'
 import {
   getAssistableDocId,
   isDocAssistable,
   useRequestRunInstruction,
 } from '../assistDocument/RequestRunInstructionProvider'
+import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
+import {giveFeedbackUrl, pluginTitle, releaseAnnouncementUrl, salesUrl} from '../constants'
+import {getConditionalMembers} from '../helpers/conditionalMembers'
+import {assistDocumentId} from '../helpers/ids'
 import {InspectorOnboarding} from '../onboarding/InspectorOnboarding'
 import {inspectorOnboardingKey, useOnboardingFeature} from '../onboarding/onboardingStore'
-import {TypePathContext} from '../assistDocument/components/AssistDocumentForm'
+import {assistDocumentTypeName, fieldPathParam, instructionParam} from '../types'
 import {FieldTitle} from './FieldAutocomplete'
-import {getConditionalMembers} from '../helpers/conditionalMembers'
+import {FieldRef, getFieldTitle, useAiPaneRouter, useSelectedField, useTypePath} from './helpers'
+import {InstructionTaskHistoryButton} from './InstructionTaskHistoryButton'
 
 const CardWithShadowBelow = styled(Card)`
   position: relative;
@@ -172,8 +173,8 @@ export function AssistInspectorWrapper(props: DocumentInspectorProps) {
               context.error
                 ? 'Retry'
                 : status?.initialized && !status.validToken
-                ? `Restore ${pluginTitle}`
-                : `Enable ${pluginTitle} now`
+                  ? `Restore ${pluginTitle}`
+                  : `Enable ${pluginTitle} now`
             }
             tone="primary"
             onClick={context.init}
@@ -224,11 +225,11 @@ export function AssistInspector(props: DocumentInspectorProps) {
   const tasks = useMemo(
     () =>
       assistDocument?.tasks?.filter((i) => !instructionKey || i.instructionKey === instructionKey),
-    [assistDocument?.tasks, instructionKey]
+    [assistDocument?.tasks, instructionKey],
   )
   const instructions = useMemo(
     () => assistDocument?.fields?.flatMap((f) => f.instructions ?? []),
-    [assistDocument?.fields]
+    [assistDocument?.fields],
   )
 
   const promptValue = instruction?.prompt
@@ -252,7 +253,7 @@ export function AssistInspector(props: DocumentInspectorProps) {
         type: assistDocumentTypeName,
       },
     }),
-    [aiDocId]
+    [aiDocId],
   )
 
   const runCurrentInstruction = useCallback(
@@ -268,7 +269,7 @@ export function AssistInspector(props: DocumentInspectorProps) {
         instruction,
         conditionalMembers: formStateRef.current ? getConditionalMembers(formStateRef.current) : [],
       }),
-    [pathKey, instruction, typePath, documentType, assistableDocId, requestRunInstruction]
+    [pathKey, instruction, typePath, documentType, assistableDocId, requestRunInstruction],
   )
 
   const Region = useCallback((_props: any) => {

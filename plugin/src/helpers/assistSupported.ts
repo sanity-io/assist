@@ -1,4 +1,5 @@
 import {ReferenceOptions, SchemaType} from 'sanity'
+
 import {AssistOptions} from '../schemas/typeDefExtensions'
 import {isType} from './typeUtils'
 

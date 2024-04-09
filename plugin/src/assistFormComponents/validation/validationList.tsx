@@ -1,3 +1,4 @@
+import {Container} from '@sanity/ui'
 import {useCallback} from 'react'
 import {
   isValidationErrorMarker,
@@ -7,7 +8,7 @@ import {
   Path,
   ValidationMarker,
 } from 'sanity'
-import {Container} from '@sanity/ui'
+
 import {ListItem} from './listItem'
 
 /** @internal */
@@ -31,7 +32,7 @@ export function ValidationList(props: ValidationListProps) {
       if (onFocus) onFocus(path)
       if (onClose) onClose()
     },
-    [onFocus, onClose]
+    [onFocus, onClose],
   )
 
   const resolvePathTitle = (path: Path) => {

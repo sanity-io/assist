@@ -12,12 +12,13 @@ import {
   useDocumentStore,
 } from 'sanity'
 import {useDocumentPane} from 'sanity/desk'
+
 import {assistFormId} from './constants'
 
 const preventDefault = (ev: React.FormEvent) => ev.preventDefault()
 
 export function DocumentForm(
-  props: Omit<BoxProps, 'as'> & Omit<HTMLProps<HTMLDivElement>, 'as' | 'onSubmit' | 'ref'>
+  props: Omit<BoxProps, 'as'> & Omit<HTMLProps<HTMLDivElement>, 'as' | 'onSubmit' | 'ref'>,
 ) {
   const {
     collapsedFieldSets,
@@ -61,7 +62,7 @@ export function DocumentForm(
           if (event.type === 'rebase') {
             patchChannel.publish(prepareRebaseEvent(event))
           }
-        })
+        }),
       )
       .subscribe()
 
@@ -192,7 +193,7 @@ function prepareRebaseEvent(event: DocumentRebaseEvent): PatchMsg {
     type: 'rebase',
     snapshot: event.document,
     patches: fromMutationPatches('remote', remotePatches).concat(
-      fromMutationPatches('local', localPatches)
+      fromMutationPatches('local', localPatches),
     ),
   }
 }

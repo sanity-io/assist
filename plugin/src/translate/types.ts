@@ -22,12 +22,12 @@ export type TranslationOutputsFunction = (
   documentMember: DocumentMember,
   enclosingType: SchemaType,
   translateFromLanguageId: string,
-  translateToLanguageIds: string[]
+  translateToLanguageIds: string[],
 ) => TranslationOutput[] | undefined
 
 export type LanguageCallback = (
   client: SanityClient,
-  selectedLanguageParams: Record<string, unknown>
+  selectedLanguageParams: Record<string, unknown>,
 ) => Promise<Language[]>
 
 export interface FieldTranslationConfig {

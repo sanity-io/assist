@@ -1,6 +1,6 @@
-import {ObjectInputProps} from 'sanity'
 import {Box} from '@sanity/ui'
 import {useEffect, useRef} from 'react'
+import {ObjectInputProps} from 'sanity'
 
 export function HideReferenceChangedBannerInput(props: ObjectInputProps) {
   const ref = useRef<HTMLDivElement>(null)

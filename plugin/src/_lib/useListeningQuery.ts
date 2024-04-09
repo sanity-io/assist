@@ -1,7 +1,8 @@
 import {useEffect, useRef, useState} from 'react'
-import {catchError, distinctUntilChanged} from 'rxjs/operators'
 import isEqual from 'react-fast-compare'
+import {catchError, distinctUntilChanged} from 'rxjs/operators'
 import {ListenQueryOptions, useClient} from 'sanity'
+
 import {listenQuery} from './fixedListenQuery'
 
 type Params = Record<string, string | number | boolean | string[]>
@@ -22,7 +23,7 @@ const DEFAULT_OPTIONS: ListenQueryOptions = {apiVersion: `v2022-05-09`}
 export function useListeningQuery<T>(
   query: string,
   params: Params = DEFAULT_PARAMS,
-  options: ListenQueryOptions = DEFAULT_OPTIONS
+  options: ListenQueryOptions = DEFAULT_OPTIONS,
 ): ReturnShape<T> {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -43,7 +44,7 @@ export function useListeningQuery<T>(
             setData(null)
 
             return err
-          })
+          }),
         )
         .subscribe((documents) => {
           setData((current) => (isEqual(current, documents) ? current : documents))

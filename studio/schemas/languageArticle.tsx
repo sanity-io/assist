@@ -40,7 +40,7 @@ export const localizedPte = defineType({
           type: 'block',
         }),
       ],
-    })
+    }),
   ),
   options: {aiAssist: {translateAction: true}},
 })
@@ -67,7 +67,7 @@ export const localeObject = defineType({
           of: [{type: 'string'}],
         }),
       ],
-    })
+    }),
   ),
   options: {aiAssist: {translateAction: true}},
 })

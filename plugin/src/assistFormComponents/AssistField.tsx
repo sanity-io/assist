@@ -1,15 +1,16 @@
-import {FieldProps, isArraySchemaType, pathToString} from 'sanity'
-import {useAssistPresence} from '../presence/useAssistPresence'
-import {useContext, useMemo} from 'react'
 import {Box, Flex} from '@sanity/ui'
-import {contextDocumentTypeName} from '../types'
+import {useContext, useMemo} from 'react'
+import {FieldProps, isArraySchemaType, pathToString} from 'sanity'
+
+import {assistFormId} from '../_lib/form/constants'
 import {isAssistSupported} from '../helpers/assistSupported'
 import {isPortableTextArray, isType} from '../helpers/typeUtils'
-import {AiFieldPresence} from '../presence/AiFieldPresence'
 import {AssistOnboardingPopover} from '../onboarding/FieldActionsOnboarding'
 import {FirstAssistedPathContext} from '../onboarding/FirstAssistedPathProvider'
 import {fieldOnboardingKey, useOnboardingFeature} from '../onboarding/onboardingStore'
-import {assistFormId} from '../_lib/form/constants'
+import {AiFieldPresence} from '../presence/AiFieldPresence'
+import {useAssistPresence} from '../presence/useAssistPresence'
+import {contextDocumentTypeName} from '../types'
 
 export function AssistFieldWrapper(props: FieldProps) {
   const {schemaType} = props
@@ -39,7 +40,7 @@ export function AssistField(props: FieldProps) {
 
   const isPortableText = useMemo(
     () => !!(isArraySchemaType(props.schemaType) && isPortableTextArray(props.schemaType)),
-    [props.schemaType]
+    [props.schemaType],
   )
 
   const presence = useAssistPresence(props.path, isPortableText)
@@ -47,7 +48,7 @@ export function AssistField(props: FieldProps) {
   const firstAssistedPath = useContext(FirstAssistedPathContext)
   const isFirstAssisted = useMemo(
     () => pathToString(path) === firstAssistedPath,
-    [path, firstAssistedPath]
+    [path, firstAssistedPath],
   )
 
   const {showOnboarding, dismissOnboarding} = useOnboardingFeature(fieldOnboardingKey)

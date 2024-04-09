@@ -1,9 +1,10 @@
-import {ArrayOfObjectsInputProps, set, typed} from 'sanity'
 import {Box} from '@sanity/ui'
-import styled from 'styled-components'
 import {useEffect} from 'react'
-import {ContextBlock, FieldRef, PromptBlock, PromptTextBlock, UserInputBlock} from '../../../types'
+import {ArrayOfObjectsInputProps, set, typed} from 'sanity'
+import styled from 'styled-components'
+
 import {randomKey} from '../../../_lib/randomKey'
+import {ContextBlock, FieldRef, PromptBlock, PromptTextBlock, UserInputBlock} from '../../../types'
 
 const PteMods = styled(Box)`
   & [data-testid='pt-editor__toolbar-card'] > div > div:last-child {

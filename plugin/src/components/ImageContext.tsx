@@ -1,11 +1,12 @@
 import {createContext, useEffect, useMemo, useState} from 'react'
 import {InputProps, pathToString, useSyncState} from 'sanity'
-import {getDescriptionFieldOption, getImageInstructionFieldOption} from '../helpers/typeUtils'
+import {usePaneRouter} from 'sanity/desk'
+
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
-import {canUseAssist, useApiClient, useGenerateCaption} from '../useApiClient'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 import {publicId} from '../helpers/ids'
-import {usePaneRouter} from 'sanity/desk'
+import {getDescriptionFieldOption, getImageInstructionFieldOption} from '../helpers/typeUtils'
+import {canUseAssist, useApiClient, useGenerateCaption} from '../useApiClient'
 
 export interface ImageContextValue {
   imageDescriptionPath?: string

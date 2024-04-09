@@ -1,5 +1,5 @@
-import {BlockProps} from 'sanity'
 import {createContext} from 'react'
+import {BlockProps} from 'sanity'
 
 // workaround for preview value sometimes lagging behind
 export const InlineBlockValueContext = createContext<unknown>(undefined)

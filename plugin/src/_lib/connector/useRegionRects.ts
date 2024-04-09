@@ -1,6 +1,7 @@
 import {useEffect, useMemo, useRef, useState} from 'react'
-import {Rect, Scroll} from './types'
+
 import {hasOverflowScroll} from './helpers'
+import {Rect, Scroll} from './types'
 
 export function useRegionRects() {
   const ref = useRef<HTMLDivElement>(null)
@@ -123,7 +124,7 @@ export function useRegionRects() {
         w: relativeBoundsRect.w,
         h: relativeBoundsRect.h,
       },
-    [relativeBoundsRect, boundsScroll]
+    [relativeBoundsRect, boundsScroll],
   )
 
   const element: Rect | null = useMemo(
@@ -134,7 +135,7 @@ export function useRegionRects() {
         w: relativeElementRect.w,
         h: relativeElementRect.h,
       },
-    [relativeElementRect, scroll]
+    [relativeElementRect, scroll],
   )
 
   return {bounds, element, ref}

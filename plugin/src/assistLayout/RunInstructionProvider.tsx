@@ -1,12 +1,11 @@
-import {Button, Dialog, Flex, Stack, Text, TextArea, Tooltip} from '@sanity/ui'
-import {getInstructionTitle} from '../helpers/misc'
 import {PlayIcon} from '@sanity/icons'
+import {Button, Dialog, Flex, Stack, Text, TextArea, Tooltip} from '@sanity/ui'
 import {
   createContext,
-  Dispatch,
-  FormEvent,
-  PropsWithChildren,
-  SetStateAction,
+  type Dispatch,
+  type FormEvent,
+  type PropsWithChildren,
+  type SetStateAction,
   useCallback,
   useContext,
   useEffect,
@@ -15,11 +14,13 @@ import {
   useRef,
   useState,
 } from 'react'
-import {UserInputBlock, userInputTypeName} from '../types'
-import {RunInstructionArgs} from './AssistLayout'
+import {FormFieldHeaderText} from 'sanity'
+
+import {getInstructionTitle} from '../helpers/misc'
+import {type UserInputBlock, userInputTypeName} from '../types'
 import {useApiClient, useRunInstructionApi} from '../useApiClient'
 import {useAiAssistanceConfig} from './AiAssistanceConfigContext'
-import {FormFieldHeaderText} from 'sanity'
+import type {RunInstructionArgs} from './AssistLayout'
 
 type BlockInputs = Record<string, string>
 const NO_INPUT: BlockInputs = {}
@@ -42,6 +43,7 @@ function isUserInputBlock(block: {_type: string}): block is UserInputBlock {
   return block._type === userInputTypeName
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function RunInstructionProvider(props: PropsWithChildren<{}>) {
   const {config} = useAiAssistanceConfig()
   const apiClient = useApiClient(config?.__customApiClient)
@@ -63,7 +65,7 @@ export function RunInstructionProvider(props: PropsWithChildren<{}>) {
       const instructionKey = instruction._key
       const userInputBlocks = instruction?.prompt
         ?.flatMap((block) =>
-          block._type === 'block' ? block.children.filter(isUserInputBlock) : [block]
+          block._type === 'block' ? block.children.filter(isUserInputBlock) : [block],
         )
         .filter(isUserInputBlock)
 
@@ -81,16 +83,17 @@ export function RunInstructionProvider(props: PropsWithChildren<{}>) {
         userInputBlocks,
       })
     },
-    [setRunRequest, runInstructionRequest, loading]
+    [runInstructionRequest, loading],
   )
 
   const close = useCallback(() => {
     setRunRequest(undefined)
     setInputs(NO_INPUT)
-  }, [setRunRequest, setInputs])
+  }, [])
 
   const runWithInput = useCallback(() => {
     if (runRequest) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const {instruction, userTexts, ...request} = runRequest
       runInstructionRequest({
         ...request,
@@ -110,7 +113,7 @@ export function RunInstructionProvider(props: PropsWithChildren<{}>) {
     () =>
       (runRequest?.userInputBlocks?.length ?? 0) >
       Object.entries(inputs).filter(([, value]) => !!value).length,
-    [runRequest?.userInputBlocks, inputs]
+    [runRequest?.userInputBlocks, inputs],
   )
 
   const runButton = (
@@ -126,7 +129,7 @@ export function RunInstructionProvider(props: PropsWithChildren<{}>) {
 
   const contextValue: RunInstructionContextValue = useMemo(
     () => ({runInstruction, instructionLoading: loading}),
-    [runInstruction, loading]
+    [runInstruction, loading],
   )
 
   return (
@@ -192,7 +195,7 @@ function UserInput(props: {
         [key]: (e.currentTarget ?? e.target).value,
       }))
     },
-    [key, setInputs]
+    [key, setInputs],
   )
 
   const value = useMemo(() => inputs[key], [inputs, key])

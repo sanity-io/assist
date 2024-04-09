@@ -30,7 +30,7 @@ export function getDescriptionFieldOption(schemaType: SchemaType | undefined): s
 }
 
 export function getImageInstructionFieldOption(
-  schemaType: SchemaType | undefined
+  schemaType: SchemaType | undefined,
 ): string | undefined {
   if (!schemaType) {
     return undefined

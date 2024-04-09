@@ -1,10 +1,11 @@
-import {set, StringInputProps} from 'sanity'
-import {useCallback, useContext, useEffect, useId, useRef} from 'react'
 import {Box} from '@sanity/ui'
-import {SelectedFieldContext} from '../SelectedFieldContext'
+import {useCallback, useContext, useEffect, useId, useRef} from 'react'
+import {set, StringInputProps} from 'sanity'
+
 import {FieldAutocomplete} from '../../../assistInspector/FieldAutocomplete'
 import {FieldRef} from '../../../assistInspector/helpers'
 import {TypePathContext} from '../AssistDocumentForm'
+import {SelectedFieldContext} from '../SelectedFieldContext'
 
 export function FieldRefPathInput(props: StringInputProps) {
   const documentSchema = useContext(SelectedFieldContext)?.documentSchema
@@ -33,7 +34,7 @@ export function FieldRefPathInput(props: StringInputProps) {
       const mustStartWith = fieldSegments.slice(0, lastArrayItemIndex + 1).join('.')
       return typePath.startsWith(mustStartWith)
     },
-    [typePath]
+    [typePath],
   )
   if (!documentSchema) {
     return props.renderDefault(props)

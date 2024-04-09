@@ -1,13 +1,14 @@
+import {extractWithPath} from '@sanity/mutator'
 import {
   isDocumentSchemaType,
   isKeySegment,
-  ObjectSchemaType,
-  Path,
+  type ObjectSchemaType,
+  type Path,
   pathToString,
-  SanityDocumentLike,
+  type SanityDocumentLike,
 } from 'sanity'
-import {extractWithPath} from '@sanity/mutator'
-import {DocumentMember, TranslationOutput, TranslationOutputsFunction} from './types'
+
+import type {DocumentMember, TranslationOutput, TranslationOutputsFunction} from './types'
 
 export interface FieldLanguageMap {
   inputLanguageId: string
@@ -30,7 +31,7 @@ function extractPaths(
   doc: SanityDocumentLike,
   schemaType: ObjectSchemaType,
   path: Path,
-  maxDepth: number
+  maxDepth: number,
 ): DocumentMember[] {
   if (path.length >= maxDepth) {
     return []
@@ -75,7 +76,7 @@ function extractPaths(
                 itemPath,
                 item,
                 itemSchema,
-              }
+              },
             )
           }
           if (item._key && itemSchema) {
@@ -83,7 +84,7 @@ function extractPaths(
               doc,
               itemSchema as ObjectSchemaType,
               itemPath,
-              maxDepth
+              maxDepth,
             )
             const arrayMember = {
               path: itemPath,
@@ -112,7 +113,7 @@ export const defaultLanguageOutputs: TranslationOutputsFunction = function (
   member,
   enclosingType,
   translateFromLanguageId,
-  translateToLanguageIds
+  translateToLanguageIds,
 ) {
   if (
     member.schemaType.jsonType === 'object' &&
@@ -146,7 +147,7 @@ export function getFieldLanguageMap(
   documentMembers: DocumentMember[],
   translateFromLanguageId: string,
   outputLanguageIds: string[],
-  langFn: TranslationOutputsFunction
+  langFn: TranslationOutputsFunction,
 ): FieldLanguageMap[] {
   const translationMaps: FieldLanguageMap[] = []
   for (const member of documentMembers) {
@@ -159,7 +160,7 @@ export function getFieldLanguageMap(
       member,
       enclosingType,
       translateFromLanguageId,
-      outputLanguageIds
+      outputLanguageIds,
     )?.filter((translation) => translation.id !== translateFromLanguageId)
 
     if (translations) {

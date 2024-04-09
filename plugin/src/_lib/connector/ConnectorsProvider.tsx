@@ -1,4 +1,5 @@
 import {ReactNode, useEffect, useMemo} from 'react'
+
 import {ConnectorsStore, createConnectorsStore} from './ConnectorsStore'
 import {ConnectorsStoreContext} from './ConnectorsStoreContext'
 import {Connector} from './types'
@@ -12,7 +13,7 @@ export function ConnectorsProvider(props: {
 
   useEffect(
     () => onConnectorsChange && store.connectors.subscribe(onConnectorsChange),
-    [onConnectorsChange, store]
+    [onConnectorsChange, store],
   )
 
   return <ConnectorsStoreContext.Provider value={store}>{children}</ConnectorsStoreContext.Provider>

@@ -1,15 +1,16 @@
-import {InputProps, ObjectInputProps, ObjectSchemaType} from 'sanity'
-import {AssistDocumentContextProvider} from './AssistDocumentContextProvider'
-import {FirstAssistedPathProvider} from '../onboarding/FirstAssistedPathProvider'
-import {useInstructionToaster} from './hooks/useInstructionToaster'
-import {isType} from '../helpers/typeUtils'
 import {useLayer} from '@sanity/ui'
-import {useDocumentPane} from 'sanity/desk'
-import {usePathKey} from '../helpers/misc'
-import {ConnectFromRegion} from '../_lib/connector'
-import {assistDocumentTypeName} from '../types'
 import {useMemo} from 'react'
+import {InputProps, ObjectInputProps, ObjectSchemaType} from 'sanity'
+import {useDocumentPane} from 'sanity/desk'
+
+import {ConnectFromRegion} from '../_lib/connector'
 import {assistFormId} from '../_lib/form/constants'
+import {usePathKey} from '../helpers/misc'
+import {isType} from '../helpers/typeUtils'
+import {FirstAssistedPathProvider} from '../onboarding/FirstAssistedPathProvider'
+import {assistDocumentTypeName} from '../types'
+import {AssistDocumentContextProvider} from './AssistDocumentContextProvider'
+import {useInstructionToaster} from './hooks/useInstructionToaster'
 
 export function AssistDocumentInputWrapper(props: InputProps) {
   if (!isType(props.schemaType, 'document') && props.id !== 'root' && props.id !== assistFormId) {

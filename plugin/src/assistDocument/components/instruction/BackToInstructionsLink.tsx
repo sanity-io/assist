@@ -1,16 +1,17 @@
 import {ArrowLeftIcon} from '@sanity/icons'
 import {Button} from '@sanity/ui'
 import {useCallback} from 'react'
-import {instructionParam} from '../../../types'
 import {useDocumentPane} from 'sanity/desk'
+
 import {aiInspectorId} from '../../../assistInspector/constants'
+import {instructionParam} from '../../../types'
 
 export function BackToInstructionListLink() {
   const {openInspector} = useDocumentPane()
 
   const goBack = useCallback(
     () => openInspector(aiInspectorId, {[instructionParam]: undefined as any}),
-    [openInspector]
+    [openInspector],
   )
 
   return (

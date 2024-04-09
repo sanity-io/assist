@@ -1,4 +1,5 @@
 import {isArraySchemaType, isObjectSchemaType, ObjectItem, SchemaType} from 'sanity'
+
 import {randomKey} from '../randomKey'
 
 export function createProtoValue(type: SchemaType): any {
@@ -23,7 +24,7 @@ export function createProtoValue(type: SchemaType): any {
 export function createProtoArrayValue<Item extends ObjectItem>(type: SchemaType): Item {
   if (!isObjectSchemaType(type)) {
     throw new Error(
-      `Invalid item type: "${type.type}". Default array input can only contain objects (for now)`
+      `Invalid item type: "${type.type}". Default array input can only contain objects (for now)`,
     )
   }
 

@@ -1,17 +1,18 @@
 import {useEffect, useMemo} from 'react'
+import {type ObjectSchemaType, typed, useClient, useCurrentUser} from 'sanity'
+
+import {maxHistoryVisibilityMs} from '../../constants'
+import {assistDocumentId, assistTasksStatusId} from '../../helpers/ids'
 import {
   assistDocumentTypeName,
-  AssistTasksStatus,
+  type AssistTasksStatus,
   assistTasksStatusTypeName,
-  InstructionTask,
-  StudioAssistDocument,
-  StudioAssistField,
-  StudioInstruction,
+  type InstructionTask,
+  type StudioAssistDocument,
+  type StudioAssistField,
+  type StudioInstruction,
 } from '../../types'
-import {ObjectSchemaType, typed, useClient, useCurrentUser} from 'sanity'
 import {useDocumentState} from './useDocumentState'
-import {assistDocumentId, assistTasksStatusId} from '../../helpers/ids'
-import {maxHistoryVisibilityMs} from '../../constants'
 
 interface UseAssistDocumentProps {
   documentId: string
@@ -29,11 +30,11 @@ export function useStudioAssistDocument({
 
   const assistDocument = useDocumentState<StudioAssistDocument>(
     assistDocumentId(documentTypeName),
-    assistDocumentTypeName
+    assistDocumentTypeName,
   )
   const assistTasksStatus = useDocumentState<AssistTasksStatus>(
     assistTasksStatusId(documentId ?? ''),
-    assistTasksStatusTypeName
+    assistTasksStatusTypeName,
   )
 
   const client = useClient({apiVersion: '2023-01-01'})
@@ -45,7 +46,7 @@ export function useStudioAssistDocument({
           _id: assistDocumentId(documentTypeName),
           _type: assistDocumentTypeName,
         })
-        .catch((e) => {
+        .catch(() => {
           // best effort
         })
     }
@@ -83,7 +84,7 @@ export function useStudioAssistDocument({
 
 function asStudioInstruction(
   instruction: StudioInstruction,
-  run: InstructionTask[]
+  run: InstructionTask[],
 ): StudioInstruction {
   return {
     ...instruction,
@@ -92,7 +93,7 @@ function asStudioInstruction(
       .filter(
         (task) =>
           task.started &&
-          new Date().getTime() - new Date(task.started).getTime() < maxHistoryVisibilityMs
+          new Date().getTime() - new Date(task.started).getTime() < maxHistoryVisibilityMs,
       ),
   }
 }

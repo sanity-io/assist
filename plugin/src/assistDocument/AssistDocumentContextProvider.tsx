@@ -1,7 +1,8 @@
+import {PropsWithChildren} from 'react'
 import {ObjectSchemaType} from 'sanity'
+
 import {AssistDocumentContext} from './AssistDocumentContext'
 import {useAssistDocumentContextValue} from './hooks/useAssistDocumentContextValue'
-import {PropsWithChildren} from 'react'
 
 export interface AIDocumentInputProps {
   documentId: string

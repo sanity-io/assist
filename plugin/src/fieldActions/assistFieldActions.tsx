@@ -1,33 +1,34 @@
+import {ControlsIcon, SparklesIcon} from '@sanity/icons'
+import {useCallback, useMemo, useRef} from 'react'
 import {
-  DocumentFieldAction,
-  DocumentFieldActionGroup,
-  DocumentFieldActionItem,
-  ObjectSchemaType,
+  type DocumentFieldAction,
+  type DocumentFieldActionGroup,
+  type DocumentFieldActionItem,
+  type ObjectSchemaType,
   typed,
   useCurrentUser,
 } from 'sanity'
-import {ControlsIcon, SparklesIcon} from '@sanity/icons'
-import {useCallback, useMemo, useRef} from 'react'
-import {pluginTitleShort} from '../constants'
-import {useAssistSupported} from '../helpers/useAssistSupported'
+import {useDocumentPane} from 'sanity/desk'
+
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
-import {getInstructionTitle, usePathKey} from '../helpers/misc'
-import {documentRootKey, fieldPathParam, instructionParam, StudioInstruction} from '../types'
-import {aiInspectorId} from '../assistInspector/constants'
 import {getIcon} from '../assistDocument/components/instruction/appearance/IconInput'
 import {useAssistDocumentContextValue} from '../assistDocument/hooks/useAssistDocumentContextValue'
 import {
   getAssistableDocId,
   useRequestRunInstruction,
 } from '../assistDocument/RequestRunInstructionProvider'
-import {PrivateIcon} from './PrivateIcon'
-import {generateCaptionsActions} from './generateCaptionActions'
-import {useDocumentPane} from 'sanity/desk'
+import {aiInspectorId} from '../assistInspector/constants'
 import {useSelectedField, useTypePath} from '../assistInspector/helpers'
+import {pluginTitleShort} from '../constants'
 import {isSchemaAssistEnabled} from '../helpers/assistSupported'
-import {translateActions, TranslateProps} from '../translate/translateActions'
-import {generateImagActions} from './generateImageActions'
 import {getConditionalMembers} from '../helpers/conditionalMembers'
+import {getInstructionTitle, usePathKey} from '../helpers/misc'
+import {useAssistSupported} from '../helpers/useAssistSupported'
+import {translateActions, type TranslateProps} from '../translate/translateActions'
+import {documentRootKey, fieldPathParam, instructionParam, type StudioInstruction} from '../types'
+import {generateCaptionsActions} from './generateCaptionActions'
+import {generateImagActions} from './generateImageActions'
+import {PrivateIcon} from './PrivateIcon'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -87,9 +88,9 @@ export const assistFieldActions: DocumentFieldAction = {
     const fieldAssist = useMemo(
       () =>
         (assistDocument?.fields ?? []).find(
-          (f) => f.path === typePath || (pathKey === documentRootKey && f.path === pathKey)
+          (f) => f.path === typePath || (pathKey === documentRootKey && f.path === pathKey),
         ),
-      [assistDocument?.fields, pathKey, typePath]
+      [assistDocument?.fields, pathKey, typePath],
     )
 
     const fieldAssistKey = fieldAssist?._key
@@ -105,7 +106,7 @@ export const assistFieldActions: DocumentFieldAction = {
         documentId: assistableDocumentId,
         documentIsAssistable,
         documentSchemaType,
-      })
+      }),
     )
     const manageInstructions = useCallback(
       () =>
@@ -115,7 +116,7 @@ export const assistFieldActions: DocumentFieldAction = {
               [fieldPathParam]: pathKey,
               [instructionParam]: undefined as any,
             }),
-      [openInspector, closeInspector, isSelected, pathKey]
+      [openInspector, closeInspector, isSelected, pathKey],
     )
 
     const onInstructionAction = useCallback(
@@ -134,23 +135,23 @@ export const assistFieldActions: DocumentFieldAction = {
             : [],
         })
       },
-      [requestRunInstruction, assistableDocId, pathKey, typePath, assistDocumentId, fieldAssistKey]
+      [requestRunInstruction, assistableDocId, pathKey, typePath, assistDocumentId, fieldAssistKey],
     )
 
     const privateInstructions = useMemo(
       () =>
         fieldAssist?.instructions?.filter((i) => i.userId && i.userId === currentUser?.id) || [],
-      [fieldAssist?.instructions, currentUser]
+      [fieldAssist?.instructions, currentUser],
     )
 
     const sharedInstructions = useMemo(
       () => fieldAssist?.instructions?.filter((i) => !i.userId) || [],
-      [fieldAssist?.instructions]
+      [fieldAssist?.instructions],
     )
 
     const instructions = useMemo(
       () => [...privateInstructions, ...sharedInstructions],
-      [privateInstructions, sharedInstructions]
+      [privateInstructions, sharedInstructions],
     )
 
     const runInstructionsGroup = useMemo(() => {
@@ -160,7 +161,7 @@ export const assistFieldActions: DocumentFieldAction = {
             icon: () => null,
             title: 'Run instructions',
             children: [
-              ...instructions?.map((instruction) =>
+              ...(instructions?.map((instruction) =>
                 instructionItem({
                   instruction,
                   isPrivate: Boolean(instruction.userId && instruction.userId === currentUser?.id),
@@ -168,8 +169,8 @@ export const assistFieldActions: DocumentFieldAction = {
                   hidden: isHidden,
                   documentIsNew: !!documentIsNew,
                   assistSupported,
-                })
-              ),
+                }),
+              ) || []),
               imageCaptionAction,
               imageGenAction,
             ].filter((a): a is DocumentFieldActionItem => !!a),
@@ -199,7 +200,7 @@ export const assistFieldActions: DocumentFieldAction = {
           onAction: manageInstructions,
           selected: isSelected,
         }),
-      [manageInstructions, isSelected]
+      [manageInstructions, isSelected],
     )
 
     const group = useMemo(
@@ -227,7 +228,7 @@ export const assistFieldActions: DocumentFieldAction = {
         imageCaptionAction,
         translateAction,
         imageGenAction,
-      ]
+      ],
     )
 
     const emptyAction = useMemo(
@@ -241,7 +242,7 @@ export const assistFieldActions: DocumentFieldAction = {
           title: pluginTitleShort,
           selected: isSelected,
         }),
-      [assistSupported, manageInstructions, isSelected]
+      [assistSupported, manageInstructions, isSelected],
     )
 
     // If there are no instructions, we don't want to render the group

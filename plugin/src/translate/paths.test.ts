@@ -1,9 +1,16 @@
-import {describe, expect, test} from 'vitest'
 import {Schema} from '@sanity/schema'
-import {defineType, ObjectSchemaType, pathToString, SanityDocumentLike, typed} from 'sanity'
+import {
+  defineType,
+  type ObjectSchemaType,
+  pathToString,
+  type SanityDocumentLike,
+  typed,
+} from 'sanity'
+import {describe, expect, test} from 'vitest'
+
 import {
   defaultLanguageOutputs,
-  FieldLanguageMap,
+  type FieldLanguageMap,
   getDocumentMembersFlat,
   getFieldLanguageMap,
 } from './paths'
@@ -82,7 +89,7 @@ describe('paths', () => {
           inputPath: ['translations', {_key: 'en'}],
           outputs: [{id: 'nb', outputPath: ['translations', {_key: 'nb'}]}],
         },
-      ])
+      ]),
     )
   })
 

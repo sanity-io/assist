@@ -1,8 +1,9 @@
 import {useMemo} from 'react'
-import {FormNodePresence, isKeySegment, Path, stringToPath} from 'sanity'
+import {type FormNodePresence, isKeySegment, type Path, stringToPath} from 'sanity'
+
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
-import {AiPresence} from '../types'
 import {maxHistoryVisibilityMs, pluginTitle} from '../constants'
+import type {AiPresence} from '../types'
 
 const NO_PRESENCE: FormNodePresence[] = []
 
@@ -17,7 +18,8 @@ export function useAssistPresence(path: Path, showFocusWithin?: boolean): FormNo
       ?.flatMap((task) => task.presence ?? [])
       ?.filter(
         (p) =>
-          p.started && new Date().getTime() - new Date(p.started).getTime() < maxHistoryVisibilityMs
+          p.started &&
+          new Date().getTime() - new Date(p.started).getTime() < maxHistoryVisibilityMs,
       )
       .filter((presence) => {
         if (!presence.path || !path.length) {
@@ -48,6 +50,7 @@ export function useAssistPresence(path: Path, showFocusWithin?: boolean): FormNo
   }, [showFocusWithin, tasks, path])
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function aiPresence(presence: AiPresence, path: Path, title?: string): FormNodePresence {
   return {
     user: {

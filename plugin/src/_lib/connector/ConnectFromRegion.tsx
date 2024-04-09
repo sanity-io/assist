@@ -1,10 +1,11 @@
 import {HTMLProps, useEffect, useState} from 'react'
-import {useConnectorsStore} from './useConnectorsStore'
-import {ConnectorRegionRects} from './types'
+
 import {ConnectorRegion} from './ConnectorRegion'
+import {ConnectorRegionRects} from './types'
+import {useConnectorsStore} from './useConnectorsStore'
 
 export function ConnectFromRegion(
-  props: {_key: string; zIndex: number} & HTMLProps<HTMLDivElement>
+  props: {_key: string; zIndex: number} & HTMLProps<HTMLDivElement>,
 ) {
   const {children, _key: key, zIndex, ...restProps} = props
   const store = useConnectorsStore()

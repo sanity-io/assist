@@ -1,27 +1,34 @@
+import {PlayIcon} from '@sanity/icons'
+import {Box, Button, Checkbox, Dialog, Flex, Radio, Spinner, Stack, Text, Tooltip} from '@sanity/ui'
 import {
   createContext,
-  PropsWithChildren,
+  type PropsWithChildren,
   useCallback,
   useContext,
   useId,
   useMemo,
   useState,
 } from 'react'
-import {ObjectSchemaType, Path, pathToString, SanityDocumentLike, useClient} from 'sanity'
+import {
+  type ObjectSchemaType,
+  type Path,
+  pathToString,
+  type SanityDocumentLike,
+  useClient,
+} from 'sanity'
+
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
+import type {ConditionalMemberState} from '../helpers/conditionalMembers'
 import {useApiClient, useTranslate} from '../useApiClient'
-import {Box, Button, Checkbox, Dialog, Flex, Radio, Spinner, Stack, Text, Tooltip} from '@sanity/ui'
+import {getLanguageParams} from './getLanguageParams'
+import {getPreferredToFieldLanguages, setPreferredToFieldLanguages} from './languageStore'
 import {
   defaultLanguageOutputs,
-  FieldLanguageMap,
+  type FieldLanguageMap,
   getDocumentMembersFlat,
   getFieldLanguageMap,
 } from './paths'
-import {PlayIcon} from '@sanity/icons'
-import {Language} from './types'
-import {getLanguageParams} from './getLanguageParams'
-import {getPreferredToFieldLanguages, setPreferredToFieldLanguages} from './languageStore'
-import {ConditionalMemberState} from '../helpers/conditionalMembers'
+import type {Language} from './types'
 
 interface FieldTranslationParams {
   document: SanityDocumentLike
@@ -47,16 +54,17 @@ export function useFieldTranslation() {
 function hasValuesToTranslate(
   fieldLanguageMaps: FieldLanguageMap[] | undefined,
   fromLanguage: Language | undefined,
-  basePath: Path
+  basePath: Path,
 ) {
   return fieldLanguageMaps?.some(
     (map) =>
       map.inputLanguageId === fromLanguage?.id &&
       map.inputPath &&
-      pathToString(map.inputPath).startsWith(pathToString(basePath))
+      pathToString(map.inputPath).startsWith(pathToString(basePath)),
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
   const {config: assistConfig} = useAiAssistanceConfig()
   const apiClient = useApiClient(assistConfig.__customApiClient)
@@ -86,7 +94,7 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
     (
       from: Language,
       languages: Language[] | undefined,
-      params: FieldTranslationParams | undefined
+      params: FieldTranslationParams | undefined,
     ) => {
       const {document, documentSchema} = params ?? {}
       setFromLanguage(from)
@@ -98,7 +106,7 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
       const preferred = getPreferredToFieldLanguages(from.id)
       const allToLanguages = languages.filter((l) => l.id !== from?.id)
       const filteredToLanguages = allToLanguages.filter(
-        (l) => !preferred.length || preferred.includes(l.id)
+        (l) => !preferred.length || preferred.includes(l.id),
       )
 
       setToLanguages(filteredToLanguages)
@@ -111,21 +119,21 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
           docMembers,
           fromId,
           allToIds.filter((toId) => fromId !== toId),
-          config?.translationOutputs ?? defaultLanguageOutputs
+          config?.translationOutputs ?? defaultLanguageOutputs,
         )
         setFieldLanguageMaps(transMap)
       } else {
         setFieldLanguageMaps(undefined)
       }
     },
-    [config]
+    [config],
   )
 
   const toggleToLanguage = useCallback(
     (
       toggledLang: Language,
       toLanguages: Language[] | undefined,
-      languages: Language[] | undefined
+      languages: Language[] | undefined,
     ) => {
       if (!languages || !fromLanguage) {
         return
@@ -134,17 +142,17 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
       const newToLangs = languages.filter(
         (anyLang) =>
           !!toLanguages?.find(
-            (selectedLang) => toggledLang.id !== selectedLang.id && selectedLang.id === anyLang.id
+            (selectedLang) => toggledLang.id !== selectedLang.id && selectedLang.id === anyLang.id,
           ) ||
-          (toggledLang.id === anyLang.id && !wasSelected)
+          (toggledLang.id === anyLang.id && !wasSelected),
       )
       setToLanguages(newToLangs)
       setPreferredToFieldLanguages(
         fromLanguage.id,
-        newToLangs.map((l) => l.id)
+        newToLangs.map((l) => l.id),
       )
     },
-    [fromLanguage]
+    [fromLanguage],
   )
 
   const openFieldTranslation = useCallback(
@@ -163,7 +171,7 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
         console.error('No languages available for selected language params', languageParams)
       }
     },
-    [selectFromLanguage, config, languageClient]
+    [selectFromLanguage, config, languageClient],
   )
 
   const contextValue: FieldTranslationContextValue = useMemo(() => {
@@ -298,7 +306,7 @@ function ToLanguageCheckbox(props: {
   toggleToLanguage: (
     toggledLang: Language,
     toLanguages: Language[] | undefined,
-    languages: Language[] | undefined
+    languages: Language[] | undefined,
   ) => void
   languages: Language[]
 }) {
@@ -306,7 +314,7 @@ function ToLanguageCheckbox(props: {
   const langId = checkboxLanguage.id
   const onChange = useCallback(
     () => toggleToLanguage(checkboxLanguage, toLanguages, languages),
-    [toggleToLanguage, checkboxLanguage, toLanguages, languages]
+    [toggleToLanguage, checkboxLanguage, toLanguages, languages],
   )
   return (
     <Flex
@@ -334,7 +342,7 @@ function FromLanguageRadio(props: {
   selectFromLanguage: (
     from: Language,
     languages: Language[] | undefined,
-    params: FieldTranslationParams | undefined
+    params: FieldTranslationParams | undefined,
   ) => void
   languages: Language[] | undefined
   fieldTranslationParams: FieldTranslationParams | undefined
@@ -344,7 +352,7 @@ function FromLanguageRadio(props: {
 
   const onChange = useCallback(
     () => selectFromLanguage(radioLanguage, languages, fieldTranslationParams),
-    [selectFromLanguage, radioLanguage, languages, fieldTranslationParams]
+    [selectFromLanguage, radioLanguage, languages, fieldTranslationParams],
   )
   return (
     <Flex key={langId} gap={3} align="center" as={'label'}>

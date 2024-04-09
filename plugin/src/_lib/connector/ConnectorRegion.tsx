@@ -1,11 +1,12 @@
 import {HTMLProps, useEffect} from 'react'
+
 import {ConnectorRegionRects} from './types'
 import {useRegionRects} from './useRegionRects'
 
 export function ConnectorRegion(
   props: {
     onRectsChange?: (rects: ConnectorRegionRects | null) => void
-  } & HTMLProps<HTMLDivElement>
+  } & HTMLProps<HTMLDivElement>,
 ) {
   const {children, onRectsChange, ...restProps} = props
 

@@ -1,8 +1,9 @@
-import {InputProps, isArraySchemaType, PatchEvent, unset} from 'sanity'
-import {ErrorInfo, PropsWithChildren, useCallback, useMemo, useState} from 'react'
 import {Box, Button, Card, ErrorBoundary, Flex, Stack, Text} from '@sanity/ui'
-import {isPortableTextArray} from '../helpers/typeUtils'
+import {ErrorInfo, PropsWithChildren, useCallback, useMemo, useState} from 'react'
+import {InputProps, isArraySchemaType, PatchEvent, unset} from 'sanity'
 import styled from 'styled-components'
+
+import {isPortableTextArray} from '../helpers/typeUtils'
 
 const WrapPreCard = styled(Card)`
   & pre {
@@ -19,7 +20,7 @@ export function SafeValueInput(props: InputProps) {
 }
 
 export function ErrorWrapper(
-  props: PropsWithChildren<{onChange: (patchEvent: PatchEvent) => void}>
+  props: PropsWithChildren<{onChange: (patchEvent: PatchEvent) => void}>,
 ) {
   const {onChange} = props
   const [error, setError] = useState<Error | undefined>()
@@ -28,7 +29,7 @@ export function ErrorWrapper(
     (params: {error: Error; info: ErrorInfo}) => {
       setError(params.error)
     },
-    [setError]
+    [setError],
   )
 
   const unsetValue = useCallback(() => {
@@ -65,7 +66,7 @@ export function ErrorWrapper(
 function PteValueFixer(props: InputProps) {
   const isPortableText = useMemo(
     () => isArraySchemaType(props.schemaType) && isPortableTextArray(props.schemaType),
-    [props.schemaType]
+    [props.schemaType],
   )
   const value = props.value
   if (isPortableText && value && !(value as any[]).length) {
