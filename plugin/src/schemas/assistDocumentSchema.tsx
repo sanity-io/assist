@@ -418,7 +418,7 @@ export const assistDocumentSchema = defineType({
 
   components: {
     input: AssistDocumentForm,
-    field: (props) => {
+    field: (props: any) => {
       return props.renderDefault({...props, title: ''})
     },
   },

@@ -1,8 +1,9 @@
 import {defineConfig, isKeySegment} from 'sanity'
-import {deskTool} from 'sanity/desk'
+import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemas'
 import {codeInput} from '@sanity/code-input'
+
 import {apiHost, dataset, pluginApiHost, projectId} from './env'
 import {assist} from '../plugin/src'
 import {embeddingsIndexDashboard} from '@sanity/embeddings-index-ui'
@@ -22,7 +23,7 @@ export default defineConfig({
   apiHost,
 
   plugins: [
-    deskTool(),
+    structureTool(),
     visionTool(),
     codeInput(),
     assist({
