@@ -1,7 +1,7 @@
 import {ArrowLeftIcon} from '@sanity/icons'
 import {Button} from '@sanity/ui'
 import {useCallback} from 'react'
-import {useDocumentPane} from 'sanity/desk'
+import {useDocumentPane} from 'sanity/structure'
 
 import {aiInspectorId} from '../../../assistInspector/constants'
 import {instructionParam} from '../../../types'

@@ -8,24 +8,24 @@ import {
   StringIcon,
 } from '@sanity/icons'
 import {extractWithPath} from '@sanity/mutator'
-import {ComponentType, useContext, useMemo} from 'react'
+import {type ComponentType, useContext, useMemo} from 'react'
 import {
-  ArraySchemaType,
+  type ArraySchemaType,
   isKeySegment,
   isObjectSchemaType,
-  ObjectSchemaType,
-  Path,
+  type ObjectSchemaType,
+  type Path,
   pathToString,
-  SanityDocumentLike,
-  SchemaType,
+  type SanityDocumentLike,
+  type SchemaType,
   stringToPath,
 } from 'sanity'
-import {type PaneRouterContextValue, usePaneRouter} from 'sanity/desk'
+import {type PaneRouterContextValue, usePaneRouter} from 'sanity/structure'
 
 import {SelectedFieldContext} from '../assistDocument/components/SelectedFieldContext'
 import {isAssistSupported} from '../helpers/assistSupported'
 import {isPortableTextArray, isType} from '../helpers/typeUtils'
-import {AssistInspectorRouteParams, documentRootKey, fieldPathParam} from '../types'
+import {type AssistInspectorRouteParams, documentRootKey, fieldPathParam} from '../types'
 
 export interface FieldRef {
   key: string

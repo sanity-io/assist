@@ -17,17 +17,13 @@
   },
   "license": "MIT",
   "author": "Sanity <hello@sanity.io>",
+  "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "source": "./src/index.ts",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.js",
-      "node": {
-        "module": "./dist/index.esm.js",
-        "import": "./dist/index.cjs.mjs"
-      },
-      "import": "./dist/index.esm.js",
-      "default": "./dist/index.esm.js"
+      "default": "./dist/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -42,7 +38,7 @@
     "v2-incompatible.js"
   ],
   "scripts": {
-    "build": "run-s clean && plugin-kit verify-package --silent && pkg-utils build --strict && pkg-utils --strict",
+    "build": "run-s clean && pkg-utils build --strict && pkg-utils --strict",
     "clean": "rimraf dist",
     "format": "prettier --write --cache --ignore-unknown .",
     "link-watch": "plugin-kit link-watch",
@@ -54,27 +50,26 @@
     "release": "semantic-release"
   },
   "dependencies": {
-    "@sanity/icons": "^2.8.0",
+    "@sanity/icons": "^2.11.7",
     "@sanity/incompatible-plugin": "^1.0.4",
-    "@sanity/ui": "^2.0.2",
-    "date-fns": "^2.30.0",
-    "lodash.get": "^4.4.2",
-    "react-fast-compare": "^3.2.1",
-    "react-is": "^18.2.0",
-    "rxjs": "^7.8.0",
+    "@sanity/ui": "^2.1.0",
+    "date-fns": "^3.6.0",
+    "lodash": "^4.17.21",
+    "react-fast-compare": "^3.2.2",
+    "rxjs": "^7.8.1",
     "rxjs-exhaustmap-with-trailing": "^2.1.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.2.1",
     "@commitlint/config-conventional": "^19.1.0",
     "@rollup/plugin-image": "^3.0.3",
-    "@sanity/pkg-utils": "^2.4.10",
+    "@sanity/pkg-utils": "^6.1.0",
     "@sanity/plugin-kit": "^3.1.10",
     "@sanity/semantic-release-preset": "^4.1.7",
+    "@types/lodash": "^4.17.0",
     "@types/react": "^18.2.75",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
     "@typescript-eslint/parser": "^7.6.0",
-    "date-fns": "^2.30.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-sanity": "^7.1.2",
@@ -92,9 +87,10 @@
     "vitest": "^1.4.0"
   },
   "peerDependencies": {
+    "@sanity/mutator": "^3.36.4",
     "react": "^18",
-    "sanity": "^3.26",
-    "styled-components": "^5.2 || ^6.0.0"
+    "sanity": "^3.36.4",
+    "styled-components": "^6.1"
   },
   "engines": {
     "node": ">=14"

@@ -8,7 +8,7 @@ import {
   typed,
   useCurrentUser,
 } from 'sanity'
-import {useDocumentPane} from 'sanity/desk'
+import {useDocumentPane} from 'sanity/structure'
 
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {getIcon} from '../assistDocument/components/instruction/appearance/IconInput'

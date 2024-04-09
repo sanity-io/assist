@@ -1,7 +1,7 @@
-import {Box, ButtonTone, Flex, MenuItem, Stack, Text} from '@sanity/ui'
+import {Box, type ButtonTone, Flex, MenuItem, Stack, Text} from '@sanity/ui'
 import {useCallback} from 'react'
-import {Path, ValidationMarker} from 'sanity'
-import styled from 'styled-components'
+import type {Path, ValidationMarker} from 'sanity'
+import {styled} from 'styled-components'
 
 interface ValidationListItemProps {
   marker: ValidationMarker

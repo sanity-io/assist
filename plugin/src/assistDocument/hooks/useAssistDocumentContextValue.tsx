@@ -1,10 +1,10 @@
 import {useMemo} from 'react'
-import {getPublishedId, ObjectSchemaType, useEditState} from 'sanity'
-import {useDocumentPane} from 'sanity/desk'
+import {getPublishedId, type ObjectSchemaType, useEditState} from 'sanity'
+import {useDocumentPane} from 'sanity/structure'
 
 import {useAiPaneRouter} from '../../assistInspector/helpers'
 import {fieldPathParam} from '../../types'
-import {AssistDocumentContextValue} from '../AssistDocumentContext'
+import type {AssistDocumentContextValue} from '../AssistDocumentContext'
 import {isDocAssistable} from '../RequestRunInstructionProvider'
 import {useStudioAssistDocument} from './useStudioAssistDocument'
 

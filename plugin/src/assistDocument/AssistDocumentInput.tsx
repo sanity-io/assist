@@ -1,7 +1,7 @@
 import {useLayer} from '@sanity/ui'
 import {useMemo} from 'react'
-import {InputProps, ObjectInputProps, ObjectSchemaType} from 'sanity'
-import {useDocumentPane} from 'sanity/desk'
+import type {InputProps, ObjectInputProps, ObjectSchemaType} from 'sanity'
+import {useDocumentPane} from 'sanity/structure'
 
 import {ConnectFromRegion} from '../_lib/connector'
 import {assistFormId} from '../_lib/form/constants'

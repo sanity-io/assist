@@ -1,5 +1,5 @@
-import {forwardRef, ReactElement, ReactNode} from 'react'
-import styled, {keyframes} from 'styled-components'
+import {forwardRef, type ReactElement, type ReactNode} from 'react'
+import {keyframes, styled} from 'styled-components'
 
 const fadeIn = keyframes`
   0% {

@@ -9,7 +9,7 @@ import type {
   DocumentFieldActionProps,
   ObjectSchemaType,
 } from 'sanity'
-import {useDocumentPane} from 'sanity/desk'
+import {useDocumentPane} from 'sanity/structure'
 
 import {useDraftDelayedTask} from '../assistDocument/RequestRunInstructionProvider'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
