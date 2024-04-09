@@ -5,6 +5,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/sanity-io/assist/compare/v3.0.0...v3.0.1) (2024-04-09)
+
+### Bug Fixes
+
+- `formatDistanceToNow` has moved ([81b77ce](https://github.com/sanity-io/assist/commit/81b77ce1fe5a1e7ce713eec8b0f4be54f002dc9b))
+- **deps:** Update dependency @sanity/document-internationalization to v3 ([#42](https://github.com/sanity-io/assist/issues/42)) ([9ad8bd8](https://github.com/sanity-io/assist/commit/9ad8bd80c38a32b334e81cb97ad14d72d0a65212))
+
 ## [3.0.0](https://github.com/sanity-io/assist/compare/v2.0.5...v3.0.0) (2024-04-09)
 
 ### ⚠ BREAKING CHANGES
