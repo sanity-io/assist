@@ -5,6 +5,16 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/sanity-io/assist/compare/v2.0.5...v3.0.0) (2024-04-09)
+
+### ⚠ BREAKING CHANGES
+
+- add strict ESM support (#40)
+
+### Features
+
+- add strict ESM support ([#40](https://github.com/sanity-io/assist/issues/40)) ([cb427da](https://github.com/sanity-io/assist/commit/cb427da15eb6386cc45d692ce0d72c1112aae49e))
+
 ## [2.0.5](https://github.com/sanity-io/assist/compare/v2.0.4...v2.0.5) (2024-04-09)
 
 ### Bug Fixes
