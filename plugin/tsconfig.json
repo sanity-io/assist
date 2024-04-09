@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.settings",
-  "include": ["./src", "./assets", "./package.config.ts"],
+  "include": ["./src", "./assets", "./package.config.ts", "vite.config.ts"],
   "compilerOptions": {
     "rootDir": ".",
     "noEmit": true
