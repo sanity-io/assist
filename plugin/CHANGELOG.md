@@ -5,6 +5,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2](https://github.com/sanity-io/assist/compare/v3.0.1...v3.0.2) (2024-04-10)
+
+### Bug Fixes
+
+- **deps:** Update non-major ([#41](https://github.com/sanity-io/assist/issues/41)) ([2b35690](https://github.com/sanity-io/assist/commit/2b356908d327a594ce867ed1b28c6feff90df93f))
+- use `lodash-es` in ESM bundles ([336134a](https://github.com/sanity-io/assist/commit/336134a33a7240205a289436df113ed5e0c25aec))
+
 ## [3.0.1](https://github.com/sanity-io/assist/compare/v3.0.0...v3.0.1) (2024-04-09)
 
 ### Bug Fixes
