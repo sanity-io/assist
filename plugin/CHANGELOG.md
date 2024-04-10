@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.3](https://github.com/sanity-io/assist/compare/v3.0.2...v3.0.3) (2024-04-10)
+
+### Bug Fixes
+
+- **deps:** Update non-major ([#44](https://github.com/sanity-io/assist/issues/44)) ([2ce1eae](https://github.com/sanity-io/assist/commit/2ce1eae7dd7879317ceaaa97c2e4416063a2dccf))
+
 ## [3.0.2](https://github.com/sanity-io/assist/compare/v3.0.1...v3.0.2) (2024-04-10)
 
 ### Bug Fixes
