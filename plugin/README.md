@@ -11,6 +11,7 @@
   - [Add the plugin](#add-the-plugin)
   - [Enabling the AI Assist API](#enabling-the-ai-assist-api)
   - [Permissions](#permissions)
+  - [Conditional user access](#conditional-user-access)
 - [Schema configuration](#schema-configuration)
   - [Disable AI Assist for a schema type](#disable-ai-assist-for-a-schema-type)
   - [Disable for a field](#disable-for-a-field)
@@ -112,6 +113,45 @@ To edit instructions, users will need read and write access to documents of `_ty
 
 Note that instructions run using the permissions of the user invoking it, so only fields that the user
 themselves can edit can be changed by the instruction instance.
+
+### Conditional user access
+To limit which users can see the AI Assist actions in the Studio, use a custom-plugin after `assist()`
+that filters out the inspector and actions, based on user properties:
+
+```ts
+import {CurrentUser, defineConfig} from 'sanity'
+import {assist} from '@sanity/assist'
+
+export default defineConfig({
+  // ...
+
+  plugins: [
+    // ...
+    assist(),
+    {
+      name: 'disable-ai-assist',
+      document: {
+        inspectors: (prev, {currentUser}) =>
+          isAiAssistAllowed(currentUser)
+            ? prev
+            : prev.filter((inspector) => inspector.name !== 'ai-assistance'),
+
+        unstable_fieldActions: (prev, {currentUser}) =>
+          isAiAssistAllowed(currentUser)
+            ? prev
+            : prev.filter((fieldActions) => fieldActions.name !== 'sanity-assist-actions'),
+      },
+    },
+  ],
+
+})
+
+const ALLOWED_ROLES = ['administrator']
+
+function isAiAssistAllowed(user?: CurrentUser | null) {
+  return user && user.roles.some((role) => ALLOWED_ROLES.includes(role.name))
+}
+```
 
 ## Schema configuration
 
