@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.4](https://github.com/sanity-io/assist/compare/v3.0.3...v3.0.4) (2024-05-07)
+
+### Bug Fixes
+
+- **docs:** added snipped about conditional user access ([62b1404](https://github.com/sanity-io/assist/commit/62b1404fe17dcaf9bb6d7e17d0b838fb25b7439e))
+
 ## [3.0.3](https://github.com/sanity-io/assist/compare/v3.0.2...v3.0.3) (2024-04-10)
 
 ### Bug Fixes
