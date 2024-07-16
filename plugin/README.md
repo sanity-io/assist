@@ -59,7 +59,7 @@ This plugin requires `sanity` version `3.26` or greater.
 
 ## Setup
 
-> **Note:** AI Assist is currently available for all projects on the Growth plan and up.
+> **Note:** AI Assist is available for all projects on the Growth plan and up.
 
 ### Add the plugin
 
