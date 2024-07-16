@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.5](https://github.com/sanity-io/assist/compare/v3.0.4...v3.0.5) (2024-07-16)
+
+### Bug Fixes
+
+- **docs:** corrects messaging on plan availability (growth and up) ([c3e2ce7](https://github.com/sanity-io/assist/commit/c3e2ce7879251359255fb633a3388142d7c08ab4))
+
 ## [3.0.4](https://github.com/sanity-io/assist/compare/v3.0.3...v3.0.4) (2024-05-07)
 
 ### Bug Fixes
