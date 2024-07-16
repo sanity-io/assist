@@ -59,9 +59,7 @@ This plugin requires `sanity` version `3.26` or greater.
 
 ## Setup
 
-> **Note:** Before using the plugin, your project must have Sanity AI Assist enabled at the API level.
->
-> Contact your Sanity enterprise representative to get started, or [contact the sales team](https://www.sanity.io/contact/sales?utm_source=github.com&utm_medium=organic_social&utm_campaign=ai-assist&utm_content=).
+> **Note:** AI Assist currently available for all projects on the Growth plan and up.
 
 ### Add the plugin
 
