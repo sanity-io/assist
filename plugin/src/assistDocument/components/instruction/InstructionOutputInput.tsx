@@ -168,7 +168,7 @@ function ArrayOutputInput({
           <Flex key={itemType.name}>
             <Selectable
               value={itemType.name}
-              title={isType(itemType, 'block') ? 'Text' : itemType.title ?? itemType.name}
+              title={isType(itemType, 'block') ? 'Text' : (itemType.title ?? itemType.name)}
               arrayValue={value as OutputTypeItem[] | undefined}
               onChange={onSelectChange}
             />

@@ -89,7 +89,7 @@ function getBaseFields(
     options: Object.keys(schemaOptions).length ? schemaOptions : undefined,
     values: Array.isArray(type?.options?.list)
       ? type?.options?.list.map((v: string | {value: string; title: string}) =>
-          typeof v === 'string' ? v : v.value ?? `${v.title}`,
+          typeof v === 'string' ? v : (v.value ?? `${v.title}`),
         )
       : undefined,
     of: 'of' in type && typeName === 'array' ? arrayOf(type, schema, options) : undefined,
@@ -156,7 +156,7 @@ function serializeMember(
   options: Options | undefined,
 ): SerializedSchemaMember {
   const typeNameExists = !!schema.get(type?.name)
-  const typeName = typeNameExists ? type.name : type.type?.name ?? ''
+  const typeName = typeNameExists ? type.name : (type.type?.name ?? '')
   return removeUndef({
     ...(options?.leanFormat ? {} : {_type: assistSerializedFieldTypeName}),
     name: name,

@@ -8,7 +8,7 @@ export function InstructionVisibility(props: StringInputProps) {
   const user = useCurrentUser()
 
   const handleChange = useCallback(() => {
-    const newValue = value ? '' : user?.id ?? ''
+    const newValue = value ? '' : (user?.id ?? '')
     onChange(newValue ? set(newValue) : unset())
   }, [onChange, user, value])
 

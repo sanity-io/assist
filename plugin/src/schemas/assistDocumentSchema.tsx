@@ -170,7 +170,7 @@ export const promptContext = defineType({
     },
     prepare(select) {
       return select.ref
-        ? contextDocumentSchema?.preview?.prepare?.(select) ?? select
+        ? (contextDocumentSchema?.preview?.prepare?.(select) ?? select)
         : {title: 'No reference selected', media: contextDocumentSchema.icon}
     },
   },
