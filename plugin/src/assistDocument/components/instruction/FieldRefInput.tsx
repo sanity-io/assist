@@ -4,12 +4,12 @@ import {set, StringInputProps} from 'sanity'
 
 import {FieldAutocomplete} from '../../../assistInspector/FieldAutocomplete'
 import {FieldRef} from '../../../assistInspector/helpers'
-import {TypePathContext} from '../AssistDocumentForm'
 import {SelectedFieldContext} from '../SelectedFieldContext'
+import {AssistTypeContext} from '../AssistTypeContext'
 
 export function FieldRefPathInput(props: StringInputProps) {
   const documentSchema = useContext(SelectedFieldContext)?.documentSchema
-  const typePath = useContext(TypePathContext)
+  const {typePath} = useContext(AssistTypeContext)
   const ref = useRef<HTMLDivElement>(null)
   const id = useId()
   const {onChange} = props

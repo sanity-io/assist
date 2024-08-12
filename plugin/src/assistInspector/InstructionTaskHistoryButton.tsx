@@ -112,7 +112,7 @@ export function InstructionTaskHistoryButton(props: InstructionTaskHistoryButton
           const instruction = instructions?.find((i) => i._key === task.instructionKey)
           return {
             ...task,
-            title: showTitles ? task.title ?? getInstructionTitle(instruction) : undefined,
+            title: showTitles ? (task.title ?? getInstructionTitle(instruction)) : undefined,
             cancel: () => cancelRun(task._key),
           }
         }) ?? []
@@ -187,6 +187,7 @@ const TaskStatusButton = forwardRef(function TaskStatusButton(
   return (
     <StatusButton
       label={`${pluginTitle} status`}
+      aria-label={`${pluginTitle} status`}
       icon={isRunning ? SyncSpinningIcon : hasErrors ? ErrorOutlineIcon : CheckmarkCircleIcon}
       mode="bleed"
       onClick={onClick}

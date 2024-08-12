@@ -13,6 +13,8 @@ import {languageFilter} from '@sanity/language-filter'
 import {internationalizedArray} from 'sanity-plugin-internationalized-array'
 import {featureProduct, languageArticle} from './schemas/languageArticle'
 import {mockArticle} from './schemas/mockArticle'
+import {brokenTypeName} from './schemas/brokenTypeName'
+import {CloseIcon} from '@sanity/icons'
 
 export default defineConfig({
   name: 'default',
@@ -23,7 +25,31 @@ export default defineConfig({
   apiHost,
 
   plugins: [
-    structureTool(),
+    structureTool({
+      structure: (S) => {
+        return S.list({
+          id: 'root',
+          title: 'Document types',
+          items: S.documentTypeListItems().map((item) => {
+            // some Studios use type names that will otherwise crash the structure tool, by assigning a custom id to them (without illegal chars)
+            // we include one such type here, for testing
+            if (item.getId() === brokenTypeName.name) {
+              return S.listItem({
+                id: 'fixed-type',
+                icon: CloseIcon,
+                title: 'Renamed type name',
+                //@ts-expect-error this works but gives errors, broken typings?
+                child: S.documentTypeList({
+                  schemaType: brokenTypeName.name,
+                  id: 'broken_type',
+                }),
+              })
+            }
+            return item
+          }),
+        })
+      },
+    }),
     visionTool(),
     codeInput(),
     assist({
