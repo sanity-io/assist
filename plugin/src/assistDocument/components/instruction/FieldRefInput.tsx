@@ -4,8 +4,8 @@ import {set, StringInputProps} from 'sanity'
 
 import {FieldAutocomplete} from '../../../assistInspector/FieldAutocomplete'
 import {FieldRef} from '../../../assistInspector/helpers'
-import {SelectedFieldContext} from '../SelectedFieldContext'
 import {AssistTypeContext} from '../AssistTypeContext'
+import {SelectedFieldContext} from '../SelectedFieldContext'
 
 export function FieldRefPathInput(props: StringInputProps) {
   const documentSchema = useContext(SelectedFieldContext)?.documentSchema
