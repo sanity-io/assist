@@ -1,5 +1,5 @@
 import {Card, Stack, Text} from '@sanity/ui'
-import {createContext, useContext, useEffect, useMemo, useRef} from 'react'
+import {useContext, useEffect, useMemo, useRef} from 'react'
 import {
   FormCallbacksProvider,
   FormCallbacksValue,
@@ -21,7 +21,6 @@ import {
 
 import {useAiPaneRouter} from '../../assistInspector/helpers'
 import {useAiAssistanceConfig} from '../../assistLayout/AiAssistanceConfigContext'
-import {documentTypeFromAiDocumentId} from '../../helpers/ids'
 import {
   AssistDocument,
   AssistField,
@@ -32,12 +31,11 @@ import {
   instructionParam,
   StudioInstruction,
 } from '../../types'
+import {AssistTypeContext} from './AssistTypeContext'
 import {BackToInstructionListLink} from './instruction/BackToInstructionsLink'
 import {SelectedFieldContextProvider, SelectedFieldContextValue} from './SelectedFieldContext'
 
 const EMPTY_FIELDS: AssistField[] = []
-
-export const TypePathContext = createContext<string | undefined>(undefined)
 
 export function AssistDocumentForm(props: ObjectInputProps) {
   if (props.readOnly) {
@@ -55,16 +53,9 @@ function AssistDocumentFormEditable(props: ObjectInputProps) {
   const id = value?._id
   const fields = value?.fields
 
-  const targetDocumentType = useMemo(() => {
-    if (!id) {
-      return undefined
-    }
-    return documentTypeFromAiDocumentId(id)
-  }, [id])
-
   const {params, setParams} = useAiPaneRouter()
   const pathKey = params[fieldPathParam]
-  const typePath = useContext(TypePathContext)
+  const {typePath, documentType: targetDocumentType} = useContext(AssistTypeContext)
   const instruction = params[instructionParam]
 
   const activeKey = useMemo(() => {

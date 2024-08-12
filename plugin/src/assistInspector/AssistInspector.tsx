@@ -16,7 +16,7 @@ import {
 import {styled} from 'styled-components'
 
 import {DocumentForm} from '../_lib/form'
-import {TypePathContext} from '../assistDocument/components/AssistDocumentForm'
+import {AssistTypeContext} from '../assistDocument/components/AssistTypeContext'
 import {useStudioAssistDocument} from '../assistDocument/hooks/useStudioAssistDocument'
 import {
   getAssistableDocId,
@@ -290,6 +290,8 @@ export function AssistInspector(props: DocumentInspectorProps) {
     return <div {..._props} style={{height: '100%', flex: 1, overflow: 'auto'}} />
   }, [])
 
+  const assistTypeContext = useMemo(() => ({typePath, documentType}), [typePath, documentType])
+
   if (!documentId || !schemaType || schemaType.jsonType !== 'object') {
     return (
       <Card flex={1} padding={4}>
@@ -319,7 +321,7 @@ export function AssistInspector(props: DocumentInspectorProps) {
             <PresenceOverlay>
               <Box padding={4}>
                 {selectedField && (
-                  <TypePathContext.Provider value={typePath}>
+                  <AssistTypeContext.Provider value={assistTypeContext}>
                     <VirtualizerScrollInstanceProvider
                       scrollElement={boundary.current}
                       containerElement={boundary}
@@ -333,7 +335,7 @@ export function AssistInspector(props: DocumentInspectorProps) {
                         <DocumentForm />
                       </DocumentPaneProvider>
                     </VirtualizerScrollInstanceProvider>
-                  </TypePathContext.Provider>
+                  </AssistTypeContext.Provider>
                 )}
               </Box>
             </PresenceOverlay>
