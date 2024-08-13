@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.6](https://github.com/sanity-io/assist/compare/v3.0.5...v3.0.6) (2024-08-13)
+
+### Bug Fixes
+
+- adds support for document types named using \_id incompatible characters ([6d5ee68](https://github.com/sanity-io/assist/commit/6d5ee682b292cd168a0fc249ef7d43a67934f952))
+
 ## [3.0.5](https://github.com/sanity-io/assist/compare/v3.0.4...v3.0.5) (2024-07-16)
 
 ### Bug Fixes
