@@ -42,7 +42,7 @@ export function getConditionalMembers(docState: DocumentFormNode): ConditionalMe
     path: '',
     hidden: false,
     readOnly: !!docState.readOnly,
-    conditional: typeof docState.schemaType.hidden === 'function',
+    conditional: isConditional(docState.schemaType),
   }
   return (
     [doc, ...extractConditionalPaths(docState, MAX_DEPTH)]

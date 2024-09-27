@@ -59,6 +59,34 @@ describe('conditionalMembers', () => {
     expect(conditionalMembers).toEqual([{path: 'title', hidden: false, readOnly: false}])
   })
 
+  test('regression test: should include document path with conditional readonly and no hidden', () => {
+    const docSchema: ObjectSchemaType = Schema.compile({
+      name: 'test',
+      types: [
+        defineType({
+          type: 'document',
+          name: 'article',
+          readOnly: () => false,
+          fields: [{type: 'string', name: 'title'}],
+        }),
+      ],
+    }).get('article')
+
+    const docState = {
+      path: [],
+      schemaType: docSchema,
+      members: [
+        {
+          kind: 'field',
+          field: {path: [docSchema.fields[0].name], schemaType: docSchema.fields[0].type},
+        },
+      ],
+    } as any
+    const conditionalMembers = getConditionalMembers(docState)
+
+    expect(conditionalMembers).toEqual([{path: '', hidden: false, readOnly: false}])
+  })
+
   test('should include array item path with conditional readonly', () => {
     const docSchema: ObjectSchemaType = Schema.compile({
       name: 'test',

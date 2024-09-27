@@ -58,7 +58,6 @@ export default defineConfig({
           documentTypes: [languageArticle.name],
           selectLanguageParams: {language: 'localePte.en', x: 'localePte'},
           languages: (client, params) => {
-            console.log(params)
             return new Promise((resolve) => {
               setTimeout(() => resolve(languages), 500)
             })
