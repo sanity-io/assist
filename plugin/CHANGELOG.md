@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.7](https://github.com/sanity-io/assist/compare/v3.0.6...v3.0.7) (2024-09-27)
+
+### Bug Fixes
+
+- ensures conditional readOnly state for document is included in requests ([b8949fc](https://github.com/sanity-io/assist/commit/b8949fc29a466ba7a00adde4a0faa6d895a43078))
+
 ## [3.0.6](https://github.com/sanity-io/assist/compare/v3.0.5...v3.0.6) (2024-08-13)
 
 ### Bug Fixes
