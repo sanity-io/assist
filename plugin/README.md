@@ -399,7 +399,9 @@ defineType({
         }),
       ],
       options: {
-        imagePromptField: 'imagePromptField',
+        aiAssist: {
+          imageInstructionField: 'imagePrompt',
+        },
       },
     }),
   ],
