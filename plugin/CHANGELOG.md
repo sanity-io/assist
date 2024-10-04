@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.8](https://github.com/sanity-io/assist/compare/v3.0.7...v3.0.8) (2024-10-04)
+
+### Bug Fixes
+
+- **docs:** fix readme example for image gen ([#52](https://github.com/sanity-io/assist/issues/52)) ([c91e364](https://github.com/sanity-io/assist/commit/c91e36460a724adf0f80f5bdd3ae2c6020dbf2ba))
+
 ## [3.0.7](https://github.com/sanity-io/assist/compare/v3.0.6...v3.0.7) (2024-09-27)
 
 ### Bug Fixes
