@@ -682,7 +682,7 @@ The function should return `undefined` for all document members that should not 
 
 #### Default function
 
-The default `translationOutputs` is available using `import {defaultTranslationOutputs} from '@sanity/assist`.
+The default `translationOutputs` is available using `import {defaultLanguageOutputs} from '@sanity/assist`.
 
 #### Example
 
