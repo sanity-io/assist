@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.9](https://github.com/sanity-io/assist/compare/v3.0.8...v3.0.9) (2024-12-16)
+
+### Bug Fixes
+
+- upgrade @sanity/icons, @sanity/ui, react 19 compatibility ([#53](https://github.com/sanity-io/assist/issues/53)) ([e1fefab](https://github.com/sanity-io/assist/commit/e1fefab95290896e86ca479895bdd727a92eb508))
+
 ## [3.0.8](https://github.com/sanity-io/assist/compare/v3.0.7...v3.0.8) (2024-10-04)
 
 ### Bug Fixes
