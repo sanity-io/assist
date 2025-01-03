@@ -3,7 +3,7 @@ import {PortableTextBlock, PortableTextMarkDefinition, PortableTextSpan} from '@
 
 //id prefixes
 export const assistDocumentIdPrefix = 'sanity.assist.schemaType.'
-export const assistDocumentStatusIdPrefix = 'sanity.assist.status.'
+export const assistDocumentStatusIdPrefix = 'sanity.assist.status'
 export const assistSchemaIdPrefix = 'sanity.assist.schema.'
 
 // type names
