@@ -18,7 +18,11 @@ export const ImageContext = createContext<ImageContextValue>({})
 export function ImageContextProvider(props: InputProps) {
   const {schemaType, path, value, readOnly} = props
   const assetRef = (value as any)?.asset?._ref
-  const pane = useDocumentPane()
+  const {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
+    selectedReleaseId,
+  } = useDocumentPane()
   const [assetRefState, setAssetRefState] = useState<string | undefined>(assetRef)
 
   const {documentId, documentSchemaType} = useAssistDocumentContext()
@@ -26,12 +30,11 @@ export function ImageContextProvider(props: InputProps) {
   const apiClient = useApiClient(config?.__customApiClient)
   const {generateCaption} = useGenerateCaption(apiClient)
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
-  const selectedReleaseId = pane.selectedReleaseName
   const {isSyncing} = useSyncState(
     getPublishedId(documentId),
     documentSchemaType.name,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
     selectedReleaseId ? {version: selectedReleaseId} : undefined,
   )
 

@@ -12,18 +12,35 @@ export function useAssistDocumentContextValue(
   documentId: string,
   documentSchemaType: ObjectSchemaType,
 ) {
-  const {published, draft} = useEditState(
+  const {
+    openInspector,
+    closeInspector,
+    inspector,
+    onChange: documentOnChange,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
+    selectedReleaseId,
+  } = useDocumentPane()
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
+  const {published, draft, version} = useEditState(
     getPublishedId(documentId),
     documentSchemaType.name,
     'low',
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
+    selectedReleaseId,
   )
-  const assistableDocumentId = draft?._id || published?._id || documentId
-  const documentIsNew = Boolean(!draft?._id && !published?._id)
-  const documentIsAssistable = isDocAssistable(documentSchemaType, published, draft)
+
+  const assistableDocumentId = version?._id || draft?._id || published?._id || documentId
+  const documentIsNew = selectedReleaseId ? !version?._id : !draft?._id && !published?._id
+  const documentIsAssistable = selectedReleaseId
+    ? Boolean(version)
+    : isDocAssistable(documentSchemaType, published, draft)
 
   const {params} = useAiPaneRouter()
   const selectedPath = params[fieldPathParam]
-  const {openInspector, closeInspector, inspector, onChange: documentOnChange} = useDocumentPane()
 
   const assistDocument = useStudioAssistDocument({
     documentId,
