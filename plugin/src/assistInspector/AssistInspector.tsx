@@ -331,6 +331,13 @@ export function AssistInspector(props: DocumentInspectorProps) {
                         index={documentPane.index}
                         itemId="ai"
                         pane={paneNode}
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        //@ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
+                        forcedVersion={{
+                          isReleaseLocked: false,
+                          selectedPerspectiveName: 'published',
+                          selectedReleaseId: undefined,
+                        }}
                       >
                         <DocumentForm />
                       </DocumentPaneProvider>
