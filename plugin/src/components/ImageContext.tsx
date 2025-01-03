@@ -1,10 +1,9 @@
 import {createContext, useEffect, useMemo, useState} from 'react'
-import {type InputProps, pathToString, useSyncState} from 'sanity'
-import {usePaneRouter} from 'sanity/structure'
+import {getPublishedId, type InputProps, pathToString, useSyncState} from 'sanity'
+import {useDocumentPane, usePaneRouter} from 'sanity/structure'
 
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
-import {publicId} from '../helpers/ids'
 import {getDescriptionFieldOption, getImageInstructionFieldOption} from '../helpers/typeUtils'
 import {canUseAssist, useApiClient, useGenerateCaption} from '../useApiClient'
 
@@ -19,6 +18,7 @@ export const ImageContext = createContext<ImageContextValue>({})
 export function ImageContextProvider(props: InputProps) {
   const {schemaType, path, value, readOnly} = props
   const assetRef = (value as any)?.asset?._ref
+  const pane = useDocumentPane()
   const [assetRefState, setAssetRefState] = useState<string | undefined>(assetRef)
 
   const {documentId, documentSchemaType} = useAssistDocumentContext()
@@ -26,7 +26,14 @@ export function ImageContextProvider(props: InputProps) {
   const apiClient = useApiClient(config?.__customApiClient)
   const {generateCaption} = useGenerateCaption(apiClient)
 
-  const {isSyncing} = useSyncState(publicId(documentId), documentSchemaType.name)
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
+  const selectedReleaseId = pane.selectedReleaseName
+  const {isSyncing} = useSyncState(
+    getPublishedId(documentId),
+    documentSchemaType.name,
+    selectedReleaseId ? {version: selectedReleaseId} : undefined,
+  )
 
   const router = usePaneRouter()
   const isShowingOlderRevision = !!router.params?.rev
