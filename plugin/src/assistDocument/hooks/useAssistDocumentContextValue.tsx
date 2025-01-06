@@ -23,7 +23,7 @@ export function useAssistDocumentContextValue(
   } = useDocumentPane()
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
+  // @ts-ignore version is available in `corel` - Remove after corel is merged to next
   const {published, draft, version} = useEditState(
     getPublishedId(documentId),
     documentSchemaType.name,
@@ -36,7 +36,7 @@ export function useAssistDocumentContextValue(
   const assistableDocumentId = version?._id || draft?._id || published?._id || documentId
   const documentIsNew = selectedReleaseId ? !version?._id : !draft?._id && !published?._id
   const documentIsAssistable = selectedReleaseId
-    ? Boolean(version)
+    ? !!version
     : isDocAssistable(documentSchemaType, published, draft)
 
   const {params} = useAiPaneRouter()
