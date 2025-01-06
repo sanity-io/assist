@@ -1,5 +1,5 @@
 import {useMemo} from 'react'
-import {getPublishedId, type ObjectSchemaType, useEditState} from 'sanity'
+import {getDraftId, getPublishedId, getVersionId, type ObjectSchemaType, useEditState} from 'sanity'
 import {useDocumentPane} from 'sanity/structure'
 
 import {useAiPaneRouter} from '../../assistInspector/helpers'
@@ -33,7 +33,15 @@ export function useAssistDocumentContextValue(
     selectedReleaseId,
   )
 
-  const assistableDocumentId = version?._id || draft?._id || published?._id || documentId
+  let assistableDocumentId = version?._id || draft?._id || published?._id
+  if (!assistableDocumentId) {
+    assistableDocumentId = selectedReleaseId
+      ? getVersionId(documentId, selectedReleaseId)
+      : documentSchemaType.liveEdit
+        ? documentId
+        : getDraftId(documentId)
+  }
+
   const documentIsNew = selectedReleaseId ? !version?._id : !draft?._id && !published?._id
   const documentIsAssistable = selectedReleaseId
     ? !!version
