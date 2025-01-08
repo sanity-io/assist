@@ -51,13 +51,12 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
   const selectedPath = params[fieldPathParam]
 
   const assistDocument = useStudioAssistDocument({
-    documentId,
+    documentId: assistableDocumentId,
     schemaType: documentSchemaType,
   })
 
   const value: AssistDocumentContextValue = useMemo(() => {
     const base = {
-      documentId,
       assistableDocumentId,
       documentSchemaType,
       documentIsNew,
@@ -79,7 +78,6 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
   }, [
     assistDocument,
     documentIsAssistable,
-    documentId,
     assistableDocumentId,
     documentSchemaType,
     documentIsNew,

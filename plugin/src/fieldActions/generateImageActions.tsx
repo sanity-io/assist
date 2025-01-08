@@ -27,7 +27,7 @@ export const generateImagActions: DocumentFieldAction = {
     if (imageContext && pathKey === imageContext?.imageInstructionPath) {
       //if this is true, it is stable, and not breaking rules of hooks
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const {documentId} = useAssistDocumentContext()
+      const {assistableDocumentId} = useAssistDocumentContext()
       // eslint-disable-next-line react-hooks/rules-of-hooks
       return useMemo(() => {
         return node({
@@ -44,12 +44,12 @@ export const generateImagActions: DocumentFieldAction = {
             if (loading) {
               return
             }
-            generateImage({path: pathKey, documentId: documentId ?? ''})
+            generateImage({path: pathKey, documentId: assistableDocumentId})
           },
           renderAsButton: true,
           disabled: loading,
         })
-      }, [generateImage, pathKey, documentId, loading])
+      }, [generateImage, pathKey, assistableDocumentId, loading])
     }
 
     // works but not supported by types

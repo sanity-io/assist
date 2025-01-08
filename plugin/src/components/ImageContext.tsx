@@ -25,13 +25,13 @@ export function ImageContextProvider(props: InputProps) {
   } = useDocumentPane()
   const [assetRefState, setAssetRefState] = useState<string | undefined>(assetRef)
 
-  const {documentId, documentSchemaType} = useAssistDocumentContext()
+  const {assistableDocumentId, documentSchemaType} = useAssistDocumentContext()
   const {config, status} = useAiAssistanceConfig()
   const apiClient = useApiClient(config?.__customApiClient)
   const {generateCaption} = useGenerateCaption(apiClient)
 
   const {isSyncing} = useSyncState(
-    getPublishedId(documentId),
+    getPublishedId(assistableDocumentId),
     documentSchemaType.name,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
@@ -45,7 +45,7 @@ export function ImageContextProvider(props: InputProps) {
     const descriptionField = getDescriptionFieldOption(schemaType)
     if (
       assetRef &&
-      documentId &&
+      assistableDocumentId &&
       descriptionField &&
       assetRef !== assetRefState &&
       !isSyncing &&
@@ -54,7 +54,10 @@ export function ImageContextProvider(props: InputProps) {
     ) {
       setAssetRefState(assetRef)
       if (canUseAssist(status)) {
-        generateCaption({path: pathToString([...path, descriptionField]), documentId: documentId})
+        generateCaption({
+          path: pathToString([...path, descriptionField]),
+          documentId: assistableDocumentId,
+        })
       }
     }
   }, [
@@ -62,7 +65,7 @@ export function ImageContextProvider(props: InputProps) {
     path,
     assetRef,
     assetRefState,
-    documentId,
+    assistableDocumentId,
     generateCaption,
     isSyncing,
     status,

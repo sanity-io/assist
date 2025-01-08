@@ -30,7 +30,7 @@ export const generateCaptionsActions: DocumentFieldAction = {
     if (imageContext && pathKey === imageContext?.imageDescriptionPath) {
       //if this is true, it is stable, and not breaking rules of hooks
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const {documentId} = useAssistDocumentContext()
+      const {assistableDocumentId} = useAssistDocumentContext()
       // eslint-disable-next-line react-hooks/rules-of-hooks
       return useMemo(() => {
         return node({
@@ -54,14 +54,21 @@ export const generateCaptionsActions: DocumentFieldAction = {
               })
               return
             }
-
-            generateCaption({path: pathKey, documentId: documentId ?? ''})
+            generateCaption({path: pathKey, documentId: assistableDocumentId})
           },
           renderAsButton: true,
           disabled: loading,
           hidden: !imageContext.assetRef,
         })
-      }, [generateCaption, pathKey, documentId, loading, imageContext, status, openInspector])
+      }, [
+        generateCaption,
+        pathKey,
+        assistableDocumentId,
+        loading,
+        imageContext,
+        status,
+        openInspector,
+      ])
     }
 
     // works but not supported by types

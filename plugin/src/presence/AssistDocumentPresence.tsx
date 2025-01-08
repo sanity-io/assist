@@ -1,10 +1,10 @@
 import {Card, Flex} from '@sanity/ui'
 import {useMemo} from 'react'
 
+import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {documentRootKey, fieldPresenceTypeName} from '../types'
 import {AiFieldPresence} from './AiFieldPresence'
 import {aiPresence} from './useAssistPresence'
-import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 
 export function createAssistDocumentPresence(documentId: string | undefined) {
   return function AssistDocumentPresenceWrapper() {
