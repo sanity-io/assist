@@ -15,13 +15,9 @@ export function assistDocumentId(documentType: string) {
 export function assistTasksStatusId(documentId: string) {
   if (isVersionId(documentId)) {
     // Creates an id: sanity.assist.status.<versionName>.<documentId>
-    return [
-      assistDocumentStatusIdPrefix,
-      getVersionFromId(documentId),
-      getPublishedId(documentId),
-    ].join('.')
+    return `${assistDocumentStatusIdPrefix}${getVersionFromId(documentId)}.${getPublishedId(documentId)}`
   }
 
   // Creates an id: sanity.assist.status<documentId>
-  return [assistDocumentStatusIdPrefix, getPublishedId(documentId)].join('.')
+  return `${assistDocumentStatusIdPrefix}${getPublishedId(documentId)}`
 }
