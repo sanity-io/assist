@@ -13,7 +13,7 @@
     "dev": "cd studio && npm run dev",
     "format": "prettier --write --cache --ignore-unknown .",
     "lint": "npm run lint --workspaces",
-    "prepare": "husky install",
+    "prepare": "husky",
     "prepublishOnly": "npm run prepublishOnly --workspaces --if-present",
     "release": "npm run release --workspaces --if-present",
     "test": "npm run test --workspaces --if-present"
