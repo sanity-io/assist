@@ -1,5 +1,5 @@
 import {useMemo} from 'react'
-import {getDraftId, getPublishedId, getVersionId, type ObjectSchemaType, useEditState} from 'sanity'
+import {getDraftId, getVersionId, type ObjectSchemaType, useSchema} from 'sanity'
 import {useDocumentPane} from 'sanity/structure'
 
 import {useAiPaneRouter} from '../../assistInspector/helpers'
@@ -8,10 +8,17 @@ import type {AssistDocumentContextValue} from '../AssistDocumentContext'
 import {isDocAssistable} from '../RequestRunInstructionProvider'
 import {useStudioAssistDocument} from './useStudioAssistDocument'
 
-export function useAssistDocumentContextValue(
-  documentId: string,
-  documentSchemaType: ObjectSchemaType,
-) {
+export function useAssistDocumentContextValue(documentId: string, documentType: string) {
+  const schema = useSchema()
+
+  const documentSchemaType = useMemo(() => {
+    const schemaType = schema.get(documentType) as ObjectSchemaType | undefined
+    if (!schemaType) {
+      throw new Error(`Schema type "${documentType}" not found`)
+    }
+    return schemaType
+  }, [documentType, schema])
+
   const {
     openInspector,
     closeInspector,
@@ -20,18 +27,11 @@ export function useAssistDocumentContextValue(
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
     selectedReleaseId,
+    editState,
   } = useDocumentPane()
-
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore version is available in `corel` - Remove after corel is merged to next
-  const {published, draft, version} = useEditState(
-    getPublishedId(documentId),
-    documentSchemaType.name,
-    'low',
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
-    selectedReleaseId,
-  )
+  // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
+  const {draft, published, version} = editState || {}
 
   let assistableDocumentId = version?._id || draft?._id || published?._id
   if (!assistableDocumentId) {

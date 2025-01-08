@@ -1,28 +1,19 @@
 import {Card, Flex} from '@sanity/ui'
 import {useMemo} from 'react'
-import {ObjectSchemaType} from 'sanity'
 
-import {useAssistDocumentContextValue} from '../assistDocument/hooks/useAssistDocumentContextValue'
 import {documentRootKey, fieldPresenceTypeName} from '../types'
 import {AiFieldPresence} from './AiFieldPresence'
 import {aiPresence} from './useAssistPresence'
+import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 
-export function createAssistDocumentPresence(
-  documentId: string | undefined,
-  schemaType: ObjectSchemaType,
-) {
+export function createAssistDocumentPresence(documentId: string | undefined) {
   return function AssistDocumentPresenceWrapper() {
-    return documentId ? (
-      <AssistDocumentPresence documentId={documentId} schemaType={schemaType} />
-    ) : null
+    return documentId ? <AssistDocumentPresence /> : null
   }
 }
 
-function AssistDocumentPresence(props: {documentId: string; schemaType: ObjectSchemaType}) {
-  const {assistDocument} = useAssistDocumentContextValue(
-    props.documentId,
-    props.schemaType as ObjectSchemaType,
-  )
+function AssistDocumentPresence() {
+  const {assistDocument} = useAssistDocumentContext()
   const anyPresence = useMemo(() => {
     const anyPresence = assistDocument?.tasks
       ?.filter((run) => !run.ended && !run.reason)

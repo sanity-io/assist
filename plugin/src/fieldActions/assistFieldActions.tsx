@@ -4,7 +4,6 @@ import {
   type DocumentFieldAction,
   type DocumentFieldActionGroup,
   type DocumentFieldActionItem,
-  type ObjectSchemaType,
   typed,
   useCurrentUser,
 } from 'sanity'
@@ -12,7 +11,6 @@ import {useDocumentPane} from 'sanity/structure'
 
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {getIcon} from '../assistDocument/components/instruction/appearance/IconInput'
-import {useAssistDocumentContextValue} from '../assistDocument/hooks/useAssistDocumentContextValue'
 import {useRequestRunInstruction} from '../assistDocument/RequestRunInstructionProvider'
 import {aiInspectorId} from '../assistInspector/constants'
 import {useSelectedField, useTypePath} from '../assistInspector/helpers'
@@ -36,8 +34,6 @@ export const assistFieldActions: DocumentFieldAction = {
   useAction(props) {
     const {schemaType} = props
 
-    const isDocumentLevel = props.path.length === 0
-
     const {
       assistDocument,
       documentIsNew,
@@ -49,14 +45,7 @@ export const assistFieldActions: DocumentFieldAction = {
       documentSchemaType,
       selectedPath,
       assistableDocumentId,
-    } =
-      // document field actions do not have access to the document context
-      // conditional hook _should_ be safe here since the logical path will be stable
-      isDocumentLevel
-        ? // eslint-disable-next-line react-hooks/rules-of-hooks
-          useAssistDocumentContextValue(props.documentId, schemaType as ObjectSchemaType)
-        : // eslint-disable-next-line react-hooks/rules-of-hooks
-          useAssistDocumentContext()
+    } = useAssistDocumentContext()
 
     const {value: docValue, formState} = useDocumentPane()
     const formStateRef = useRef(formState)

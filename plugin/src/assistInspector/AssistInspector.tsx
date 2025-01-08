@@ -16,7 +16,6 @@ import {styled} from 'styled-components'
 
 import {DocumentForm} from '../_lib/form'
 import {AssistTypeContext} from '../assistDocument/components/AssistTypeContext'
-import {useAssistDocumentContextValue} from '../assistDocument/hooks/useAssistDocumentContextValue'
 import {useStudioAssistDocument} from '../assistDocument/hooks/useStudioAssistDocument'
 import {useRequestRunInstruction} from '../assistDocument/RequestRunInstructionProvider'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
@@ -35,6 +34,7 @@ import {
   useTypePath,
 } from './helpers'
 import {InstructionTaskHistoryButton} from './InstructionTaskHistoryButton'
+import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 
 const CardWithShadowBelow = styled(Card)`
   position: relative;
@@ -206,10 +206,7 @@ export function AssistInspector(props: DocumentInspectorProps) {
     formState,
   } = documentPane
 
-  const {assistableDocumentId, documentIsAssistable} = useAssistDocumentContextValue(
-    documentId,
-    schemaType,
-  )
+  const {assistableDocumentId, documentIsAssistable} = useAssistDocumentContext()
 
   const formStateRef = useRef(formState)
   formStateRef.current = formState
