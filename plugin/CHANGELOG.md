@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/sanity-io/assist/compare/v3.0.9...v3.1.0) (2025-01-09)
+
+### Features
+
+- adds support for versions ids in Studio releases ([#54](https://github.com/sanity-io/assist/issues/54)) ([6b1e8d4](https://github.com/sanity-io/assist/commit/6b1e8d4aa54f9f8f86f6a101b77f03b06d4255f2))
+
 ## [3.0.9](https://github.com/sanity-io/assist/compare/v3.0.8...v3.0.9) (2024-12-16)
 
 ### Bug Fixes
