@@ -1,10 +1,9 @@
 import {createContext, useEffect, useMemo, useState} from 'react'
-import {type InputProps, pathToString, useSyncState} from 'sanity'
-import {usePaneRouter} from 'sanity/structure'
+import {getPublishedId, type InputProps, pathToString, useSyncState} from 'sanity'
+import {useDocumentPane, usePaneRouter} from 'sanity/structure'
 
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
-import {publicId} from '../helpers/ids'
 import {getDescriptionFieldOption, getImageInstructionFieldOption} from '../helpers/typeUtils'
 import {canUseAssist, useApiClient, useGenerateCaption} from '../useApiClient'
 
@@ -19,14 +18,25 @@ export const ImageContext = createContext<ImageContextValue>({})
 export function ImageContextProvider(props: InputProps) {
   const {schemaType, path, value, readOnly} = props
   const assetRef = (value as any)?.asset?._ref
+  const {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
+    selectedReleaseId,
+  } = useDocumentPane()
   const [assetRefState, setAssetRefState] = useState<string | undefined>(assetRef)
 
-  const {documentId, documentSchemaType} = useAssistDocumentContext()
+  const {assistableDocumentId, documentSchemaType} = useAssistDocumentContext()
   const {config, status} = useAiAssistanceConfig()
   const apiClient = useApiClient(config?.__customApiClient)
   const {generateCaption} = useGenerateCaption(apiClient)
 
-  const {isSyncing} = useSyncState(publicId(documentId), documentSchemaType.name)
+  const {isSyncing} = useSyncState(
+    getPublishedId(assistableDocumentId),
+    documentSchemaType.name,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
+    selectedReleaseId ? {version: selectedReleaseId} : undefined,
+  )
 
   const router = usePaneRouter()
   const isShowingOlderRevision = !!router.params?.rev
@@ -35,7 +45,7 @@ export function ImageContextProvider(props: InputProps) {
     const descriptionField = getDescriptionFieldOption(schemaType)
     if (
       assetRef &&
-      documentId &&
+      assistableDocumentId &&
       descriptionField &&
       assetRef !== assetRefState &&
       !isSyncing &&
@@ -44,7 +54,10 @@ export function ImageContextProvider(props: InputProps) {
     ) {
       setAssetRefState(assetRef)
       if (canUseAssist(status)) {
-        generateCaption({path: pathToString([...path, descriptionField]), documentId: documentId})
+        generateCaption({
+          path: pathToString([...path, descriptionField]),
+          documentId: assistableDocumentId,
+        })
       }
     }
   }, [
@@ -52,7 +65,7 @@ export function ImageContextProvider(props: InputProps) {
     path,
     assetRef,
     assetRefState,
-    documentId,
+    assistableDocumentId,
     generateCaption,
     isSyncing,
     status,

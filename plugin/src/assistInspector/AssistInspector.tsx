@@ -4,7 +4,6 @@ import {useCallback, useMemo, useRef} from 'react'
 import {
   type DocumentInspectorProps,
   PresenceOverlay,
-  useEditState,
   VirtualizerScrollInstanceProvider,
 } from 'sanity'
 import {
@@ -18,11 +17,7 @@ import {styled} from 'styled-components'
 import {DocumentForm} from '../_lib/form'
 import {AssistTypeContext} from '../assistDocument/components/AssistTypeContext'
 import {useStudioAssistDocument} from '../assistDocument/hooks/useStudioAssistDocument'
-import {
-  getAssistableDocId,
-  isDocAssistable,
-  useRequestRunInstruction,
-} from '../assistDocument/RequestRunInstructionProvider'
+import {useRequestRunInstruction} from '../assistDocument/RequestRunInstructionProvider'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 import {giveFeedbackUrl, pluginTitle, releaseAnnouncementUrl, salesUrl} from '../constants'
 import {getConditionalMembers} from '../helpers/conditionalMembers'
@@ -39,6 +34,7 @@ import {
   useTypePath,
 } from './helpers'
 import {InstructionTaskHistoryButton} from './InstructionTaskHistoryButton'
+import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 
 const CardWithShadowBelow = styled(Card)`
   position: relative;
@@ -209,15 +205,15 @@ export function AssistInspector(props: DocumentInspectorProps) {
     onChange: documentOnChange,
     formState,
   } = documentPane
-  const {published, draft} = useEditState(documentId, documentType, 'low')
+
+  const {assistableDocumentId, documentIsAssistable} = useAssistDocumentContext()
 
   const formStateRef = useRef(formState)
   formStateRef.current = formState
 
-  const assistableDocId = getAssistableDocId(schemaType, documentId)
   const {instructionLoading, requestRunInstruction} = useRequestRunInstruction({
     documentOnChange,
-    isDocAssistable: isDocAssistable(schemaType, published, draft),
+    isDocAssistable: documentIsAssistable,
   })
 
   const typePath = useTypePath(docValue, pathKey ?? '')
@@ -268,14 +264,14 @@ export function AssistInspector(props: DocumentInspectorProps) {
       pathKey &&
       typePath &&
       requestRunInstruction({
-        documentId: assistableDocId,
+        documentId: assistableDocumentId,
         path: pathKey,
         typePath,
         assistDocumentId: assistDocumentId(documentType),
         instruction,
         conditionalMembers: formStateRef.current ? getConditionalMembers(formStateRef.current) : [],
       }),
-    [pathKey, instruction, typePath, documentType, assistableDocId, requestRunInstruction],
+    [pathKey, instruction, typePath, documentType, assistableDocumentId, requestRunInstruction],
   )
 
   const Region = useCallback((_props: any) => {
@@ -331,6 +327,13 @@ export function AssistInspector(props: DocumentInspectorProps) {
                         index={documentPane.index}
                         itemId="ai"
                         pane={paneNode}
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        //@ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
+                        forcedVersion={{
+                          isReleaseLocked: false,
+                          selectedPerspectiveName: 'published',
+                          selectedReleaseId: undefined,
+                        }}
                       >
                         <DocumentForm />
                       </DocumentPaneProvider>
@@ -373,7 +376,7 @@ export function AssistInspector(props: DocumentInspectorProps) {
           )}
 
           <InstructionTaskHistoryButton
-            documentId={assistableDocId}
+            documentId={assistableDocumentId}
             tasks={tasks}
             instructions={instructions}
             showTitles={!instructionKey}

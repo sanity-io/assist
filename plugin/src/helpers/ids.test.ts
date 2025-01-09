@@ -1,6 +1,6 @@
 import {describe, expect, test} from 'vitest'
 
-import {assistDocumentId} from './ids'
+import {assistDocumentId, assistTasksStatusId} from './ids'
 
 describe('ids', () => {
   test('assistDocumentId should replace illegal id chars with _', () => {
@@ -14,4 +14,15 @@ describe('ids', () => {
     const expected = testCases.map((testCase) => testCase.assistId)
     expect(outputs).toEqual(expected)
   })
+
+  test.each([
+    {documentId: 'foo', assistId: 'sanity.assist.status.foo'},
+    {documentId: 'drafts.foo', assistId: 'sanity.assist.status.foo'},
+    {documentId: 'versions.r12332.foo', assistId: 'sanity.assist.status.r12332.foo'},
+  ])(
+    "assistTasksStatusId should return the documentId with 'sanity.assist.status' prefix for $documentId",
+    ({documentId, assistId}) => {
+      expect(assistTasksStatusId(documentId)).toEqual(assistId)
+    },
+  )
 })

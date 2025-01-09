@@ -4,7 +4,6 @@ import {
   type DocumentFieldAction,
   type DocumentFieldActionGroup,
   type DocumentFieldActionItem,
-  type ObjectSchemaType,
   typed,
   useCurrentUser,
 } from 'sanity'
@@ -12,11 +11,7 @@ import {useDocumentPane} from 'sanity/structure'
 
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {getIcon} from '../assistDocument/components/instruction/appearance/IconInput'
-import {useAssistDocumentContextValue} from '../assistDocument/hooks/useAssistDocumentContextValue'
-import {
-  getAssistableDocId,
-  useRequestRunInstruction,
-} from '../assistDocument/RequestRunInstructionProvider'
+import {useRequestRunInstruction} from '../assistDocument/RequestRunInstructionProvider'
 import {aiInspectorId} from '../assistInspector/constants'
 import {useSelectedField, useTypePath} from '../assistInspector/helpers'
 import {pluginTitleShort} from '../constants'
@@ -39,8 +34,6 @@ export const assistFieldActions: DocumentFieldAction = {
   useAction(props) {
     const {schemaType} = props
 
-    const isDocumentLevel = props.path.length === 0
-
     const {
       assistDocument,
       documentIsNew,
@@ -50,17 +43,9 @@ export const assistFieldActions: DocumentFieldAction = {
       inspector,
       documentOnChange,
       documentSchemaType,
-      documentId,
       selectedPath,
       assistableDocumentId,
-    } =
-      // document field actions do not have access to the document context
-      // conditional hook _should_ be safe here since the logical path will be stable
-      isDocumentLevel
-        ? // eslint-disable-next-line react-hooks/rules-of-hooks
-          useAssistDocumentContextValue(props.documentId, schemaType as ObjectSchemaType)
-        : // eslint-disable-next-line react-hooks/rules-of-hooks
-          useAssistDocumentContext()
+    } = useAssistDocumentContext()
 
     const {value: docValue, formState} = useDocumentPane()
     const formStateRef = useRef(formState)
@@ -72,7 +57,6 @@ export const assistFieldActions: DocumentFieldAction = {
     const typePath = useTypePath(docValue, pathKey)
     const assistDocumentId = assistDocument?._id
 
-    const assistableDocId = getAssistableDocId(documentSchemaType, documentId)
     const {requestRunInstruction} = useRequestRunInstruction({
       documentOnChange,
       isDocAssistable: documentIsAssistable ?? false,
@@ -121,11 +105,11 @@ export const assistFieldActions: DocumentFieldAction = {
 
     const onInstructionAction = useCallback(
       (instruction: StudioInstruction) => {
-        if (!pathKey || !fieldAssistKey || !assistDocumentId || !assistableDocId) {
+        if (!pathKey || !fieldAssistKey || !assistDocumentId || !assistableDocumentId) {
           return
         }
         requestRunInstruction({
-          documentId: assistableDocId,
+          documentId: assistableDocumentId,
           assistDocumentId,
           path: pathKey,
           typePath,
@@ -135,7 +119,14 @@ export const assistFieldActions: DocumentFieldAction = {
             : [],
         })
       },
-      [requestRunInstruction, assistableDocId, pathKey, typePath, assistDocumentId, fieldAssistKey],
+      [
+        requestRunInstruction,
+        assistableDocumentId,
+        pathKey,
+        typePath,
+        assistDocumentId,
+        fieldAssistKey,
+      ],
     )
 
     const privateInstructions = useMemo(

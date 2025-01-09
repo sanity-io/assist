@@ -8,9 +8,11 @@ export type AssistDocumentContextValue = (
   | {assistDocument: undefined; loading: true}
 ) & {
   documentIsNew: boolean
+  /**
+   * This is the _actual_ id of the current document (ie the document loaded in the pane); it contains draft. versions. prefix ect depending on context
+   */
   assistableDocumentId: string
   documentIsAssistable: boolean
-  documentId: string
   documentSchemaType: ObjectSchemaType
   openInspector: (inspectorName: string, paneParams?: Record<string, string>) => void
   closeInspector: (inspectorName?: string) => void

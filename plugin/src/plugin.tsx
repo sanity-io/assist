@@ -17,6 +17,7 @@ import {isImage} from './helpers/typeUtils'
 import {ImageContextProvider} from './components/ImageContext'
 import {TranslationConfig} from './translate/types'
 import {assistDocumentTypeName, AssistPreset} from './types'
+import {AssistDocumentLayout} from './assistDocument/AssistDocumentLayout'
 
 export interface AssistPluginConfig {
   translate?: TranslationConfig
@@ -69,9 +70,12 @@ export const assist = definePlugin<AssistPluginConfig | void>((config) => {
         }
         const docSchema = schema.get(schemaType)
         if (docSchema && isObjectSchemaType(docSchema) && isSchemaAssistEnabled(docSchema)) {
-          return [...prev, createAssistDocumentPresence(documentId, docSchema)]
+          return [...prev, createAssistDocumentPresence(documentId)]
         }
         return prev
+      },
+      components: {
+        unstable_layout: AssistDocumentLayout,
       },
     },
 

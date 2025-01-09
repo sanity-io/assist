@@ -2,7 +2,6 @@ import {useCallback, useEffect, useState} from 'react'
 import {ObjectSchemaType, PatchEvent, SanityDocument, unset} from 'sanity'
 
 import {useRunInstruction} from '../assistLayout/RunInstructionProvider'
-import {publicId} from '../helpers/ids'
 
 export interface DraftDelayedTaskArgs<T> {
   documentOnChange: (event: PatchEvent) => void
@@ -17,11 +16,6 @@ export function isDocAssistable(
   draft?: SanityDocument | null,
 ) {
   return !!(documentSchemaType.liveEdit ? published : draft)
-}
-
-export function getAssistableDocId(documentSchemaType: ObjectSchemaType, documentId: string) {
-  const baseId = publicId(documentId)
-  return documentSchemaType.liveEdit ? baseId : `drafts.${baseId}`
 }
 
 export function useRequestRunInstruction(args: {

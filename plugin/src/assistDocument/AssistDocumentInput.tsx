@@ -9,7 +9,6 @@ import {usePathKey} from '../helpers/misc'
 import {isType} from '../helpers/typeUtils'
 import {FirstAssistedPathProvider} from '../onboarding/FirstAssistedPathProvider'
 import {assistDocumentTypeName} from '../types'
-import {AssistDocumentContextProvider} from './AssistDocumentContextProvider'
 import {useInstructionToaster} from './hooks/useInstructionToaster'
 
 export function AssistDocumentInputWrapper(props: InputProps) {
@@ -44,12 +43,7 @@ function AssistDocumentInput({documentId, ...props}: ObjectInputProps & {documen
 
   return (
     <FirstAssistedPathProvider members={props.members}>
-      <AssistDocumentContextProvider schemaType={schemaType} documentId={documentId}>
-        {props.renderDefault({
-          ...props,
-          schemaType,
-        })}
-      </AssistDocumentContextProvider>
+      {props.renderDefault({...props, schemaType})}
     </FirstAssistedPathProvider>
   )
 }
