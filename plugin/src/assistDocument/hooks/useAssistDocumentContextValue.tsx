@@ -1,5 +1,5 @@
 import {useMemo} from 'react'
-import {getDraftId, getVersionId, type ObjectSchemaType, useSchema} from 'sanity'
+import {getDraftId, getVersionId, type ObjectSchemaType, usePerspective, useSchema} from 'sanity'
 import {useDocumentPane} from 'sanity/structure'
 
 import {useAiPaneRouter} from '../../assistInspector/helpers'
@@ -24,11 +24,9 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
     closeInspector,
     inspector,
     onChange: documentOnChange,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
-    selectedReleaseId,
     editState,
   } = useDocumentPane()
+  const {selectedReleaseId} = usePerspective()
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
   const {draft, published, version} = editState || {}

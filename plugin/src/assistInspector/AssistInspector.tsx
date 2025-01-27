@@ -3,6 +3,7 @@ import {Box, Button, Card, Flex, Spinner, Stack, Text} from '@sanity/ui'
 import {useCallback, useMemo, useRef} from 'react'
 import {
   type DocumentInspectorProps,
+  PerspectiveProvider,
   PresenceOverlay,
   VirtualizerScrollInstanceProvider,
 } from 'sanity'
@@ -189,7 +190,6 @@ export function AssistInspectorWrapper(props: DocumentInspectorProps) {
 
   return <AssistInspector {...props} />
 }
-
 export function AssistInspector(props: DocumentInspectorProps) {
   const {params} = useAiPaneRouter()
 
@@ -322,21 +322,16 @@ export function AssistInspector(props: DocumentInspectorProps) {
                       scrollElement={boundary.current}
                       containerElement={boundary}
                     >
-                      <DocumentPaneProvider
-                        paneKey={documentPane.paneKey}
-                        index={documentPane.index}
-                        itemId="ai"
-                        pane={paneNode}
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        //@ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
-                        forcedVersion={{
-                          isReleaseLocked: false,
-                          selectedPerspectiveName: 'published',
-                          selectedReleaseId: undefined,
-                        }}
-                      >
-                        <DocumentForm />
-                      </DocumentPaneProvider>
+                      <PerspectiveProvider selectedPerspectiveName={'published'}>
+                        <DocumentPaneProvider
+                          paneKey={documentPane.paneKey}
+                          index={documentPane.index}
+                          itemId="ai"
+                          pane={paneNode}
+                        >
+                          <DocumentForm />
+                        </DocumentPaneProvider>
+                      </PerspectiveProvider>
                     </VirtualizerScrollInstanceProvider>
                   </AssistTypeContext.Provider>
                 )}
