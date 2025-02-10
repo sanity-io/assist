@@ -5,6 +5,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.1](https://github.com/sanity-io/assist/compare/v3.1.0...v3.1.1) (2025-02-10)
+
+### Bug Fixes
+
+- `useSyncState` `version` argument type ([312fbbe](https://github.com/sanity-io/assist/commit/312fbbe02adc90ec1fd0d636effbef15ad2ef173))
+- update README release section ([#55](https://github.com/sanity-io/assist/issues/55)) ([5e2185a](https://github.com/sanity-io/assist/commit/5e2185a64c8ccb8211ad69ab84fb1556b46a8c0b))
+
 ## [3.1.0](https://github.com/sanity-io/assist/compare/v3.0.9...v3.1.0) (2025-01-09)
 
 ### Features
