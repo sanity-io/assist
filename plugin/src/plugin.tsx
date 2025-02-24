@@ -36,10 +36,11 @@ export interface AssistPluginConfig {
 
 export const assist = definePlugin<AssistPluginConfig | void>((config) => {
   const configWithDefaults = config ?? {}
+  const styleguide = configWithDefaults.translate?.styleguide || ''
 
-  if ((configWithDefaults.translate?.styleguide || '').length > 2000) {
+  if (styleguide.length > 2000) {
     throw new Error(
-      `[${packageName}]: \`translate.styleguide\` value is too long. It must be 2000 characters or less.`,
+      `[${packageName}]: \`translate.styleguide\` value is too long. It must be 2000 characters or less, was ${styleguide.length} characters`,
     )
   }
 

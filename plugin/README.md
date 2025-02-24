@@ -31,6 +31,7 @@
   - [What it solves](#what-ai-assist-field-level-translations-solves)
   - [Configure](#configure-field-translations)
 - [Adding translation actions to fields](#adding-translation-actions-to-fields)
+- [Translation style guide](#translation-style-guide)
 - [License](#license)
 - [Develop \& test](#develop--test)
   - [Release new version](#release-new-version)
