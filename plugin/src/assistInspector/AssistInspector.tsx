@@ -15,6 +15,7 @@ import {
 import {styled} from 'styled-components'
 
 import {DocumentForm} from '../_lib/form'
+import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {AssistTypeContext} from '../assistDocument/components/AssistTypeContext'
 import {useStudioAssistDocument} from '../assistDocument/hooks/useStudioAssistDocument'
 import {useRequestRunInstruction} from '../assistDocument/RequestRunInstructionProvider'
@@ -34,7 +35,6 @@ import {
   useTypePath,
 } from './helpers'
 import {InstructionTaskHistoryButton} from './InstructionTaskHistoryButton'
-import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 
 const CardWithShadowBelow = styled(Card)`
   position: relative;

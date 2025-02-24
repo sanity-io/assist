@@ -1,11 +1,12 @@
-import {Path, pathToString, useClient, useCurrentUser, useSchema} from 'sanity'
-import {useCallback, useMemo, useState} from 'react'
-import {serializeSchema} from './schemas/serialize/serializeSchema'
+import type {SanityClient} from '@sanity/client'
 import {useToast} from '@sanity/ui'
-import {SanityClient} from '@sanity/client'
+import {useCallback, useMemo, useState} from 'react'
+import {Path, pathToString, useClient, useCurrentUser, useSchema} from 'sanity'
+
+import {ConditionalMemberState} from './helpers/conditionalMembers'
+import {serializeSchema} from './schemas/serialize/serializeSchema'
 import {FieldLanguageMap} from './translate/paths'
 import {documentRootKey} from './types'
-import {ConditionalMemberState} from './helpers/conditionalMembers'
 
 export interface UserTextInstance {
   blockKey: string
