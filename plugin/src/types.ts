@@ -1,5 +1,5 @@
-import {SanityDocument} from 'sanity'
 import {PortableTextBlock, PortableTextMarkDefinition, PortableTextSpan} from '@portabletext/types'
+import {SanityDocument} from 'sanity'
 
 //id prefixes
 export const assistDocumentIdPrefix = 'sanity.assist.schemaType.'

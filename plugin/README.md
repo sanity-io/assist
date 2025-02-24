@@ -113,6 +113,7 @@ Note that instructions run using the permissions of the user invoking it, so onl
 themselves can edit can be changed by the instruction instance.
 
 ### Conditional user access
+
 To limit which users can see the AI Assist actions in the Studio, use a custom-plugin after `assist()`
 that filters out the inspector and actions, based on user properties:
 
@@ -141,7 +142,6 @@ export default defineConfig({
       },
     },
   ],
-
 })
 
 const ALLOWED_ROLES = ['administrator']

@@ -1,4 +1,4 @@
-import {SanityClient} from '@sanity/client'
+import type {SanityClient} from '@sanity/client'
 import {defer, delay, merge, Observable, of, partition, switchMap, throwError} from 'rxjs'
 import {filter, mergeMap, share, take} from 'rxjs/operators'
 import {exhaustMapToWithTrailing} from 'rxjs-exhaustmap-with-trailing'

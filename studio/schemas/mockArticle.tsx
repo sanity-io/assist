@@ -281,7 +281,7 @@ export const mockArticle = defineType({
     prepare: ({title, subtitle, lang, imageUrl}) => {
       return {
         title,
-        subtitle: `${lang ? languages.find((l) => l.id === lang)?.title ?? lang : subtitle ?? ''}`,
+        subtitle: `${lang ? (languages.find((l) => l.id === lang)?.title ?? lang) : (subtitle ?? '')}`,
         media: imageUrl ? <img src={`${imageUrl}?w=100`} alt="" /> : undefined,
       }
     },
