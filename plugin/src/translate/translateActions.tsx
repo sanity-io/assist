@@ -73,6 +73,7 @@ export const translateActions: DocumentFieldAction = {
         task: translationApi.translate,
       })
 
+      const styleguide = config.translate?.styleguide
       const languagePath = config.translate?.document?.languageField
 
       // if this is true, it is stable, and not breaking rules of hooks
@@ -98,6 +99,7 @@ export const translateActions: DocumentFieldAction = {
             translate({
               languagePath,
               translatePath: path,
+              styleguide,
               documentId: documentId ?? '',
               conditionalMembers: formStateRef.current
                 ? getConditionalMembers(formStateRef.current)
@@ -110,6 +112,7 @@ export const translateActions: DocumentFieldAction = {
       }, [
         languagePath,
         translate,
+        styleguide,
         documentId,
         translationApi.loading,
         documentTranslationEnabled,

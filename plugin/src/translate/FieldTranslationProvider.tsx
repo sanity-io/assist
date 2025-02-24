@@ -68,6 +68,7 @@ function hasValuesToTranslate(
 export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
   const {config: assistConfig} = useAiAssistanceConfig()
   const apiClient = useApiClient(assistConfig.__customApiClient)
+  const styleguide = assistConfig.translate?.styleguide
   const config = assistConfig.translate?.field
   const {translate: runTranslate} = useTranslate(apiClient)
 
@@ -193,7 +194,8 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
     if (fieldLanguageMaps && documentId && translatePath) {
       runTranslate({
         documentId,
-        translatePath: translatePath,
+        translatePath,
+        styleguide,
         fieldLanguageMap: fieldLanguageMaps.map((map) => ({
           ...map,
           // eslint-disable-next-line max-nested-callbacks
@@ -207,6 +209,7 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
     fieldLanguageMaps,
     documentId,
     runTranslate,
+    styleguide,
     close,
     toLanguages,
     fieldTranslationParams?.translatePath,

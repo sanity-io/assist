@@ -817,6 +817,28 @@ defineField({
 })
 ```
 
+## Translation style guide
+
+In some cases you might want/need the translator to follow a certain style guide - for
+instance you might tell it not to translate certain words, or be more formal or casual.
+To configure this you can pass a `styleguide` property under the translation
+configuration:
+
+```ts
+assist({
+  translate: {
+    styleguide: `Be extremely formal and precise. Translate as if you are Spock from Star Trek.`,
+  },
+})
+```
+
+The style guide is currently limited to 2000 characters, and the translation might get
+slower the longer your style guide is. If the provided string is longer than the limit,
+the plugin will throw upon studio startup.
+
+Note that this is currently only available on a global level - it can not be defined
+per-field for now.
+
 ## Caveats
 
 Large Language Models (LLMs) are a new technology. Constraints and limitations are still being explored,
