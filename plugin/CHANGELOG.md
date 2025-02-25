@@ -5,6 +5,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.0](https://github.com/sanity-io/assist/compare/v3.1.1...v3.2.0) (2025-02-25)
+
+### Features
+
+- allow specifying a translation style guide ([#61](https://github.com/sanity-io/assist/issues/61)) ([dd91d61](https://github.com/sanity-io/assist/commit/dd91d61fa03d279323a9a67f007687d63ecc63c5))
+- can now set maxPathDepth for field translations ([#62](https://github.com/sanity-io/assist/issues/62)) ([ca1743e](https://github.com/sanity-io/assist/commit/ca1743ef69862b84627a54de5a0b742905d1e926))
+
 ## [3.1.1](https://github.com/sanity-io/assist/compare/v3.1.0...v3.1.1) (2025-02-10)
 
 ### Bug Fixes
