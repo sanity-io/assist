@@ -34,6 +34,7 @@ export interface TranslateRequest {
   documentId: string
   translatePath: Path
   languagePath?: string
+  styleguide?: string
   fieldLanguageMap?: FieldLanguageMap[]
   conditionalMembers?: ConditionalMemberState[]
 }
@@ -63,6 +64,7 @@ export function useTranslate(apiClient: SanityClient) {
     ({
       documentId,
       languagePath,
+      styleguide,
       translatePath,
       fieldLanguageMap,
       conditionalMembers,
@@ -79,6 +81,7 @@ export function useTranslate(apiClient: SanityClient) {
             documentId,
             types,
             languagePath,
+            userStyleguide: styleguide,
             fieldLanguageMap,
             conditionalMembers,
             translatePath:

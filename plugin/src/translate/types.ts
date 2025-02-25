@@ -157,4 +157,10 @@ export interface TranslationConfig {
    * Config for document types with a single language field that determines the language for the whole document.
    */
   document?: DocumentTranslationConfig
+  /**
+   * A "style guide" that can be used to provide guidance on how to translate content.
+   * Will be passed to the LLM - ergo this is only a guide and the model _may_ not
+   * always follow it to the letter.
+   */
+  styleguide?: string
 }
