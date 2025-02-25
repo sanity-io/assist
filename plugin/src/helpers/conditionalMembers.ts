@@ -13,6 +13,7 @@ import {
 } from 'sanity'
 
 const DEFAULT_MAX_DEPTH = 8
+const ABSOLUTE_MAX_DEPTH = 50
 
 export interface ConditionalMemberState {
   path: string
@@ -48,7 +49,7 @@ export function getConditionalMembers(
     conditional: isConditional(docState.schemaType),
   }
   return (
-    [doc, ...extractConditionalPaths(docState, maxDepth)]
+    [doc, ...extractConditionalPaths(docState, Math.min(maxDepth, ABSOLUTE_MAX_DEPTH))]
       .filter((v) => v.conditional)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .map(({conditional, ...state}) => ({...state}))

@@ -226,4 +226,51 @@ describe('conditionalMembers', () => {
       },
     ])
   })
+
+  test('should respect max-depth', () => {
+    const docSchema: ObjectSchemaType = Schema.compile({
+      name: 'test',
+      types: [
+        defineType({
+          type: 'document',
+          name: 'article',
+          fields: [
+            {type: 'string', name: 'title', readOnly: () => false},
+            {
+              type: 'object',
+              name: 'object',
+              fields: [{type: 'string', name: 'title', readOnly: () => false}],
+            },
+          ],
+        }),
+      ],
+    }).get('article')
+
+    const docState = {
+      path: [],
+      schemaType: docSchema,
+      members: [
+        {
+          kind: 'field',
+          field: {path: [docSchema.fields[0].name], schemaType: docSchema.fields[0].type},
+        },
+        {
+          kind: 'field',
+          field: {
+            path: [docSchema.fields[1].name],
+            schemaType: docSchema.fields[1].type,
+            members: [
+              {
+                kind: 'field',
+                field: {path: ['object', 'title'], schemaType: docSchema.fields[0].type},
+              },
+            ],
+          },
+        },
+      ],
+    } as any
+    const conditionalMembers = getConditionalMembers(docState, 1)
+
+    expect(conditionalMembers).toEqual([{path: 'title', hidden: false, readOnly: false}])
+  })
 })

@@ -592,7 +592,11 @@ defineType({
 **If your schema is not using either of these structures**, refer to the section on [Custom language fields](#custom-language-fields).
 
 #### Note on document schema depth
-By default, field level translations will own translate 6 "path-segments" deep.
+By default, field level translations will translate 6 "path-segments" deep.
+
+Depth is based on field path segments like so:
+- `title` has depth 1
+- `array[_key="no"].title` has depth 3
 
 If this is not sufficient for your document types, use `maxPathDepth`:
 
@@ -606,11 +610,8 @@ assist({
 })
 ```
 
-Depth is based on field path segments:
-- `title` has depth 1
-- `array[_key="no"].title` has depth 3
-
 Be careful not to set this too high in studios with recursive document schemas, as it could have negative impact on performance.
+maxPathDepth is hard-capped to 50.
 
 ### Loading field languages
 
