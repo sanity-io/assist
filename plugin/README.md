@@ -591,6 +591,27 @@ defineType({
 
 **If your schema is not using either of these structures**, refer to the section on [Custom language fields](#custom-language-fields).
 
+#### Note on document schema depth
+By default, field level translations will own translate 6 "path-segments" deep.
+
+If this is not sufficient for your document types, use `maxPathDepth`:
+
+```ts
+assist({
+  translate: {
+    field: {
+      maxPathDepth: 12
+    },
+  },
+})
+```
+
+Depth is based on field path segments:
+- `title` has depth 1
+- `array[_key="no"].title` has depth 3
+
+Be careful not to set this too high in studios with recursive document schemas, as it could have negative impact on performance.
+
 ### Loading field languages
 
 Languages must be an array of objects with an id and title.
@@ -749,7 +770,7 @@ function translationOutputs(
 }
 ```
 
-### Full field translation configuration example
+[### Full field translation configuration example]()
 
 ```ts
 assist({
