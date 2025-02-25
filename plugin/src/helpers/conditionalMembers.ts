@@ -12,7 +12,7 @@ import {
   type SchemaType,
 } from 'sanity'
 
-const MAX_DEPTH = 8
+const DEFAULT_MAX_DEPTH = 8
 
 export interface ConditionalMemberState {
   path: string
@@ -37,7 +37,10 @@ interface ConditionalMemberInnerState extends ConditionalMemberState {
  * * If a parent path is readOnly, no child paths are included
  * * If a path is hidden, it is not included; only conditionally visible paths will be returned, with hidden: false
  */
-export function getConditionalMembers(docState: DocumentFormNode): ConditionalMemberState[] {
+export function getConditionalMembers(
+  docState: DocumentFormNode,
+  maxDepth = DEFAULT_MAX_DEPTH,
+): ConditionalMemberState[] {
   const doc: ConditionalMemberInnerState = {
     path: '',
     hidden: false,
@@ -45,7 +48,7 @@ export function getConditionalMembers(docState: DocumentFormNode): ConditionalMe
     conditional: isConditional(docState.schemaType),
   }
   return (
-    [doc, ...extractConditionalPaths(docState, MAX_DEPTH)]
+    [doc, ...extractConditionalPaths(docState, maxDepth)]
       .filter((v) => v.conditional)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .map(({conditional, ...state}) => ({...state}))

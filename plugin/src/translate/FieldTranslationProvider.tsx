@@ -112,7 +112,7 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
       setToLanguages(filteredToLanguages)
       const fromId = from?.id
       const allToIds = allToLanguages?.map((l) => l.id) ?? []
-      const docMembers = getDocumentMembersFlat(document, documentSchema)
+      const docMembers = getDocumentMembersFlat(document, documentSchema, config?.maxPathDepth)
       if (fromId && allToIds?.length) {
         const transMap = getFieldLanguageMap(
           documentSchema,

@@ -16,15 +16,19 @@ export interface FieldLanguageMap {
   outputs: TranslationOutput[]
 }
 
-const MAX_DEPTH = 6
+const DEFAULT_MAX_DEPTH = 6
 
-export function getDocumentMembersFlat(doc: SanityDocumentLike, schemaType: ObjectSchemaType) {
+export function getDocumentMembersFlat(
+  doc: SanityDocumentLike,
+  schemaType: ObjectSchemaType,
+  maxDepth = DEFAULT_MAX_DEPTH,
+) {
   if (!isDocumentSchemaType(schemaType)) {
     console.error(`Schema type is not a document`)
     return []
   }
 
-  return extractPaths(doc, schemaType, [], MAX_DEPTH)
+  return extractPaths(doc, schemaType, [], maxDepth)
 }
 
 function extractPaths(
