@@ -76,7 +76,6 @@ export interface FieldTranslationConfig {
    *
    *  It determines the relationships between document paths: Given a document path and a language, into which
    *  sibling paths should translations be output.
-
    *
    * `translationOutputs` is invoked once per path in the document (limited to a depth of 6), with the following:
    *
@@ -121,8 +120,24 @@ export interface FieldTranslationConfig {
    *   return undefined
    * }
    * ```
+   *
+   * @see #maxPathDepth
    **/
   translationOutputs?: TranslationOutputsFunction
+
+  /**
+   * The max depth for document paths AI Assist will translate.
+   *
+   * Depth is based on field path segments:
+   * - `title` has depth 1
+   * - `array[_key="no"].title` has depth 3
+   *
+   * Be careful not to set this too high in studios with recursive document schemas, as it could have
+   * negative impact on performance.
+   *
+   * Default: 6
+   */
+  maxPathDepth?: number
 }
 
 export interface DocumentTranslationConfig {

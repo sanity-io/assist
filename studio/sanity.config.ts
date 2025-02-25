@@ -62,6 +62,7 @@ export default defineConfig({
               setTimeout(() => resolve(languages), 500)
             })
           },
+          maxPathDepth: 12,
         },
         document: {
           documentTypes: translatedDocTypes,

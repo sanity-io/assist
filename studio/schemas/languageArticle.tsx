@@ -72,6 +72,30 @@ export const localeObject = defineType({
   options: {aiAssist: {translateAction: true}},
 })
 
+export const recursiveObject = defineType({
+  type: 'object',
+  name: 'recursiveObject',
+  title: 'Recursive',
+  fields: [
+    defineField({
+      type: 'array',
+      name: 'recursive',
+      title: 'Recursive array',
+      of: [{type: 'recursiveObject'}],
+    }),
+    defineField({
+      name: 'title',
+      type: 'internationalizedArrayString',
+      title: 'Title',
+    }),
+  ],
+  options: {
+    aiAssist: {
+      translateAction: true,
+    },
+  },
+})
+
 export const languageArticle = defineType({
   type: 'document',
   name: 'languageArticle',
@@ -134,6 +158,10 @@ export const languageArticle = defineType({
       name: 'alternateTitles',
       title: 'Alternate titles',
       of: [{type: 'string'}],
+    }),
+    defineField({
+      type: recursiveObject.name,
+      name: 'recursive',
     }),
     defineField({
       name: 'description',

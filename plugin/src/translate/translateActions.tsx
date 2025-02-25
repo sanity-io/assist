@@ -126,6 +126,7 @@ export const translateActions: DocumentFieldAction = {
         task: fieldTranslate.openFieldTranslation,
       })
 
+      const maxDepth = config.translate?.field?.maxPathDepth
       const translateFieldsAction = useMemo(
         () =>
           fieldTransEnabled
@@ -151,7 +152,7 @@ export const translateActions: DocumentFieldAction = {
                     documentSchema: documentSchemaType,
                     translatePath: path,
                     conditionalMembers: formStateRef.current
-                      ? getConditionalMembers(formStateRef.current)
+                      ? getConditionalMembers(formStateRef.current, maxDepth)
                       : [],
                   })
                 },
@@ -167,6 +168,7 @@ export const translateActions: DocumentFieldAction = {
           fieldTransEnabled,
           path,
           readOnly,
+          maxDepth,
         ],
       )
 

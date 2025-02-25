@@ -137,4 +137,45 @@ describe('paths', () => {
       'translations[_key=="en"].value',
     ])
   })
+
+  test('should limit depth to 1 when specified', () => {
+    const docSchema: ObjectSchemaType = Schema.compile({
+      name: 'test',
+      types: [
+        defineType({
+          type: 'document',
+          name: 'article',
+          fields: [
+            {
+              type: 'array',
+              name: 'translations',
+              of: [
+                {
+                  type: 'object',
+                  name: 'internationalizedArrayString',
+                  fields: [{type: 'string', name: 'value'}],
+                },
+              ],
+            },
+          ],
+        }),
+      ],
+    }).get('article')
+
+    const doc: SanityDocumentLike = {
+      _id: 'na',
+      _type: 'article',
+      translations: [
+        {
+          //assume type is missing in the data for some reason
+          //_type: 'internationalizedArrayString',
+          _key: 'en',
+          value: 'some string',
+        },
+      ],
+    }
+
+    const members = getDocumentMembersFlat(doc, docSchema, 1)
+    expect(members.map((p) => pathToString(p.path))).toEqual(['translations'])
+  })
 })

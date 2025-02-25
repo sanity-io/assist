@@ -16,15 +16,20 @@ export interface FieldLanguageMap {
   outputs: TranslationOutput[]
 }
 
-const MAX_DEPTH = 6
+const DEFAULT_MAX_DEPTH = 6
+const ABSOLUTE_MAX_DEPTH = 50
 
-export function getDocumentMembersFlat(doc: SanityDocumentLike, schemaType: ObjectSchemaType) {
+export function getDocumentMembersFlat(
+  doc: SanityDocumentLike,
+  schemaType: ObjectSchemaType,
+  maxDepth = DEFAULT_MAX_DEPTH,
+) {
   if (!isDocumentSchemaType(schemaType)) {
     console.error(`Schema type is not a document`)
     return []
   }
 
-  return extractPaths(doc, schemaType, [], MAX_DEPTH)
+  return extractPaths(doc, schemaType, [], Math.min(maxDepth, ABSOLUTE_MAX_DEPTH))
 }
 
 function extractPaths(
@@ -59,7 +64,9 @@ function extractPaths(
     } else if (
       fieldSchema.jsonType === 'array' &&
       fieldSchema.of.length &&
-      fieldSchema.of.some((item) => 'fields' in item)
+      fieldSchema.of.some((item) => 'fields' in item) &&
+      // no reason to drill into arrays if the item fields will be culled by maxDepth, ie we need 1 extra path headroom
+      path.length + 1 < maxDepth
     ) {
       const {value: arrayValue} = extractWithPath(pathToString(fieldPath), doc)[0] ?? {}
 
