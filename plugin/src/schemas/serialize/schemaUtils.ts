@@ -11,6 +11,7 @@ export const hiddenTypes = [
   'document',
   'email',
   'file',
+  'globalDocumentReference',
   'image',
   'number',
   'object',

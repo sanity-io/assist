@@ -741,4 +741,63 @@ describe('serializeSchema', () => {
       },
     ])
   })
+
+  test('should no serialize global document reference types (for now)', () => {
+    const schema = Schema.compile({
+      name: 'test',
+      types: [
+        defineType({
+          type: 'object',
+          name: 'author',
+          fields: [
+            defineField({
+              type: 'string',
+              name: 'name',
+            }),
+            defineField({
+              type: 'globalDocumentReference',
+              name: 'person',
+              title: 'Person',
+              resourceType: 'dataset',
+              resourceId: 'exx11uqh.blog',
+              to: [
+                {
+                  type: 'person',
+                  preview: {
+                    select: {
+                      title: 'title',
+                      media: 'coverImage',
+                    },
+                    prepare(val: any) {
+                      return {
+                        title: val.title,
+                        media: val.coverImage,
+                      }
+                    },
+                  },
+                },
+              ],
+            }),
+          ],
+        }),
+      ],
+    })
+
+    const serializedTypes = serializeSchema(schema, {leanFormat: true})
+
+    expect(serializedTypes).toEqual([
+      {
+        fields: [
+          {
+            name: 'name',
+            title: 'Name',
+            type: 'string',
+          },
+        ],
+        name: 'author',
+        title: 'Author',
+        type: 'object',
+      },
+    ])
+  })
 })

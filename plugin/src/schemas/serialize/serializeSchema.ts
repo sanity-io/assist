@@ -58,6 +58,7 @@ function getSchemaStub(
   options?: Options,
 ): SerializedSchemaType {
   if (!schemaType.type?.name) {
+    // eslint-disable-next-line no-console -- log error
     console.error('Missing type name', schemaType.type)
     throw new Error('Type is missing name!')
   }

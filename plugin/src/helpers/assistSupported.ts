@@ -37,6 +37,7 @@ function isUnsupportedType(type: SchemaType) {
     type.jsonType === 'number' ||
     type.name === 'sanity.imageCrop' ||
     type.name === 'sanity.imageHotspot' ||
+    isType(type, 'globalDocumentReference') ||
     (isType(type, 'reference') &&
       !(type?.options as ReferenceOptions)?.aiAssist?.embeddingsIndex) ||
     isType(type, 'crossDatasetReference') ||
