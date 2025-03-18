@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.1](https://github.com/sanity-io/assist/compare/v3.2.0...v3.2.1) (2025-03-18)
+
+### Bug Fixes
+
+- ignore GDR type ([#64](https://github.com/sanity-io/assist/issues/64)) ([74c3ca0](https://github.com/sanity-io/assist/commit/74c3ca0703e146b849018229f5d737d90d8aae22))
+
 ## [3.2.0](https://github.com/sanity-io/assist/compare/v3.1.1...v3.2.0) (2025-02-25)
 
 ### Features
