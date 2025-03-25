@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.2](https://github.com/sanity-io/assist/compare/v3.2.1...v3.2.2) (2025-03-25)
+
+### Bug Fixes
+
+- flags auto updating studio support for studios with global reference type in schema ([#66](https://github.com/sanity-io/assist/issues/66)) ([f353ec7](https://github.com/sanity-io/assist/commit/f353ec7adbf4a9fc546c48746fe73fca0d3ea4c4))
+
 ## [3.2.1](https://github.com/sanity-io/assist/compare/v3.2.0...v3.2.1) (2025-03-18)
 
 ### Bug Fixes
