@@ -46,7 +46,9 @@ export const assist = definePlugin<AssistPluginConfig | void>((config) => {
 
   return {
     name: packageName,
-
+    // the addition of global references broke auto updating studios
+    // new versions of studio know to look for this prop on assist plugin, and filter + console.warn if it is missing
+    ...({handlesGDR: true} as any),
     schema: {
       types: schemaTypes,
     },
