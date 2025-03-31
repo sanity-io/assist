@@ -256,7 +256,7 @@ Starting from v3.0.0, AI Assist can write to date and datetime fields. Instructi
 Language about time is locale and timeZone dependant. By default instructions will use the locale and timezone provided
 by the browser (`Intl.DateTimeFormat().resolvedOptions()`).
 
-Alternatively, the plugin can configured per user with a `assist.localeSettings` function that should return `LocaleSettings`.
+Alternatively, you can configure the plugin per user with an `assist.localeSettings` function that should return `LocaleSettings`.
 
 ##### Example
 ```ts
