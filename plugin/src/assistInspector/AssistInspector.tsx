@@ -367,7 +367,7 @@ export function AssistInspector(props: DocumentInspectorProps) {
                 mode="ghost"
                 disabled={isEmptyPrompt || instructionLoading}
                 fontSize={1}
-                icon={instructionLoading ? <Spinner /> : PlayIcon}
+                icon={instructionLoading ? <Spinner style={{marginTop: 3}} /> : PlayIcon}
                 onClick={runCurrentInstruction}
                 padding={3}
                 text={'Run instruction'}

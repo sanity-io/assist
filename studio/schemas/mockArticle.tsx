@@ -259,8 +259,8 @@ export const mockArticle = defineType({
   name: 'mockArticle',
   __experimental_formPreviewTitle: false,
   title: 'Article',
-  hidden: () => false,
-  readOnly: () => false,
+  //hidden: () => false,
+  //readOnly: () => false,
   fieldsets: [
     {
       name: 'seo-fieldset',
@@ -346,6 +346,16 @@ export const mockArticle = defineType({
       options: {
         aiAssist: {translateAction: true},
       },
+    }),
+    defineField({
+      name: 'editDay',
+      title: 'Day of edit',
+      type: 'date',
+    }),
+    defineField({
+      name: 'publishDay',
+      title: 'Publishing date',
+      type: 'datetime',
     }),
     defineField({
       type: articleImage.name,

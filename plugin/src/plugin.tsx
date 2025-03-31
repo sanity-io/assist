@@ -1,5 +1,5 @@
 import type {SanityClient} from '@sanity/client'
-import {definePlugin, isObjectSchemaType} from 'sanity'
+import {CurrentUser, definePlugin, isObjectSchemaType} from 'sanity'
 
 import {AssistDocumentInputWrapper} from './assistDocument/AssistDocumentInput'
 import {AssistDocumentLayout} from './assistDocument/AssistDocumentLayout'
@@ -19,9 +19,15 @@ import {createAssistDocumentPresence} from './presence/AssistDocumentPresence'
 import {schemaTypes} from './schemas'
 import {TranslationConfig} from './translate/types'
 import {assistDocumentTypeName, AssistPreset} from './types'
+import {AssistConfig} from './assistTypes'
 
 export interface AssistPluginConfig {
   translate?: TranslationConfig
+
+  /**
+   * Config that affects all instructions
+   */
+  assist?: AssistConfig
 
   /**
    * @internal
@@ -34,13 +40,57 @@ export interface AssistPluginConfig {
   __presets?: Record<string, AssistPreset>
 }
 
+export interface LocaleSettingsContext {
+  user: CurrentUser
+  defaultSettings: LocaleSettings
+}
+
+export interface LocaleSettings {
+  /**
+   * A valid Unicode BCP 47 locale identifier used to interpret and format
+   * natural language inputs and date output. Examples include "en-US", "fr-FR", or "ja-JP".
+   *
+   * This affects how phrases like "next Friday" or "in two weeks" are parsed,
+   * and how resulting dates are presented (e.g., 12-hour vs 24-hour format).
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#getcanonicalocales
+   */
+  locale: string
+
+  /**
+   * A valid IANA time zone identifier used to resolve relative and absolute
+   * date expressions to a specific point in time. Examples include
+   * "America/New_York", "Europe/Paris", or "Asia/Tokyo".
+   *
+   * This ensures phrases like "tomorrow at 9am" are interpreted correctly
+   * based on the user's local time.
+   *
+   * @see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+   */
+  timeZone: string
+}
+
 export const assist = definePlugin<AssistPluginConfig | void>((config) => {
   const configWithDefaults = config ?? {}
   const styleguide = configWithDefaults.translate?.styleguide || ''
+  const maxPathDepth = configWithDefaults.assist?.maxPathDepth
+  const temperature = configWithDefaults.assist?.temperature
 
   if (styleguide.length > 2000) {
     throw new Error(
       `[${packageName}]: \`translate.styleguide\` value is too long. It must be 2000 characters or less, was ${styleguide.length} characters`,
+    )
+  }
+
+  if (maxPathDepth !== undefined && (maxPathDepth < 1 || maxPathDepth > 12)) {
+    throw new Error(
+      `[${packageName}]: \`assist.maxPathDepth\` must be be in the range [1,12] inclusive, but was ${maxPathDepth}`,
+    )
+  }
+
+  if (temperature !== undefined && (temperature < 0 || temperature > 1)) {
+    throw new Error(
+      `[${packageName}]: \`assist.maxPathDepth\` must be be in the range [0,1] inclusive, but was ${temperature}`,
     )
   }
 
