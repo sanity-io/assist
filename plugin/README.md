@@ -158,7 +158,7 @@ function isAiAssistAllowed(user?: CurrentUser | null) {
 
 ```ts
 assist({
-  //Showing defaults
+  // Showing default values
   assist: {
     localeSettings: () => Intl.DateTimeFormat().resolvedOptions(),
     maxPathDepth: 4,
