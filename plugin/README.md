@@ -254,7 +254,7 @@ Starting from v3.0.0, AI Assist can write to date and datetime fields. Instructi
 "next year", and when Assist writes to the field, it will be converted to a field-compatible value.
 
 Language about time is locale and timeZone dependant. By default instructions will use the locale and timezone provided
-by the browser (`Intl.DateTimeFormat().resolvedOptions()`)
+by the browser (`Intl.DateTimeFormat().resolvedOptions()`).
 
 Alternatively, the plugin can configured per user with a `assist.localeSettings` function that should return `LocaleSettings`.
 
