@@ -34,17 +34,12 @@ function isDisabled(type: SchemaType) {
 
 function isUnsupportedType(type: SchemaType) {
   return (
-    type.jsonType === 'number' ||
     type.name === 'sanity.imageCrop' ||
     type.name === 'sanity.imageHotspot' ||
     isType(type, 'globalDocumentReference') ||
     (isType(type, 'reference') &&
       !(type?.options as ReferenceOptions)?.aiAssist?.embeddingsIndex) ||
     isType(type, 'crossDatasetReference') ||
-    isType(type, 'slug') ||
-    isType(type, 'url') ||
-    isType(type, 'date') ||
-    isType(type, 'datetime') ||
     isType(type, 'file')
   )
 }
