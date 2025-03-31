@@ -3,6 +3,7 @@ import {useToast} from '@sanity/ui'
 import {useCallback, useMemo, useState} from 'react'
 import {Path, pathToString, useClient, useCurrentUser, useSchema} from 'sanity'
 
+import {useAiAssistanceConfig} from './assistLayout/AiAssistanceConfigContext'
 import {ConditionalMemberState} from './helpers/conditionalMembers'
 import {serializeSchema} from './schemas/serialize/serializeSchema'
 import {FieldLanguageMap} from './translate/paths'
@@ -40,13 +41,14 @@ export interface TranslateRequest {
 }
 
 const basePath = '/assist/tasks/instruction'
+const API_VERSION_WITH_EXTENDED_TYPES = '2025-04-01'
 
 export function canUseAssist(status: InstructStatus | undefined) {
   return status?.enabled && status.initialized && status.validToken
 }
 
 export function useApiClient(customApiClient?: (defaultClient: SanityClient) => SanityClient) {
-  const client = useClient({apiVersion: '2023-06-05'})
+  const client = useClient({apiVersion: API_VERSION_WITH_EXTENDED_TYPES})
   return useMemo(
     () => (customApiClient ? customApiClient(client) : client),
     [client, customApiClient],
@@ -278,9 +280,27 @@ export function useRunInstructionApi(apiClient: SanityClient) {
   const schema = useSchema()
   const types = useMemo(() => serializeSchema(schema, {leanFormat: true}), [schema])
 
+  const {
+    config: {assist: assistConfig},
+  } = useAiAssistanceConfig()
+
   const runInstruction = useCallback(
     (request: RunInstructionRequest) => {
+      if (!user) {
+        toast.push({
+          status: 'error',
+          title: 'Unable to get user for instruction.',
+        })
+        return undefined
+      }
       setLoading(true)
+
+      const {timeZone, locale} = Intl.DateTimeFormat().resolvedOptions()
+      const defaultLocaleSettings = {timeZone, locale}
+      const localeSettings =
+        assistConfig?.localeSettings?.({user, defaultSettings: defaultLocaleSettings}) ??
+        defaultLocaleSettings
+
       return apiClient
         .request({
           method: 'POST',
@@ -291,6 +311,8 @@ export function useRunInstructionApi(apiClient: SanityClient) {
             ...request,
             types,
             userId: user?.id,
+            localeSettings,
+            maxPathDepth: assistConfig?.maxPathDepth,
           },
         })
         .catch((e) => {
@@ -305,7 +327,7 @@ export function useRunInstructionApi(apiClient: SanityClient) {
           setLoading(false)
         })
     },
-    [apiClient, types, user, toast],
+    [apiClient, types, user, toast, assistConfig],
   )
 
   return useMemo(
