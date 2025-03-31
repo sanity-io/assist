@@ -172,7 +172,7 @@ assist({
 - `maxPathDepth`: The max depth for document paths AI Assist will write to.
 - `temperature`: Influences how much the output of an instruction will vary between runs.
 
-For more details, please confer the TSDocs of the individual config parameters in [assistTypes.ts](./src/assistTypes.ts)
+For more details, please review the TSDocs of the individual config parameters in [assistTypes.ts](./src/assistTypes.ts)
 
 ## Schema configuration
 
