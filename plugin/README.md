@@ -12,11 +12,13 @@
   - [Enabling the AI Assist API](#enabling-the-ai-assist-api)
   - [Permissions](#permissions)
   - [Conditional user access](#conditional-user-access)
+  - [Assist configuration](#assist-configuration-optional)
 - [Schema configuration](#schema-configuration)
   - [Disable AI Assist for a schema type](#disable-ai-assist-for-a-schema-type)
   - [Disable for a field](#disable-for-a-field)
   - [Disable for an array type](#disable-for-an-array-type)
   - [Unsupported types](#unsupported-types)
+  - [Date and datetime](#date-and-datetime)
   - [Hidden and readOnly fields](#hidden-and-readonly-fields)
   - [Reference support](#reference-support)
   - [Troubleshooting](#troubleshooting)
@@ -152,6 +154,26 @@ function isAiAssistAllowed(user?: CurrentUser | null) {
 }
 ```
 
+### Assist configuration (optional)
+
+```ts
+assist({
+  //Showing defaults
+  assist: {
+    localeSettings: () => Intl.DateTimeFormat().resolvedOptions(),
+    maxPathDepth: 4,
+    temperature: 0.3
+  },
+  translate: { /* see sections about document and field translation */}
+})
+```
+
+- `localeSettings`: See section on [date and datetime](#date-and-datetime)
+- `maxPathDepth`: The max depth for document paths AI Assist will write to.
+- `temperature`: Influences how much the output of an instruction will vary between runs.
+
+For more details, please confer the TSDocs of the individual config parameters in [assistTypes.ts](./src/assistTypes.ts)
+
 ## Schema configuration
 
 By default, most string, object, and array field types (including Portable Text!) have AI writing assistance enabled. Your assistant can write to all compatible fields that it detects.
@@ -215,11 +237,6 @@ defineType({
 
 The following types are not supported, and behave as excluded types:
 
-- [Number](https://www.sanity.io/docs/number-type)
-- [Slug](https://www.sanity.io/docs/slug-type)
-- [Url](https://www.sanity.io/docs/url-type)
-- [Date](https://www.sanity.io/docs/date-type)
-- [Datetime](https://www.sanity.io/docs/datetime-type)
 - [Image](https://www.sanity.io/docs/image-type) (supported when image has custom fields)
 - [File](https://www.sanity.io/docs/file-type) (never supported, even when file has custom fields)
 - [Reference](https://www.sanity.io/docs/reference-type) (supported when configured with embeddingsIndex)
@@ -228,6 +245,42 @@ Fields with these types will not be changed by the assistant, do not have AI Ass
 
 Objects where all fields are excluded or unsupported and arrays where all member types are excluded or unsupported
 will also be excluded.
+
+### Date and datetime
+- [Date](https://www.sanity.io/docs/date-type)
+- [Datetime](https://www.sanity.io/docs/datetime-type)
+
+Starting from v3.0.0, AI Assist can write to date and datetime fields. Instructions can use language like "tomorrow at noon" or
+"next year", and when Assist writes to the field, it will be converted to a field-compatible value.
+
+Language about time is locale and timeZone dependant. By default instructions will use the locale and timezone provided
+by the browser (`Intl.DateTimeFormat().resolvedOptions()`)
+
+Alternatively, the plugin can configured per user with a `assist.localeSettings` function that should return `LocaleSettings`.
+
+##### Example
+```ts
+assist({
+  assist: {
+    localeSettings: ({currentUser, defaultSettings}) => {
+      if (currentUser.roles.includes('admin')) {
+        //forces locale and timeZone for admins
+        return {
+          locale: 'en-US',
+          timeZone: 'America/New_York'
+        }
+      }
+      // defaultSettings is the same as using:
+      // const {locale, timeZone} = Intl.DateTimeFormat().resolvedOptions()
+      return defaultSettings
+    }
+  }
+})
+```
+
+For a list of allowed values for these parameters, see the following resources: 
+- `locale`: [Mozilla on Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#getcanonicalocales)
+- `timeZone`: [Wiki on time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 
 ### Hidden and readOnly fields
 
