@@ -150,11 +150,6 @@ describe('serializeSchema', () => {
             }),
             //image without extra fields should be excluded
             defineField({type: 'image', name: 'image'}),
-            // unsupported types
-            defineField({type: 'number', name: 'number'}),
-            defineField({type: 'slug', name: 'slug'}),
-            defineField({type: 'url', name: 'url'}),
-            defineField({type: 'datetime', name: 'datetime'}),
             defineField({type: 'file', name: 'file'}),
             defineField({type: 'reference', name: 'reference', to: [{type: 'excluded'}]}),
             defineField({
@@ -717,7 +712,14 @@ describe('serializeSchema', () => {
         name: 'blockAlias',
         title: 'Block',
         type: 'block',
-        annotations: [],
+        annotations: [
+          {
+            fields: [{name: 'href', title: 'Link', type: 'url'}],
+            name: 'link',
+            title: 'Link',
+            type: 'object',
+          },
+        ],
         inlineOf: [
           {
             name: 'inline-block',
