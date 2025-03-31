@@ -30,8 +30,8 @@ export interface AssistConfig {
    * Be careful not to set this too high in studios with recursive document schemas, as it could have
    * negative impact on performance.
    *
-   * Depth will be counted from the field the instruction is run from. Ie, if an instruction
-   * is attached to say, depth 6, count starts from there (at 0, not at 6).
+   * Depth will be counted from the field the instruction is run from. For example, if an instruction
+   * is attached to depth 6, the count starts from there (at 0, not at 6).
    *
    * Default: 4
    */
