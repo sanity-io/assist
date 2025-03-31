@@ -264,7 +264,7 @@ assist({
   assist: {
     localeSettings: ({currentUser, defaultSettings}) => {
       if (currentUser.roles.includes('admin')) {
-        //forces locale and timeZone for admins
+        // forces locale and timeZone for admins
         return {
           locale: 'en-US',
           timeZone: 'America/New_York'
