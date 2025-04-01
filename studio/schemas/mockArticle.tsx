@@ -358,6 +358,10 @@ export const mockArticle = defineType({
       type: 'datetime',
     }),
     defineField({
+      type: 'slug',
+      name: 'slug',
+    }),
+    defineField({
       type: articleImage.name,
       name: 'image',
       title: 'Cover image',
