@@ -53,6 +53,11 @@ export default defineConfig({
     visionTool(),
     codeInput(),
     assist({
+      assist: {
+        maxPathDepth: 6,
+        localeSettings: ({defaultSettings}) => defaultSettings,
+        temperature: 1,
+      },
       translate: {
         field: {
           documentTypes: [languageArticle.name],
