@@ -518,6 +518,22 @@ export const mockArticle = defineType({
       of: [{type: 'number'}],
     }),
     defineField({
+      name: 'canPublush',
+      type: 'boolean',
+      title: 'Can publish',
+    }),
+    defineField({
+      name: 'homepage',
+      type: 'url',
+      title: 'Homepage',
+    }),
+    defineField({
+      name: 'boolean',
+      type: 'array',
+      title: 'Switches',
+      of: [{type: 'boolean'}],
+    }),
+    defineField({
       type: 'crossDatasetReference',
       name: 'crossRef',
       title: 'Cross dataset ref',
