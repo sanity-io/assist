@@ -5,6 +5,17 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.0](https://github.com/sanity-io/assist/compare/v3.2.2...v4.0.0) (2025-04-09)
+
+### ⚠ BREAKING CHANGES
+
+- AI Assist will write to fields it previously skipped as it did not support them.
+
+### Features
+
+- adds instruction plugin config via assist prop – localeSettings, maxPathDepth and temperature ([68dbeaf](https://github.com/sanity-io/assist/commit/68dbeaf5fc5b50f574b5e7d38eac6b59fa7eb0cd))
+- adds support for boolean, number, slug, url, date and datetime ([329c959](https://github.com/sanity-io/assist/commit/329c959e38aac60aa93f1e3175663347ea5fde69))
+
 ## [3.2.2](https://github.com/sanity-io/assist/compare/v3.2.1...v3.2.2) (2025-03-25)
 
 ### Bug Fixes
