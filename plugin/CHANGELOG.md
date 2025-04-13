@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/sanity-io/assist/compare/v4.0.0...v4.0.1) (2025-04-13)
+
+### Bug Fixes
+
+- **regression:** instructions and translate will now correctly send drafts.id when running on a published document ([95d8fc5](https://github.com/sanity-io/assist/commit/95d8fc540f4392c0f998b27e67c929398ee02100))
+
 ## [4.0.0](https://github.com/sanity-io/assist/compare/v3.2.2...v4.0.0) (2025-04-09)
 
 ### ⚠ BREAKING CHANGES
