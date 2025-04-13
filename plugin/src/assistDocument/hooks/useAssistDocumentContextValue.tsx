@@ -33,14 +33,11 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
   // @ts-ignore this is a valid option available in `corel` - Remove after corel is merged to next
   const {draft, published, version} = editState || {}
 
-  let assistableDocumentId = version?._id || draft?._id || published?._id
-  if (!assistableDocumentId) {
-    assistableDocumentId = selectedReleaseId
-      ? getVersionId(documentId, selectedReleaseId)
-      : documentSchemaType.liveEdit
-        ? documentId
-        : getDraftId(documentId)
-  }
+  const assistableDocumentId = selectedReleaseId
+    ? getVersionId(documentId, selectedReleaseId)
+    : documentSchemaType.liveEdit
+      ? documentId
+      : getDraftId(documentId)
 
   const documentIsNew = selectedReleaseId ? !version?._id : !draft?._id && !published?._id
   const documentIsAssistable = selectedReleaseId
