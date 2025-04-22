@@ -148,7 +148,10 @@ export const translateActions: DocumentFieldAction = {
                     getConditionalMembers(formStateRef.current)
                   }
                   openFieldTranslation({
-                    document: docRef.current,
+                    document: {
+                      ...docRef.current,
+                      _id: documentId,
+                    },
                     documentSchema: documentSchemaType,
                     translatePath: path,
                     conditionalMembers: formStateRef.current
