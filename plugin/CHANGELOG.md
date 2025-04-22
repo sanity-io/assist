@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.2](https://github.com/sanity-io/assist/compare/v4.0.1...v4.0.2) (2025-04-22)
+
+### Bug Fixes
+
+- running field translation for the whole document now correctly forces a new draft ([b323d10](https://github.com/sanity-io/assist/commit/b323d10c75aa940c69764980572ba9cfdf76be4a))
+
 ## [4.0.1](https://github.com/sanity-io/assist/compare/v4.0.0...v4.0.1) (2025-04-13)
 
 ### Bug Fixes
