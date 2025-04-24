@@ -19,7 +19,8 @@ import {
 
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 import type {ConditionalMemberState} from '../helpers/conditionalMembers'
-import {useApiClient, useTranslate} from '../useApiClient'
+import {createStyleGuideResolver} from '../helpers/styleguide'
+import {API_VERSION_WITH_EXTENDED_TYPES, useApiClient, useTranslate} from '../useApiClient'
 import {getLanguageParams} from './getLanguageParams'
 import {getPreferredToFieldLanguages, setPreferredToFieldLanguages} from './languageStore'
 import {
@@ -67,6 +68,7 @@ function hasValuesToTranslate(
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
   const {config: assistConfig} = useAiAssistanceConfig()
+
   const apiClient = useApiClient(assistConfig.__customApiClient)
   const styleguide = assistConfig.translate?.styleguide
   const config = assistConfig.translate?.field
@@ -87,7 +89,9 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
     setLanguages(undefined)
     setFieldTranslationParams(undefined)
   }, [])
-  const languageClient = useClient({apiVersion: config?.apiVersion ?? '2022-11-27'})
+  const languageClient = useClient({
+    apiVersion: config?.apiVersion ?? API_VERSION_WITH_EXTENDED_TYPES,
+  })
   const documentId = fieldTranslationParams?.document?._id
   const id = useId()
 
@@ -195,7 +199,12 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
       runTranslate({
         documentId,
         translatePath,
-        styleguide,
+        styleguide: createStyleGuideResolver(styleguide, {
+          client: languageClient,
+          documentId,
+          schemaType: fieldTranslationParams?.documentSchema,
+          translatePath,
+        }),
         fieldLanguageMap: fieldLanguageMaps.map((map) => ({
           ...map,
           // eslint-disable-next-line max-nested-callbacks
@@ -214,6 +223,8 @@ export function FieldTranslationProvider(props: PropsWithChildren<{}>) {
     toLanguages,
     fieldTranslationParams?.translatePath,
     fieldTranslationParams?.conditionalMembers,
+    fieldTranslationParams?.documentSchema,
+    languageClient,
   ])
 
   const runButton = (

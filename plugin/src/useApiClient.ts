@@ -35,13 +35,13 @@ export interface TranslateRequest {
   documentId: string
   translatePath: Path
   languagePath?: string
-  styleguide?: string
+  styleguide: () => Promise<string | undefined>
   fieldLanguageMap?: FieldLanguageMap[]
   conditionalMembers?: ConditionalMemberState[]
 }
 
 const basePath = '/assist/tasks/instruction'
-const API_VERSION_WITH_EXTENDED_TYPES = '2025-04-01'
+export const API_VERSION_WITH_EXTENDED_TYPES = '2025-04-01'
 
 export function canUseAssist(status: InstructStatus | undefined) {
   return status?.enabled && status.initialized && status.validToken
@@ -73,8 +73,8 @@ export function useTranslate(apiClient: SanityClient) {
     }: TranslateRequest) => {
       setLoading(true)
 
-      return apiClient
-        .request({
+      async function run() {
+        return apiClient.request({
           method: 'POST',
           url: `/assist/tasks/translate/${apiClient.config().dataset}?projectId=${
             apiClient.config().projectId
@@ -83,7 +83,7 @@ export function useTranslate(apiClient: SanityClient) {
             documentId,
             types,
             languagePath,
-            userStyleguide: styleguide,
+            userStyleguide: await styleguide(),
             fieldLanguageMap,
             conditionalMembers,
             translatePath:
@@ -91,6 +91,9 @@ export function useTranslate(apiClient: SanityClient) {
             userId: user?.id,
           },
         })
+      }
+
+      return run()
         .catch((e) => {
           toast.push({
             status: 'error',

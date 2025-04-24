@@ -915,6 +915,21 @@ the plugin will throw upon studio startup.
 Note that this is currently only available on a global level - it can not be defined
 per-field for now.
 
+### Dynamic styleguide
+
+As of 4.1.0 it is also possible to provide a styleguide async function.
+The function is passed a context object with Sanity client and the current documentId and schemaType. 
+
+Consider caching the results: the function is invoked every time translate runs.
+
+```ts
+assist({
+  translate: {
+    styleguide: ({client, documentId, schemaType}) => client.fetch('* [_id=="styleguide.singleton"][0].styleguide')
+  },
+})
+```
+
 ## Caveats
 
 Large Language Models (LLMs) are a new technology. Constraints and limitations are still being explored,

@@ -73,7 +73,11 @@ export default defineConfig({
           documentTypes: translatedDocTypes,
           languageField: 'language',
         },
-        styleguide: 'Retain the word "Headless" in all translations as is, regardless of language.',
+        styleguide: () => {
+          return Promise.resolve(
+            'Retain the word "Headless" in all translations as is, regardless of language.',
+          )
+        },
       },
 
       __customApiClient: (defaultClient) =>
