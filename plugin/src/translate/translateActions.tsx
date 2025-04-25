@@ -2,12 +2,13 @@
 import {TranslateIcon} from '@sanity/icons'
 import {Box, Spinner} from '@sanity/ui'
 import {useMemo, useRef} from 'react'
-import type {
+import {
   DocumentFieldAction,
   DocumentFieldActionGroup,
   DocumentFieldActionItem,
   DocumentFieldActionProps,
   ObjectSchemaType,
+  useClient,
 } from 'sanity'
 import {useDocumentPane} from 'sanity/structure'
 
@@ -15,8 +16,9 @@ import {useDraftDelayedTask} from '../assistDocument/RequestRunInstructionProvid
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 import {isAssistSupported} from '../helpers/assistSupported'
 import {getConditionalMembers} from '../helpers/conditionalMembers'
+import {createStyleGuideResolver} from '../helpers/styleguide'
 import type {AssistOptions} from '../schemas/typeDefExtensions'
-import {useApiClient, useTranslate} from '../useApiClient'
+import {API_VERSION_WITH_EXTENDED_TYPES, useApiClient, useTranslate} from '../useApiClient'
 import {useFieldTranslation} from './FieldTranslationProvider'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
@@ -32,7 +34,7 @@ export const translateActions: DocumentFieldAction = {
   useAction(props: TranslateProps) {
     const {config, status} = useAiAssistanceConfig()
     const apiClient = useApiClient(config?.__customApiClient)
-
+    const client = useClient({apiVersion: API_VERSION_WITH_EXTENDED_TYPES})
     const {
       schemaType: fieldSchemaType,
       path,
@@ -99,7 +101,11 @@ export const translateActions: DocumentFieldAction = {
             translate({
               languagePath,
               translatePath: path,
-              styleguide,
+              styleguide: createStyleGuideResolver(styleguide, {
+                client,
+                documentId,
+                schemaType: documentSchemaType,
+              }),
               documentId: documentId ?? '',
               conditionalMembers: formStateRef.current
                 ? getConditionalMembers(formStateRef.current)
@@ -118,6 +124,8 @@ export const translateActions: DocumentFieldAction = {
         documentTranslationEnabled,
         path,
         readOnly,
+        client,
+        documentSchemaType,
       ])
       const fieldTranslate = useFieldTranslation()
       const openFieldTranslation = useDraftDelayedTask({

@@ -9,17 +9,18 @@ import {AssistInlineFormBlock} from './assistFormComponents/AssistInlineFormBloc
 import {AssistItem} from './assistFormComponents/AssistItem'
 import {assistInspector} from './assistInspector'
 import {AssistLayout} from './assistLayout/AssistLayout'
+import {AssistConfig} from './assistTypes'
 import {ImageContextProvider} from './components/ImageContext'
 import {SafeValueInput} from './components/SafeValueInput'
 import {packageName} from './constants'
 import {assistFieldActions} from './fieldActions/assistFieldActions'
 import {isSchemaAssistEnabled} from './helpers/assistSupported'
+import {validateStyleguide} from './helpers/styleguide'
 import {isImage} from './helpers/typeUtils'
 import {createAssistDocumentPresence} from './presence/AssistDocumentPresence'
 import {schemaTypes} from './schemas'
 import {TranslationConfig} from './translate/types'
 import {assistDocumentTypeName, AssistPreset} from './types'
-import {AssistConfig} from './assistTypes'
 
 export interface AssistPluginConfig {
   translate?: TranslationConfig
@@ -46,10 +47,8 @@ export const assist = definePlugin<AssistPluginConfig | void>((config) => {
   const maxPathDepth = configWithDefaults.assist?.maxPathDepth
   const temperature = configWithDefaults.assist?.temperature
 
-  if (styleguide.length > 2000) {
-    throw new Error(
-      `[${packageName}]: \`translate.styleguide\` value is too long. It must be 2000 characters or less, was ${styleguide.length} characters`,
-    )
+  if (typeof styleguide === 'string') {
+    validateStyleguide(styleguide)
   }
 
   if (maxPathDepth !== undefined && (maxPathDepth < 1 || maxPathDepth > 12)) {

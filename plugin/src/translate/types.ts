@@ -1,4 +1,4 @@
-import {Path, SanityClient, SchemaType} from 'sanity'
+import {ObjectSchemaType, Path, SanityClient, SchemaType} from 'sanity'
 
 export interface Language {
   id: string
@@ -163,6 +163,20 @@ export interface DocumentTranslationConfig {
   documentTypes?: string[]
 }
 
+export interface TranslateStyleguideContext {
+  documentId: string
+  schemaType: ObjectSchemaType
+  client: SanityClient
+  /**
+   * Only provided for field translations
+   */
+  translatePath?: Path
+}
+
+export type TranslateStyleguide =
+  | string
+  | ((context: TranslateStyleguideContext) => Promise<string>)
+
 export interface TranslationConfig {
   /**
    * Config for document types with fields in multiple languages in the same document.
@@ -176,6 +190,8 @@ export interface TranslationConfig {
    * A "style guide" that can be used to provide guidance on how to translate content.
    * Will be passed to the LLM - ergo this is only a guide and the model _may_ not
    * always follow it to the letter.
+   *
+   * When providing a function, consider caching the results of any async operation; it will invoked every time translate runs
    */
-  styleguide?: string
+  styleguide?: TranslateStyleguide
 }
