@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.0](https://github.com/sanity-io/assist/compare/v4.0.2...v4.1.0) (2025-04-25)
+
+### Features
+
+- translate styleguide can now be an async function ([#69](https://github.com/sanity-io/assist/issues/69)) ([485db6b](https://github.com/sanity-io/assist/commit/485db6b4af73497f375525ce6bc461f258737e31))
+
 ## [4.0.2](https://github.com/sanity-io/assist/compare/v4.0.1...v4.0.2) (2025-04-22)
 
 ### Bug Fixes
