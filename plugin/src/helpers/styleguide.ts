@@ -2,7 +2,7 @@ import {packageName} from '../constants'
 import {TranslateStyleguide, TranslateStyleguideContext} from '../translate/types'
 
 export function validateStyleguide(styleguide: string | undefined) {
-  if (styleguide && styleguide?.length > 2000) {
+  if (styleguide && styleguide.length > 2000) {
     throw new Error(
       `[${packageName}]: \`translate.styleguide\` value is too long. It must be 2000 characters or less, but was ${styleguide.length} characters`,
     )
