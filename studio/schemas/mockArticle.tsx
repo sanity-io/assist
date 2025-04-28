@@ -621,7 +621,10 @@ export const mockArticle = defineType({
       ],
       options: {
         aiAssist: {
-          imageDescriptionField: 'wrapper.wrapper.caption',
+          imageDescriptionField: {
+            path: 'wrapper.wrapper.caption',
+            updateOnImageChange: false,
+          },
         },
       },
     }),
