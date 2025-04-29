@@ -15,6 +15,12 @@ import {featureProduct, languageArticle} from './schemas/languageArticle'
 import {mockArticle} from './schemas/mockArticle'
 import {brokenTypeName} from './schemas/brokenTypeName'
 import {CloseIcon} from '@sanity/icons'
+import {generateSansPtePlugin} from './plugins/generateSansPtePlugin'
+import {pteContinuationPlugin} from './plugins/pteContinuationPlugin'
+import {fixSpellingWithTranslatePlugin} from './plugins/fixSpellingWithTranslatePlugin'
+import {newDocumentsBasedOnStringArrayPlugin} from './plugins/newDocsBasedOnStringArray'
+import {translateIntoAllLanguagesPlugin} from './plugins/translateIntoAllTheLanguages'
+import {emojifyDocPlugin} from './plugins/emojifyDocument'
 
 export default defineConfig({
   name: 'default',
@@ -113,6 +119,12 @@ export default defineConfig({
         },
       },
     }),
+    generateSansPtePlugin(),
+    pteContinuationPlugin(),
+    fixSpellingWithTranslatePlugin(),
+    newDocumentsBasedOnStringArrayPlugin(),
+    translateIntoAllLanguagesPlugin(),
+    emojifyDocPlugin(),
     documentInternationalization({
       supportedLanguages: languages,
       schemaTypes: translatedDocTypes,
