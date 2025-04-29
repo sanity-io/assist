@@ -76,7 +76,7 @@ export const translateActions: DocumentFieldAction = {
       })
 
       const styleguide = config.translate?.styleguide
-      const languagePath = config.translate?.document?.languageField
+      const languagePath = config.translate?.document?.languageField ?? 'language'
 
       // if this is true, it is stable, and not breaking rules of hooks
       const translateDocumentAction = useMemo(() => {

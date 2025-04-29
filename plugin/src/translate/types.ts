@@ -150,7 +150,7 @@ export interface DocumentTranslationConfig {
    *
    * Default: 'language'
    */
-  languageField: string
+  languageField?: string
 
   /**
    * `documentTypes` should be an array of strings where each entry must match a name from your document schemas.
