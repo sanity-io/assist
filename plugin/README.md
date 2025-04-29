@@ -162,9 +162,11 @@ assist({
   assist: {
     localeSettings: () => Intl.DateTimeFormat().resolvedOptions(),
     maxPathDepth: 4,
-    temperature: 0.3
+    temperature: 0.3,
   },
-  translate: { /* see sections about document and field translation */}
+  translate: {
+    /* see sections about document and field translation */
+  },
 })
 ```
 
@@ -247,6 +249,7 @@ Objects where all fields are excluded or unsupported and arrays where all member
 will also be excluded.
 
 ### Date and datetime
+
 - [Date](https://www.sanity.io/docs/date-type)
 - [Datetime](https://www.sanity.io/docs/datetime-type)
 
@@ -259,6 +262,7 @@ by the browser (`Intl.DateTimeFormat().resolvedOptions()`).
 Alternatively, you can configure the plugin per user with an `assist.localeSettings` function that should return `LocaleSettings`.
 
 ##### Example
+
 ```ts
 assist({
   assist: {
@@ -267,18 +271,19 @@ assist({
         // forces locale and timeZone for admins
         return {
           locale: 'en-US',
-          timeZone: 'America/New_York'
+          timeZone: 'America/New_York',
         }
       }
       // defaultSettings is the same as using:
       // const {locale, timeZone} = Intl.DateTimeFormat().resolvedOptions()
       return defaultSettings
-    }
-  }
+    },
+  },
 })
 ```
 
-For a list of allowed values for these parameters, see the following resources: 
+For a list of allowed values for these parameters, see the following resources:
+
 - `locale`: [Mozilla on Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#getcanonicalocales)
 - `timeZone`: [Wiki on time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 
@@ -408,6 +413,7 @@ The **Generate image description** action will automatically run whenever the im
 Fields within array items are not supported.
 
 By default, the caption field will regenerate whenever the image asset changes. To disable this behavior use the following configuration:
+
 ```ts
 {
   imageDescriptionField: {
@@ -523,9 +529,11 @@ AI Assist allows editors to translate these documents into the desired language 
 
 ### Configure document translations
 
-To enable full document translations, set `translate.document.languageField` to the path of the language field in your documents.
+If using the default configuration from [@sanity/document-internationalization](https://github.com/sanity-io/document-internationalization) AI Assist will be automatically enabled for any document with a `language` field.
 
-All documents with a corresponding language field will get a "Translate document" instruction added to the AI Assist drop-down for the document.
+If using a field name besides `language`, set `translate.document.languageField` to the path of the language field in your documents.
+
+All documents with a matching language field will get a "Translate document" instruction added to the AI Assist drop-down for the document.
 
 To further limit which document types should be enabled for translation instructions, provide an array of document type names to `translate.document.documentTypes`.
 
@@ -534,11 +542,16 @@ If the studio is using [@sanity/document-internationalization](https://github.co
 **Example configs**
 
 ```ts
-// This will add a "Translate document" instruction to all documents with a language field
+// No config adds the action to any document with a `language` field
+assist()
+```
+
+```ts
+// If passing a custom field name to @sanity/document-internationalization, override `languageField`
 assist({
   translate: {
     document: {
-      languageField: 'language',
+      languageField: 'locale',
     },
   },
 })
@@ -549,7 +562,6 @@ assist({
 assist({
   translate: {
     document: {
-      languageField: 'language',
       documentTypes: ['article'],
     },
   },
@@ -564,8 +576,6 @@ assist({
         /** Config for document types with a single language field that determines the language for the whole document. */
         document: {
             /**
-             * Required config, enable document tranlations.
-             *
              * Path to language field in documents. Can be a hidden field.
              * For instance: 'config.language'
              *
@@ -656,9 +666,11 @@ defineType({
 **If your schema is not using either of these structures**, refer to the section on [Custom language fields](#custom-language-fields).
 
 #### Note on document schema depth
+
 By default, field level translations will translate 6 "path-segments" deep.
 
 Depth is based on field path segments like so:
+
 - `title` has depth 1
 - `array[_key="no"].title` has depth 3
 
@@ -668,7 +680,7 @@ If this is not sufficient for your document types, use `maxPathDepth`:
 assist({
   translate: {
     field: {
-      maxPathDepth: 12
+      maxPathDepth: 12,
     },
   },
 })
@@ -928,14 +940,15 @@ per-field for now.
 ### Dynamic styleguide
 
 As of 4.1.0 it is also possible to provide a styleguide async function.
-The function is passed a context object with Sanity client and the current documentId and schemaType. 
+The function is passed a context object with Sanity client and the current documentId and schemaType.
 
 Consider caching the results: the function is invoked every time translate runs.
 
 ```ts
 assist({
   translate: {
-    styleguide: ({client, documentId, schemaType}) => client.fetch('* [_id=="styleguide.singleton"][0].styleguide')
+    styleguide: ({client, documentId, schemaType}) =>
+      client.fetch('* [_id=="styleguide.singleton"][0].styleguide'),
   },
 })
 ```
