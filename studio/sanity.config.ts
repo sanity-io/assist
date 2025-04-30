@@ -17,7 +17,7 @@ import {brokenTypeName} from './schemas/brokenTypeName'
 import {CloseIcon} from '@sanity/icons'
 import {generateSansPtePlugin} from './plugins/generateSansPtePlugin'
 import {pteContinuationPlugin} from './plugins/pteContinuationPlugin'
-import {documentPoweredFixWithTranslatePlugin} from './plugins/documentPoweredFixWithTranslatePlugin'
+import {documentPoweredFixWithTransformPlugin} from './plugins/documentPoweredFixWithTransformPlugin'
 import {newDocumentsBasedOnStringArrayPlugin} from './plugins/newDocsBasedOnStringArray'
 import {translateIntoAllLanguagesPlugin} from './plugins/translateIntoAllTheLanguages'
 import {emojifyDocPlugin} from './plugins/emojifyDocument'
@@ -122,7 +122,7 @@ export default defineConfig({
     }),
     generateSansPtePlugin(),
     pteContinuationPlugin(),
-    documentPoweredFixWithTranslatePlugin(),
+    documentPoweredFixWithTransformPlugin(),
     newDocumentsBasedOnStringArrayPlugin(),
     translateIntoAllLanguagesPlugin(),
     emojifyDocPlugin(),

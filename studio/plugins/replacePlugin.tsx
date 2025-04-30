@@ -106,14 +106,17 @@ export const replacePlugin = definePlugin({
 export function useClient(props: {apiVersion: string}) {
   const client = useClientSanity(props)
   return useMemo(() => {
-    return createClient(client.config()).withConfig({
-      apiHost: 'http://localhost:5000',
+    const sanityClient = createClient(client.config())
+    if (!process.env.SANITY_STUDIO_PLUGIN_API_HOST) {
+      return sanityClient
+    }
+    return sanityClient.withConfig({
+      apiHost: process.env.SANITY_STUDIO_PLUGIN_API_HOST,
       useProjectHostname: false,
       withCredentials: false,
     })
   }, [client])
 }
-
 export function pathStartsWith(path: Path, startsWithPath: Path) {
   return startsWithPath.every((s, i) => isSegmentEqual(s, path[i]))
 }

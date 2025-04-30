@@ -19,7 +19,7 @@ import {AgentActionPath, createClient} from '@sanity/client'
 import {useToast} from '@sanity/ui'
 
 // Triggers on shift+mod+enter
-export const documentPoweredFixWithTranslatePlugin = definePlugin({
+export const documentPoweredFixWithTransformPlugin = definePlugin({
   name: '@sanity/document-powered-spelling',
 
   form: {
@@ -64,11 +64,16 @@ export const documentPoweredFixWithTranslatePlugin = definePlugin({
             const targetId = documentSchemaType.liveEdit ? documentId : getDraftId(documentId)
 
             client.agent.action
-              .translate({
+              .transform({
                 schemaId,
                 documentId: targetId,
-                styleGuide: `$guide`,
-                styleGuideParams: {
+                instruction: `
+                Fix the field value according to this guide:
+                $guide.
+                ---
+                Keep in mind that the document is for language code: ${languageCode}
+                `,
+                instructionParams: {
                   guide: {
                     type: 'groq',
                     //this is silly, you should use a singleton id probably
@@ -76,13 +81,12 @@ export const documentPoweredFixWithTranslatePlugin = definePlugin({
                     params: {type: 'assist.instruction.context'},
                   },
                 },
-                fromLanguage: {id: languageCode},
-                toLanguage: {id: languageCode},
-                target: {path: fieldPath},
+                target: fieldPath?.length ? {path: fieldPath} : undefined,
                 conditionalPaths: {
                   defaultHidden: false,
                   defaultReadOnly: false,
                 },
+                temperature: 0.4,
               })
               .catch((err) => {
                 console.error(err)
@@ -116,8 +120,12 @@ export const documentPoweredFixWithTranslatePlugin = definePlugin({
 export function useClient(props: {apiVersion: string}) {
   const client = useClientSanity(props)
   return useMemo(() => {
-    return createClient(client.config()).withConfig({
-      apiHost: 'http://localhost:5000',
+    const sanityClient = createClient(client.config())
+    if (!process.env.SANITY_STUDIO_PLUGIN_API_HOST) {
+      return sanityClient
+    }
+    return sanityClient.withConfig({
+      apiHost: process.env.SANITY_STUDIO_PLUGIN_API_HOST,
       useProjectHostname: false,
       withCredentials: false,
     })
