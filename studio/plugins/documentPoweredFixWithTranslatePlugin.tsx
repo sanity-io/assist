@@ -8,7 +8,6 @@ import {
   isKeySegment,
   Path,
   PathSegment,
-  pathToString,
   SchemaType,
   useClient as useClientSanity,
   useFormValue,
@@ -20,8 +19,8 @@ import {AgentActionPath, createClient} from '@sanity/client'
 import {useToast} from '@sanity/ui'
 
 // Triggers on shift+mod+enter
-export const fixSpellingWithTranslatePlugin = definePlugin({
-  name: '@sanity/fix-spelling',
+export const documentPoweredFixWithTranslatePlugin = definePlugin({
+  name: '@sanity/document-powered-spelling',
 
   form: {
     components: {
@@ -68,7 +67,15 @@ export const fixSpellingWithTranslatePlugin = definePlugin({
               .translate({
                 schemaId,
                 documentId: targetId,
-                styleGuide: `Fix any spelling mistakes, leave everything else as is.`,
+                styleGuide: `$guide`,
+                styleGuideParams: {
+                  guide: {
+                    type: 'groq',
+                    //this is silly, you should use a singleton id probably
+                    query: '*[_type == $type] | order(_updatedAt desc)[0].context',
+                    params: {type: 'assist.instruction.context'},
+                  },
+                },
                 fromLanguage: {id: languageCode},
                 toLanguage: {id: languageCode},
                 target: {path: fieldPath},
