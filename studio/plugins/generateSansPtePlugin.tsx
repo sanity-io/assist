@@ -65,6 +65,8 @@ export const generateSansPtePlugin = definePlugin({
                   We are generating a new value for a document field.
                   The document type is ${documentSchemaType.name}, and the document type title is ${documentSchemaType.title}
 
+                  The document language is: "$lang" (use en-US if unspecified)
+
                   The document value is:
                   $doc
                   ---
@@ -76,11 +78,12 @@ export const generateSansPtePlugin = definePlugin({
                   ---
 
                   Generate a new field value. The new value should be relevant to the document type and context.
-                  Keep it interesting.
+                  Keep it interesting. Generate using the document language.
                 `,
                 instructionParams: {
                   doc: {type: 'document'},
                   field: {type: 'field', path: fieldPath},
+                  lang: {type: 'field', path: ['language']},
                 },
                 target: {path: fieldPath},
                 conditionalPaths: {
