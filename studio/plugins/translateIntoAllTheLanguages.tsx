@@ -1,23 +1,14 @@
 import {
-  ArrayOfPrimitivesInputProps,
   definePlugin,
-  getDraftId,
   type InputProps,
-  isArrayOfPrimitivesSchemaType,
-  isArraySchemaType,
-  isIndexSegment,
-  isIndexTuple,
-  isKeySegment,
   ObjectInputProps,
-  Path,
-  PathSegment,
   SchemaType,
   useClient as useClientSanity,
   useFormValue,
   useWorkspace,
 } from 'sanity'
 import {useCallback, useMemo, useState} from 'react'
-import {AgentActionPath, createClient} from '@sanity/client'
+import {createClient} from '@sanity/client'
 import {Box, Button, Flex, Spinner, Stack, useToast} from '@sanity/ui'
 import {useDocumentPane} from 'sanity/desk'
 import {SparklesIcon} from '@sanity/icons'

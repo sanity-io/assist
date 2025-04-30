@@ -3,12 +3,6 @@ import {
   definePlugin,
   type InputProps,
   isArrayOfPrimitivesSchemaType,
-  isArraySchemaType,
-  isIndexSegment,
-  isIndexTuple,
-  isKeySegment,
-  Path,
-  PathSegment,
   SchemaType,
   useClient as useClientSanity,
   useWorkspace,
@@ -18,6 +12,7 @@ import {createClient} from '@sanity/client'
 import {Box, Button, Flex, Spinner, Stack, useToast} from '@sanity/ui'
 import {useDocumentPane} from 'sanity/desk'
 import {SparklesIcon} from '@sanity/icons'
+import {outdent} from 'outdent'
 
 export const newDocumentsBasedOnStringArrayPlugin = definePlugin({
   name: '@sanity/new-based-on-string-array',
@@ -53,7 +48,7 @@ function NewDocumentBasedOnStringArray(props: ArrayOfPrimitivesInputProps) {
       return client.agent.action.generate({
         schemaId,
         targetDocument: {operation: 'create', _type: documentSchemaType.name},
-        instruction: `
+        instruction: outdent`
             We want to generate a document variation based on the current document.
             The new document should be based on a value from an alternation field title "${fieldSchemaType.title}"
 

@@ -3,11 +3,6 @@ import {
   getDraftId,
   type InputProps,
   isArraySchemaType,
-  isIndexSegment,
-  isIndexTuple,
-  isKeySegment,
-  Path,
-  PathSegment,
   pathToString,
   SchemaType,
   useClient as useClientSanity,
@@ -17,6 +12,7 @@ import {useDocumentPane} from 'sanity/desk'
 import {useCallback, useEffect, useMemo, useRef} from 'react'
 import {AgentActionPath, createClient} from '@sanity/client'
 import {useToast} from '@sanity/ui'
+import {outdent} from 'outdent'
 
 //TODO move cursor to after whatever is generated
 
@@ -65,7 +61,7 @@ export const generateSansPtePlugin = definePlugin({
                   _type: documentSchemaType.name,
                   initialValues: docValue.current,
                 },
-                instruction: `
+                instruction: outdent`
                   We are generating a new value for a document field.
                   The document type is ${documentSchemaType.name}, and the document type title is ${documentSchemaType.title}
 

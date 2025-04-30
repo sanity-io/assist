@@ -1,27 +1,18 @@
 import {
-  ArrayOfPrimitivesInputProps,
   definePlugin,
   getDraftId,
   type InputProps,
-  isArrayOfPrimitivesSchemaType,
-  isArraySchemaType,
-  isIndexSegment,
-  isIndexTuple,
-  isKeySegment,
   ObjectInputProps,
-  Path,
-  PathSegment,
   SchemaType,
   useClient as useClientSanity,
-  useFormState,
-  useFormValue,
   useWorkspace,
 } from 'sanity'
 import {useCallback, useMemo, useRef, useState} from 'react'
-import {AgentActionPath, createClient} from '@sanity/client'
+import {createClient} from '@sanity/client'
 import {Box, Button, Flex, Spinner, Stack, useToast} from '@sanity/ui'
 import {useDocumentPane} from 'sanity/desk'
-import {SparklesIcon, WarningOutlineIcon} from '@sanity/icons'
+import {WarningOutlineIcon} from '@sanity/icons'
+import {outdent} from 'outdent'
 
 export const emojifyDocPlugin = definePlugin({
   name: '@sanity/emojify-document',
@@ -60,7 +51,7 @@ function EmojifyDoc(props: ObjectInputProps) {
         await client.agent.action.transform({
           schemaId,
           documentId: targetId,
-          instruction: `
+          instruction: outdent`
            Add and replace emojis everywhere. Make it really crazy up in here!
            Make it very doggy. Insert random woofs and the like, as you se fit.
            You can also remove them, or rewrite to really give it BITE!

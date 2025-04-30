@@ -18,6 +18,7 @@ import {useCallback, useEffect, useMemo, useRef} from 'react'
 import {AgentActionPath, createClient} from '@sanity/client'
 import {useToast} from '@sanity/ui'
 import {PortableTextBlock} from '@portabletext/types'
+import {outdent} from 'outdent'
 
 //TODO move cursor to after whatever is generated
 
@@ -125,7 +126,7 @@ export const pteContinuationPlugin = definePlugin({
                   initialValues: docRef.current,
                 },
                 //poor mans continuation
-                instruction: `
+                instruction: outdent`
                   We want to generate the next paragraph or title inside the text value for a field, after the current cursor.
 
                   The document value is:

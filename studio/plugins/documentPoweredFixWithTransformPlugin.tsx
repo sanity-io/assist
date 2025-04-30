@@ -17,6 +17,7 @@ import {useDocumentPane} from 'sanity/desk'
 import {useCallback, useEffect, useMemo, useRef} from 'react'
 import {AgentActionPath, createClient} from '@sanity/client'
 import {useToast} from '@sanity/ui'
+import {outdent} from 'outdent'
 
 // Triggers on shift+mod+enter
 export const documentPoweredFixWithTransformPlugin = definePlugin({
@@ -67,7 +68,7 @@ export const documentPoweredFixWithTransformPlugin = definePlugin({
               .transform({
                 schemaId,
                 documentId: targetId,
-                instruction: `
+                instruction: outdent`
                 Fix the field value according to this guide:
                 $guide.
                 ---

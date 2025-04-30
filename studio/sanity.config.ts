@@ -21,7 +21,6 @@ import {documentPoweredFixWithTransformPlugin} from './plugins/documentPoweredFi
 import {newDocumentsBasedOnStringArrayPlugin} from './plugins/newDocsBasedOnStringArray'
 import {translateIntoAllLanguagesPlugin} from './plugins/translateIntoAllTheLanguages'
 import {emojifyDocPlugin} from './plugins/emojifyDocument'
-import {replacePlugin} from './plugins/replacePlugin'
 
 export default defineConfig({
   name: 'default',
@@ -126,7 +125,6 @@ export default defineConfig({
     newDocumentsBasedOnStringArrayPlugin(),
     translateIntoAllLanguagesPlugin(),
     emojifyDocPlugin(),
-    replacePlugin(),
     documentInternationalization({
       supportedLanguages: languages,
       schemaTypes: translatedDocTypes,
