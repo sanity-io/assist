@@ -34,7 +34,10 @@
   - [Configure](#configure-field-translations)
 - [Adding translation actions to fields](#adding-translation-actions-to-fields)
 - [Translation style guide](#translation-style-guide)
-- 
+- [Custom field actions](#custom-field-actions)
+  - [useFieldActions](#usefieldaction)
+  - [Define helpers](#define-helpers)
+  - [useUserInput](#useuserinput)
 - [License](#license)
 - [Develop \& test](#develop--test)
   - [Release new version](#release-new-version)
@@ -956,7 +959,7 @@ assist({
 })
 ```
 
-### `useFieldAction`
+### `useFieldActions`
 
 `useFieldActions` is called for the document itself and for all fields within it. It can call React hooks.
 Actions returned by the hook will be added to the corresponding document or field menu.
