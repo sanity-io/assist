@@ -21,6 +21,7 @@ import {createAssistDocumentPresence} from './presence/AssistDocumentPresence'
 import {schemaTypes} from './schemas'
 import {TranslationConfig} from './translate/types'
 import {assistDocumentTypeName, AssistPreset} from './types'
+import {AssistFieldActionNode, AssistFieldActionProps} from './fieldActions/customFieldActions'
 
 export interface AssistPluginConfig {
   translate?: TranslationConfig
@@ -29,6 +30,11 @@ export interface AssistPluginConfig {
    * Config that affects all instructions
    */
   assist?: AssistConfig
+
+  fieldActions?: {
+    title?: string
+    useFieldActions?: (props: AssistFieldActionProps) => AssistFieldActionNode[]
+  }
 
   /**
    * @internal

@@ -1,7 +1,7 @@
 import {createContext, useContext} from 'react'
 import {DocumentInspector, ObjectSchemaType, PatchEvent} from 'sanity'
 
-import {StudioAssistDocument} from '../types'
+import {InstructionTask, StudioAssistDocument} from '../types'
 
 export type AssistDocumentContextValue = (
   | {assistDocument: StudioAssistDocument; loading: false}
@@ -19,6 +19,10 @@ export type AssistDocumentContextValue = (
   inspector: DocumentInspector | null
   selectedPath?: string
   documentOnChange: (event: PatchEvent) => void
+
+  syntheticTasks?: InstructionTask[]
+  addSyntheticTask: (syntheticTask: InstructionTask) => void
+  removeSyntheticTask: (syntheticTask: InstructionTask) => void
 }
 
 export const AssistDocumentContext = createContext<AssistDocumentContextValue | undefined>(

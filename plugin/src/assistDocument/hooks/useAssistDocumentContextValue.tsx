@@ -1,9 +1,9 @@
-import {useMemo} from 'react'
+import {useCallback, useEffect, useMemo, useState} from 'react'
 import {getDraftId, getVersionId, type ObjectSchemaType, useSchema} from 'sanity'
 import {useDocumentPane} from 'sanity/structure'
 
 import {useAiPaneRouter} from '../../assistInspector/helpers'
-import {fieldPathParam} from '../../types'
+import {fieldPathParam, InstructionTask} from '../../types'
 import type {AssistDocumentContextValue} from '../AssistDocumentContext'
 import {isDocAssistable} from '../RequestRunInstructionProvider'
 import {useStudioAssistDocument} from './useStudioAssistDocument'
@@ -51,7 +51,8 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
     documentId: assistableDocumentId,
     schemaType: documentSchemaType,
   })
-
+  const {syntheticTasks, addSyntheticTask, removeSyntheticTask} =
+    useSyntheticTasks(assistableDocumentId)
   const value: AssistDocumentContextValue = useMemo(() => {
     const base = {
       assistableDocumentId,
@@ -63,6 +64,9 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
       inspector,
       documentOnChange,
       selectedPath,
+      syntheticTasks,
+      addSyntheticTask,
+      removeSyntheticTask,
     }
     if (!assistDocument) {
       return {...base, loading: true, assistDocument: undefined}
@@ -83,7 +87,30 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
     inspector,
     documentOnChange,
     selectedPath,
+    syntheticTasks,
+    addSyntheticTask,
+    removeSyntheticTask,
   ])
 
   return value
+}
+
+function useSyntheticTasks(assistableDocumentId: string) {
+  const [syntheticTasks, setSyntheticTasks] = useState<InstructionTask[]>(() => [])
+  const addSyntheticTask = useCallback((task: InstructionTask) => {
+    setSyntheticTasks((current) => [...current, task])
+  }, [])
+  const removeSyntheticTask = useCallback((task: InstructionTask) => {
+    setSyntheticTasks((current) => current.filter((t) => task._key !== t._key))
+  }, [])
+
+  useEffect(() => {
+    setSyntheticTasks([])
+  }, [assistableDocumentId])
+
+  return {
+    syntheticTasks,
+    addSyntheticTask,
+    removeSyntheticTask,
+  }
 }

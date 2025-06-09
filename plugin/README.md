@@ -34,6 +34,7 @@
   - [Configure](#configure-field-translations)
 - [Adding translation actions to fields](#adding-translation-actions-to-fields)
 - [Translation style guide](#translation-style-guide)
+- 
 - [License](#license)
 - [Develop \& test](#develop--test)
   - [Release new version](#release-new-version)
@@ -927,6 +928,241 @@ assist({
   translate: {
     styleguide: ({client, documentId, schemaType}) => client.fetch('* [_id=="styleguide.singleton"][0].styleguide')
   },
+})
+```
+
+## Custom field actions
+
+<img width="513" alt="Field action menu with custom actions" src="https://github.com/user-attachments/assets/59ff4205-44d5-472e-b75e-8cfe0181b323" />
+
+To incorporate [Agent Actions](https://www.sanity.io/docs/agent-actions?utm_source=github.com&utm_medium=organic_social&utm_campaign=ai-assist&utm_content=)
+or other custom actions into the AI Assist document and field action menus, use `fieldActions` plugin config:
+
+```ts
+assist({
+  title: 'Custom actions',
+  useFieldActions: (props: AssistFieldActionProps) => {
+    return useMemo(() => [
+      defineAssistFieldAction({
+        title: 'Do something',
+        icon: ActionIcon,
+        onAction: async () => {
+          // preform an (async) action
+          // errors will be caught and displayed in a toast
+          // until the action completes or fails, AI Assist "presence" will show up on the top of the document
+        },  
+    })], [])
+  }
+})
+```
+
+### `useFieldAction`
+
+`useFieldActions` is called for the document itself and for all fields within it. It can call React hooks.
+Actions returned by the hook will be added to the corresponding document or field menu.
+
+It is recommended to wrap the returned actions in `useMemo`.
+
+See TSDocs for [AssistFieldActionProps](./src/fieldActions/customFieldActions.tsx) for details on how each
+prop can be used to parameterize Agent Actions on sanity client.
+
+#### Agent Action example
+The following example adds a "Fill field" action to all fields in the document.
+
+The action will:
+- create the document as a draft if it does not exist, respecting initial values (`targetDocument`)
+- use existing document state to determine what should be put in the the field (`instruction`, `instructionParams`)
+- pass the current readOnly and hidden state currently use by the document form to the Agent Action, so it respects it (`conditionalPaths`)
+- output to the field the action started from (`target.path`)
+
+```ts
+assist({
+  title: 'Custom actions',
+  useFieldActions: (props: AssistFieldActionProps) => {
+    const {
+      documentSchemaType,
+      actionType,
+      schemaId,
+      getDocumentValue,
+      getConditionalPaths,
+      documentIdForAction,
+      path,
+      schemaType,
+    } = props
+
+    // hook usage has to happen outside onAction, so preassemble state in useFieldActions and pass to useMemo
+    const client = useClient({apiVersion: 'vX'})
+    
+    return useMemo(() => {
+      if (actionType === 'document') {
+        // in this case we dont want a document action
+        return []
+      }
+      
+      return [
+        defineAssistFieldAction({
+          title: 'Fill field',
+          icon: EditIcon,
+          onAction: async () => {
+            await client.agent.action.generate({
+              schemaId,
+              targetDocument: {
+                operation: 'createIfNotExists',
+                _id: documentIdForAction,
+                _type: documentSchemaType.name,
+                initialValues: getDocumentValue(),
+              },
+              instruction: `
+                        We are generating a new value for a document field.
+                        The document type is ${documentSchemaType.name}, and the document type title is ${documentSchemaType.title}
+                        The document language is: "$lang" (use en-US if unspecified)
+                        The document value is:
+                        $doc
+                        ---
+                        We are in the following field:
+                        JSON-path: ${pathToString(path)}
+                        Title: ${schemaType.title}
+                        Value: $field (consider it empty if undefined)
+                        ---
+                        Generate a new field value. The new value should be relevant to the document type and context.
+                        Keep it interesting. Generate using the document language.
+                     `,
+              instructionParams: {
+                doc: {type: 'document'},
+                field: {type: 'field', path},
+                lang: {type: 'field', path: ['language']},
+              },
+              target: {
+                path,
+              },
+              conditionalPaths: {
+                paths: getConditionalPaths(),
+              },
+            })
+          },
+        })
+        ]
+    }, [
+      client,
+      documentSchemaType,
+      schemaId,
+      getDocumentValue,
+      getConditionalPaths,
+      documentIdForAction,
+      actionType,
+      path,
+      schemaType,
+    ])
+  }
+})
+```
+
+### Define helpers
+
+#### `defineAssistFieldAction`
+
+Adds a single action that will appear in the document/field action menu.
+
+`onAction` _cannot_ call hooks. If state from hook is needed, it should be pre-assembled by `useFieldActions`
+
+```ts
+defineAssistFieldAction({
+  title: 'Do something',
+  icon: ActionIcon,
+  onAction: async () => {
+    //preform actions
+  },
+})
+```
+
+#### `defineAssistFieldActionGroup`
+
+Adds a group to hold one or more actions (or nested groups).
+
+By default, any actions returned by `useFieldActions` will be grouped under `title`.
+```ts
+assist({
+  title: 'Default group',
+  useFieldActions: (props) => {
+    return [
+      defineAssistFieldAction({/* ... */}), 
+      defineAssistFieldActionGroup({
+        title: 'More actions',
+        children: [
+          defineAssistFieldAction({/* ... */}),
+        ],
+      })
+    ]
+  }
+})
+```
+
+#### Only groups in `useFieldActions`
+If `useFieldActions` _only_ returns groups, the default wrapper group will be omitted. This allows full control over each group title.
+
+#### `defineFieldActionDivider`
+Adds a divider between actions or groups. Takes no arguments:
+
+```ts
+assist({
+  title: 'Custom actions',
+  useFieldActions: (props) => {
+    return useMemo(() => [
+      defineAssistFieldAction({/* ... */}),
+      defineFieldActionDivider(),
+      defineAssistFieldAction({/* ... */}),
+    ], [])
+  }
+})
+```
+
+### `useUserInput`
+
+<img width="522" alt="user input dialog" src="https://github.com/user-attachments/assets/86966468-9a28-4c0b-99f3-e4b80fdbe691" />
+
+For certain actions, it is useful to have the user provide additional information or details that can be used
+as parameters for the action.
+
+`useUserInput` returns a `getUserInput` function that can be called and awaited to return input from the user.
+
+The `getUserInput` function takes input configuration and will display an input dialog to the user.
+When the user completes the dialog, the user inputted text will be available (or undefined if the user closed the dialog).
+
+
+```ts
+assist({
+  title: 'Custom actions',
+  useFieldActions: (props: AssistFieldActionProps) => {
+    const getUserInput = useUserInput()
+    
+    return useMemo(() => [
+      defineAssistFieldAction({
+        title: 'Do something with user input',
+        icon: ActionIcon,
+        onAction: async () => {
+          const inputResult = await getUserInput({
+            title: 'What do you want to do?', // dialog title
+            inputs: [
+              {
+                id: 'topic',
+                title: 'Topic',
+              },
+              {
+                id: 'facts',
+                title: 'Facts',
+                description: 'Provide additional facts that will be used by the action'
+              },
+            ],
+          })
+          if(!inputResult) {
+            return // user closed the dialog
+          }
+
+          //use the result from each input
+          //const [{result: topic}, {result: facts}] = inputResult
+        },
+    })], [getUserInput])
+  }
 })
 ```
 
