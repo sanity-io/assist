@@ -240,7 +240,7 @@ export default defineConfig({
                         Given the following outline:
                         $outline
                         ---
-                        Create at least 2 paragraphs of text for each outline item (dont repeat the outline)
+                        Create at least 2 paragraphs of text for each outline item (don't repeat the outline)
                      `,
                     instructionParams: {outline},
                     temperature: 0.5,

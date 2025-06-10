@@ -214,8 +214,6 @@ export const assistFieldActions: DocumentFieldAction = {
       getConditionalPaths,
     })
 
-    const instructionsLength = instructions?.length || 0
-
     const manageInstructionsItem = useMemo(
       () =>
         node({
@@ -274,11 +272,11 @@ export const assistFieldActions: DocumentFieldAction = {
 
     // If there are no instructions, we don't want to render the group
     if (
-      instructionsLength === 0 &&
+      !instructions?.length &&
       !imageCaptionAction &&
       !translateAction &&
       !imageGenAction &&
-      !customActions
+      !customActions.length
     ) {
       return emptyAction
     }

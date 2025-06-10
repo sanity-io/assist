@@ -1073,7 +1073,7 @@ defineAssistFieldAction({
   title: 'Do something',
   icon: ActionIcon,
   onAction: async () => {
-    //preform actions
+    //perform actions
   },
 })
 ```
