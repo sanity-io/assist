@@ -950,7 +950,7 @@ assist({
         title: 'Do something',
         icon: ActionIcon,
         onAction: async () => {
-          // preform an (async) action
+          // perform an (async) action
           // errors will be caught and displayed in a toast
           // until the action completes or fails, AI Assist "presence" will show up on the top of the document
         },  
