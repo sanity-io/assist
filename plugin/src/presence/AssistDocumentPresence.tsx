@@ -13,9 +13,9 @@ export function createAssistDocumentPresence(documentId: string | undefined) {
 }
 
 function AssistDocumentPresence() {
-  const {assistDocument} = useAssistDocumentContext()
+  const {assistDocument, syntheticTasks} = useAssistDocumentContext()
   const anyPresence = useMemo(() => {
-    const anyPresence = assistDocument?.tasks
+    const anyPresence = [...(assistDocument?.tasks ?? []), ...(syntheticTasks ?? [])]
       ?.filter((run) => !run.ended && !run.reason)
       ?.flatMap((run) => run.presence ?? [])
       .find((f) => f.started && new Date().getTime() - new Date(f.started).getTime() < 30000)
@@ -36,7 +36,7 @@ function AssistDocumentPresence() {
           [],
         )
       : undefined
-  }, [assistDocument?.tasks])
+  }, [assistDocument?.tasks, syntheticTasks])
 
   return (
     <Card>

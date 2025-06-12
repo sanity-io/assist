@@ -1,5 +1,13 @@
 import {PlayIcon} from '@sanity/icons'
 import {Button, Dialog, Flex, Stack, Text, TextArea, Tooltip} from '@sanity/ui'
+import {FormFieldHeaderText} from 'sanity'
+
+import {getInstructionTitle} from '../helpers/misc'
+import {type UserInputBlock, userInputTypeName} from '../types'
+import {useApiClient, useRunInstructionApi} from '../useApiClient'
+import {useAiAssistanceConfig} from './AiAssistanceConfigContext'
+import type {RunInstructionArgs} from './AssistLayout'
+import {CustomInputResult, GetUserInput} from '../fieldActions/useUserInput'
 import {
   createContext,
   type Dispatch,
@@ -14,24 +22,19 @@ import {
   useRef,
   useState,
 } from 'react'
-import {FormFieldHeaderText} from 'sanity'
-
-import {getInstructionTitle} from '../helpers/misc'
-import {type UserInputBlock, userInputTypeName} from '../types'
-import {useApiClient, useRunInstructionApi} from '../useApiClient'
-import {useAiAssistanceConfig} from './AiAssistanceConfigContext'
-import type {RunInstructionArgs} from './AssistLayout'
 
 type BlockInputs = Record<string, string>
 const NO_INPUT: BlockInputs = {}
 
 export interface RunInstructionContextValue {
   runInstruction: (req: RunInstructionArgs) => void
+  getUserInput: GetUserInput
   instructionLoading: boolean
 }
 
 export const RunInstructionContext = createContext<RunInstructionContextValue>({
   runInstruction: () => {},
+  getUserInput: async () => undefined,
   instructionLoading: false,
 })
 
@@ -53,8 +56,33 @@ export function RunInstructionProvider(props: PropsWithChildren<{}>) {
 
   const [inputs, setInputs] = useState(NO_INPUT)
   const [runRequest, setRunRequest] = useState<
-    (RunInstructionArgs & {userInputBlocks: UserInputBlock[]}) | undefined
+    | (RunInstructionArgs & {userInputBlocks: UserInputBlock[]})
+    | {dialogTitle: string; userInputBlocks: UserInputBlock[]}
+    | undefined
   >()
+
+  const [resolveUserInput, setResolveUserInput] =
+    useState<
+      (
+        value: CustomInputResult[] | PromiseLike<CustomInputResult[] | undefined> | undefined,
+      ) => void
+    >()
+
+  const getUserInput: GetUserInput = useCallback(async ({title, inputs}) => {
+    const userInputBlocks: UserInputBlock[] = inputs.map((input, i) => ({
+      _type: userInputTypeName,
+      _key: input.id ?? `${i}`,
+      message: input.title,
+      description: input.description,
+    }))
+    if (!userInputBlocks.length) {
+      return undefined
+    }
+    setRunRequest({dialogTitle: title, userInputBlocks})
+    return new Promise<CustomInputResult[] | undefined>((resolve) => {
+      setResolveUserInput(() => resolve)
+    })
+  }, [])
 
   const runInstruction = useCallback(
     (req: RunInstructionArgs) => {
@@ -89,23 +117,43 @@ export function RunInstructionProvider(props: PropsWithChildren<{}>) {
   const close = useCallback(() => {
     setRunRequest(undefined)
     setInputs(NO_INPUT)
-  }, [])
+    if (resolveUserInput) {
+      resolveUserInput(undefined)
+    }
+    setResolveUserInput(undefined)
+  }, [resolveUserInput])
 
   const runWithInput = useCallback(() => {
     if (runRequest) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const {instruction, userTexts, ...request} = runRequest
-      runInstructionRequest({
-        ...request,
-        instructionKey: instruction._key,
-        userTexts: Object.entries(inputs).map(([key, value]) => ({
-          blockKey: key,
-          userInput: value,
-        })),
-      })
+      if ('instruction' in runRequest) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const {instruction, userTexts, ...request} = runRequest
+        runInstructionRequest({
+          ...request,
+          instructionKey: instruction._key,
+          userTexts: Object.entries(inputs).map(([key, value]) => ({
+            blockKey: key,
+            userInput: value,
+          })),
+        })
+      } else {
+        const userInputs = Object.values(inputs).map((input, i) => {
+          const userInputBlock = runRequest.userInputBlocks[i]
+          return {
+            input: {
+              id: userInputBlock._key,
+              title: userInputBlock.message ?? '',
+              description: userInputBlock.description,
+            },
+            result: input,
+          }
+        })
+        resolveUserInput?.(userInputs)
+        setResolveUserInput(undefined)
+      }
     }
     close()
-  }, [close, runInstructionRequest, runRequest, inputs])
+  }, [close, runInstructionRequest, runRequest, inputs, resolveUserInput])
 
   const open = !!runRequest
 
@@ -128,7 +176,7 @@ export function RunInstructionProvider(props: PropsWithChildren<{}>) {
   )
 
   const contextValue: RunInstructionContextValue = useMemo(
-    () => ({runInstruction, instructionLoading: loading}),
+    () => ({runInstruction, getUserInput, instructionLoading: loading}),
     [runInstruction, loading],
   )
 
@@ -140,7 +188,11 @@ export function RunInstructionProvider(props: PropsWithChildren<{}>) {
           open={open}
           onClose={close}
           width={1}
-          header={getInstructionTitle(runRequest?.instruction)}
+          header={
+            'dialogTitle' in runRequest
+              ? runRequest.dialogTitle
+              : getInstructionTitle(runRequest?.instruction)
+          }
           footer={
             <Flex justify="space-between" padding={2} flex={1}>
               {runDisabled ? (
@@ -178,7 +230,7 @@ export function RunInstructionProvider(props: PropsWithChildren<{}>) {
   )
 }
 
-function UserInput(props: {
+export function UserInput(props: {
   block: UserInputBlock
   inputs: BlockInputs
   setInputs: Dispatch<SetStateAction<BlockInputs>>

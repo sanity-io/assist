@@ -1,5 +1,5 @@
 import {defineCliConfig} from 'sanity/cli'
-import {dataset, projectId} from './env'
+import {dataset, projectId, studioHost} from './env'
 
 export default defineCliConfig({
   reactStrictMode: true,
@@ -7,5 +7,5 @@ export default defineCliConfig({
     projectId,
     dataset,
   },
-  studioHost: 'ai-assist-test',
+  studioHost,
 })

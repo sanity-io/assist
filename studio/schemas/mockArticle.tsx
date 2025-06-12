@@ -385,9 +385,8 @@ export const mockArticle = defineType({
       name: 'refs',
       title: 'Article references',
       of: [
-        defineField({
+        defineArrayMember({
           type: 'reference',
-          name: 'ref',
           title: 'Article reference',
           to: [{type: 'mockArticle'}],
           options: {
@@ -438,7 +437,6 @@ export const mockArticle = defineType({
         }),
         defineArrayMember({
           type: 'reference',
-          name: 'ref',
           title: 'Article reference',
           to: [{type: 'mockArticle'}],
           options: {

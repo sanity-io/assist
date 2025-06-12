@@ -4,6 +4,7 @@ import {
   type DocumentFieldAction,
   type DocumentFieldActionGroup,
   type DocumentFieldActionItem,
+  stringToPath,
   typed,
   useCurrentUser,
 } from 'sanity'
@@ -24,6 +25,8 @@ import {documentRootKey, fieldPathParam, instructionParam, type StudioInstructio
 import {generateCaptionsActions} from './generateCaptionActions'
 import {generateImagActions} from './generateImageActions'
 import {PrivateIcon} from './PrivateIcon'
+import {AgentActionConditionalPath, useCustomFieldActions} from './customFieldActions'
+import {AgentActionPath} from '@sanity/client/stega'
 
 function node(node: DocumentFieldActionItem | DocumentFieldActionGroup) {
   return node
@@ -48,6 +51,7 @@ export const assistFieldActions: DocumentFieldAction = {
     } = useAssistDocumentContext()
 
     const {value: docValue, formState} = useDocumentPane()
+    const docValueRef = useRef(docValue)
     const formStateRef = useRef(formState)
     formStateRef.current = formState
 
@@ -180,7 +184,35 @@ export const assistFieldActions: DocumentFieldAction = {
       imageGenAction,
     ])
 
-    const instructionsLength = instructions?.length || 0
+    const getDocumentValue = useCallback(() => {
+      return docValueRef.current
+    }, [])
+
+    const getConditionalPaths: () => AgentActionConditionalPath[] = useCallback(() => {
+      return (formStateRef.current ? getConditionalMembers(formStateRef.current) : []).flatMap(
+        (cm) => {
+          const path = stringToPath(cm.path)
+          if (path.some((s) => typeof s === 'number')) {
+            //agent actions does not support indexed paths
+            return []
+          }
+          return {
+            ...cm,
+            path: path as AgentActionPath,
+          }
+        },
+      )
+    }, [])
+
+    const customActions = useCustomFieldActions({
+      actionType: props.path.length ? 'field' : 'document',
+      documentIdForAction: assistableDocumentId,
+      schemaType,
+      documentSchemaType,
+      path: props.path,
+      getDocumentValue,
+      getConditionalPaths,
+    })
 
     const manageInstructionsItem = useMemo(
       () =>
@@ -203,6 +235,7 @@ export const assistFieldActions: DocumentFieldAction = {
           children: [
             runInstructionsGroup,
             translateAction,
+            ...customActions,
             assistSupported && manageInstructionsItem,
           ]
             .filter((c): c is DocumentFieldActionItem | DocumentFieldActionGroup => !!c)
@@ -219,6 +252,7 @@ export const assistFieldActions: DocumentFieldAction = {
         imageCaptionAction,
         translateAction,
         imageGenAction,
+        customActions,
       ],
     )
 
@@ -237,7 +271,13 @@ export const assistFieldActions: DocumentFieldAction = {
     )
 
     // If there are no instructions, we don't want to render the group
-    if (instructionsLength === 0 && !imageCaptionAction && !translateAction && !imageGenAction) {
+    if (
+      !instructions?.length &&
+      !imageCaptionAction &&
+      !translateAction &&
+      !imageGenAction &&
+      !customActions.length
+    ) {
       return emptyAction
     }
 
