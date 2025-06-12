@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.0](https://github.com/sanity-io/assist/compare/v4.2.0...v4.3.0) (2025-06-12)
+
+### Features
+
+- adds api for custom document and field actions colocated with instructions ([#73](https://github.com/sanity-io/assist/issues/73)) ([97eb491](https://github.com/sanity-io/assist/commit/97eb491b4d3cda59386bc782121f6b4830e3fb81))
+
 ## [4.2.0](https://github.com/sanity-io/assist/compare/v4.1.0...v4.2.0) (2025-04-28)
 
 ### Features
