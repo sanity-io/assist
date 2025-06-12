@@ -40,7 +40,7 @@ export function ImageContextProvider(props: InputProps) {
     if (
       assetRef &&
       assistableDocumentId &&
-      descriptionField &&
+      descriptionField?.updateOnImageChange &&
       assetRef !== assetRefState &&
       !isSyncing &&
       !isShowingOlderRevision &&
@@ -49,7 +49,7 @@ export function ImageContextProvider(props: InputProps) {
       setAssetRefState(assetRef)
       if (canUseAssist(status)) {
         generateCaption({
-          path: pathToString([...path, descriptionField]),
+          path: pathToString([...path, descriptionField.path]),
           documentId: assistableDocumentId,
         })
       }
@@ -71,8 +71,8 @@ export function ImageContextProvider(props: InputProps) {
     const descriptionField = getDescriptionFieldOption(schemaType)
     const imageInstructionField = getImageInstructionFieldOption(schemaType)
     return {
-      imageDescriptionPath: descriptionField
-        ? pathToString([...path, descriptionField])
+      imageDescriptionPath: descriptionField?.path
+        ? pathToString([...path, descriptionField.path])
         : undefined,
       imageInstructionPath: imageInstructionField
         ? pathToString([...path, imageInstructionField])

@@ -411,6 +411,16 @@ The **Generate image description** action will automatically run whenever the im
 `imageDescriptionField` can be a nested field, if the image has an object field, i.e. `imageDescriptionField: 'wrapper.altText'`.
 Fields within array items are not supported.
 
+By default, the caption field will regenerate whenever the image asset changes. To disable this behavior use the following configuration:
+```ts
+{
+  imageDescriptionField: {
+    path: 'wrapper.altText',
+      updateOnImageChange: false
+  }
+}
+```
+
 ## Image generation
 
 <img width="600" alt="image" src="https://github.com/sanity-io/assist/assets/835514/c4de6791-f530-4cd1-b0c2-96ef988bc256">

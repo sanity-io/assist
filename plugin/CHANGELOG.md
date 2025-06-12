@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.0](https://github.com/sanity-io/assist/compare/v4.1.0...v4.2.0) (2025-04-28)
+
+### Features
+
+- imageDescriptionField can now be configured to NOT update whenever the asset changes ([#70](https://github.com/sanity-io/assist/issues/70)) ([328531c](https://github.com/sanity-io/assist/commit/328531c3723807524adb96b7ab801514352bb340))
+
 ## [4.1.0](https://github.com/sanity-io/assist/compare/v4.0.2...v4.1.0) (2025-04-25)
 
 ### Features

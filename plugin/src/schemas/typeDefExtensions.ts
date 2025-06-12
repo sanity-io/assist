@@ -90,7 +90,18 @@ declare module 'sanity' {
        * })
        * ```
        */
-      imageDescriptionField?: string
+      imageDescriptionField?:
+        | string
+        | {
+            path: string
+            /**
+             * When updateOnImageChange is true (or undefined), whenever the
+             * image asset changes, imageDescriptionField will be regenerated.
+             *
+             * default:  true
+             * */
+            updateOnImageChange?: boolean
+          }
     }
   }
   interface NumberOptions extends AssistOptions {}

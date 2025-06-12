@@ -18,13 +18,23 @@ export function isImage(schemaType: SchemaType) {
   return isType(schemaType, 'image')
 }
 
-export function getDescriptionFieldOption(schemaType: SchemaType | undefined): string | undefined {
+export function getDescriptionFieldOption(
+  schemaType: SchemaType | undefined,
+): {path: string; updateOnImageChange: boolean} | undefined {
   if (!schemaType) {
     return undefined
   }
   const descriptionField = (schemaType.options as ImageOptions)?.aiAssist?.imageDescriptionField
-  if (descriptionField) {
-    return descriptionField
+  if (typeof descriptionField === 'string') {
+    return {
+      path: descriptionField,
+      updateOnImageChange: true,
+    }
+  } else if (descriptionField) {
+    return {
+      path: descriptionField.path,
+      updateOnImageChange: descriptionField.updateOnImageChange ?? true,
+    }
   }
   return getDescriptionFieldOption(schemaType.type)
 }
