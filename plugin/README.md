@@ -936,7 +936,7 @@ assist({
 
 ## Custom field actions
 
-<img width="513" alt="Field action menu with custom actions" src="https://github.com/user-attachments/assets/59ff4205-44d5-472e-b75e-8cfe0181b323" />
+<img width="513" alt="Field action menu with custom actions" src="https://github.com/user-attachments/assets/c613f692-4983-4acc-a8c2-8fb60294682a" />
 
 To incorporate [Agent Actions](https://www.sanity.io/docs/agent-actions?utm_source=github.com&utm_medium=organic_social&utm_campaign=ai-assist&utm_content=)
 or other custom actions into the AI Assist document and field action menus, use `fieldActions` plugin config:
@@ -969,8 +969,61 @@ It is recommended to wrap the returned actions in `useMemo`.
 See TSDocs for [AssistFieldActionProps](./src/fieldActions/customFieldActions.tsx) for details on how each
 prop can be used to parameterize Agent Actions on sanity client.
 
-#### Agent Action example
-The following example adds a "Fill field" action to all fields in the document.
+#### Agent Action examples
+
+##### Fix spelling
+
+The following example adds a "Fix spelling" action to all fields and the document itself.
+
+It will fix spelling mistakes for the field it is invoked for (and all child fields, for arrays and objects),
+by calling `client.agent.action.transform`.
+
+```ts
+assist({
+  title: 'Custom actions',
+  useFieldActions: (props) => {
+    const {
+      documentSchemaType,
+      schemaId,
+      getDocumentValue,
+      getConditionalPaths,
+      documentIdForAction,
+      path,
+    } = props
+    const client = useClient({apiVersion: 'vX'})
+    return useMemo(() => {
+      return [
+        defineAssistFieldAction({
+          title: 'Fix spelling',
+          icon: TranslateIcon,
+          onAction: async () => {
+            await client.agent.action.transform({
+              schemaId,
+              documentId: documentIdForAction,
+              instruction: 'Fix any spelling mistakes',
+              instructionParams: {field: {type: 'field', path}},
+              // no need to send path for document actions
+              target: path.length ? {path} : undefined,
+              conditionalPaths: {paths: getConditionalPaths()},
+            })
+          },
+        }),
+      ]
+    }, [
+      client,
+      documentSchemaType,
+      schemaId,
+      getDocumentValue,
+      getConditionalPaths,
+      documentIdForAction,
+      path,
+    ])
+  }})
+```
+
+##### Fill field (contextually aware)
+
+The following example adds a "Fill field" action to all fields in the document by calling `client.agent.action.generate`.
 
 The action will:
 - create the document as a draft if it does not exist, respecting initial values (`targetDocument`)

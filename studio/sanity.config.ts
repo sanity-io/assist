@@ -19,7 +19,7 @@ import {internationalizedArray} from 'sanity-plugin-internationalized-array'
 import {featureProduct, languageArticle} from './schemas/languageArticle'
 import {mockArticle} from './schemas/mockArticle'
 import {brokenTypeName} from './schemas/brokenTypeName'
-import {CloseIcon, EditIcon, ErrorOutlineIcon, UserIcon} from '@sanity/icons'
+import {CloseIcon, EditIcon, ErrorOutlineIcon, TranslateIcon, UserIcon} from '@sanity/icons'
 import {useMemo} from 'react'
 import {useUserInput} from '../plugin/src/fieldActions/useUserInput'
 import {SanityClient} from '@sanity/client'
@@ -152,6 +152,22 @@ export default defineConfig({
                       },
                     }),
                   ],
+                }),
+
+                defineAssistFieldAction({
+                  title: 'Fix spelling',
+                  icon: TranslateIcon,
+                  onAction: async () => {
+                    await client.agent.action.transform({
+                      schemaId,
+                      documentId: documentIdForAction,
+                      instruction: 'Fix any spelling mistakes',
+                      instructionParams: {field: {type: 'field', path}},
+                      // no need to send path for document actions
+                      target: path.length ? {path} : undefined,
+                      conditionalPaths: {paths: getConditionalPaths()},
+                    })
+                  },
                 }),
 
                 defineAssistFieldActionGroup({
