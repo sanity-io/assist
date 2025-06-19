@@ -22,3 +22,5 @@ export {
   type CustomInputResult,
   useUserInput,
 } from './fieldActions/useUserInput'
+
+export {isType} from './helpers/typeUtils'

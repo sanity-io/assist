@@ -4,6 +4,12 @@ export function isPortableTextArray(type: ArraySchemaType) {
   return type.of.find((t) => isType(t, 'block'))
 }
 
+/**
+ * Returns true if the `schemaType` or any of its parent types (`schemaType.type`)` has `name` equal
+ * to `typeName`.
+ *
+ * Useful for checking if `schemaType` is a type alias of `ìmage`, `code` or similar.
+ */
 export function isType(schemaType: SchemaType, typeName: string): boolean {
   if (schemaType.name === typeName) {
     return true
