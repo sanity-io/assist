@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.1](https://github.com/sanity-io/assist/compare/v4.3.0...v4.3.1) (2025-06-19)
+
+### Bug Fixes
+
+- exports isType as a helper for checking schemaType name hierarchy in actions ([0ebdc80](https://github.com/sanity-io/assist/commit/0ebdc809329cb7f82e7a6b41e2cdded477f5b072))
+
 ## [4.3.0](https://github.com/sanity-io/assist/compare/v4.2.0...v4.3.0) (2025-06-12)
 
 ### Features
