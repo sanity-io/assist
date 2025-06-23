@@ -20,6 +20,7 @@ import {
   instructionTaskTypeName,
 } from '../types'
 import {randomKey} from '../_lib/randomKey'
+import {isDefined} from '../helpers/misc'
 
 export interface AgentActionConditionalPath {
   path: AgentActionPath
@@ -159,7 +160,11 @@ export type AssistFieldActionGroup = Omit<
   DocumentFieldActionGroup,
   'renderAsButton' | 'expanded' | 'children'
 > & {
-  children: AssistFieldActionNode[]
+  /**
+   * `children` can include undefined entries in the action array. These will be filtered out.
+   * If the group has no defined children, the group will also be filtered out.
+   */
+  children: (AssistFieldActionNode | undefined)[]
 }
 
 type PushToast = (params: ToastParams) => string
@@ -206,14 +211,17 @@ export function useCustomFieldActions(
 
   return useMemo(() => {
     const title = fieldActions?.title
-    const customActions = configActions?.map((node) => {
-      return createSafeNode({
-        node,
-        pushToast,
-        addSyntheticTask,
-        removeSyntheticTask,
+    const customActions = configActions
+      ?.filter(isDefined)
+      .map((node) => {
+        return createSafeNode({
+          node,
+          pushToast,
+          addSyntheticTask,
+          removeSyntheticTask,
+        })
       })
-    })
+      .filter(isDefined)
     const onlyGroups =
       customActions?.length && customActions?.every((node) => node.type === 'group')
     const groups = customActions?.length
@@ -237,17 +245,25 @@ function createSafeNode(args: {
   pushToast: PushToast
   addSyntheticTask: (task: InstructionTask) => void
   removeSyntheticTask: (task: InstructionTask) => void
-}): DocumentFieldActionNode {
+}): DocumentFieldActionNode | undefined {
   const {node} = args
   switch (node.type) {
     case 'action':
       return createSafeAction({...args, action: node})
     case 'group':
+      // eslint-disable-next-line no-case-declarations
+      const children = node.children
+        ?.filter(isDefined)
+        .map((child) => createSafeNode({...args, node: child}))
+        .filter(isDefined)
+      if (!children?.length) {
+        return undefined
+      }
       return {
         ...node,
         renderAsButton: false,
         expanded: true,
-        children: node.children?.map((child) => createSafeNode({...args, node: child})),
+        children,
       }
     case 'divider':
     default:

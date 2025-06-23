@@ -19,3 +19,7 @@ export function getPathKey(path: Path | string) {
 export function getInstructionTitle(instruction?: StudioInstruction) {
   return instruction?.title ?? 'Untitled'
 }
+
+export function isDefined<T>(t: T | undefined | null): t is T {
+  return t !== undefined && t !== null
+}

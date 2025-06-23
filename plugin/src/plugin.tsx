@@ -33,7 +33,10 @@ export interface AssistPluginConfig {
 
   fieldActions?: {
     title?: string
-    useFieldActions?: (props: AssistFieldActionProps) => AssistFieldActionNode[]
+    /**
+     * The returned array can include `undefined` entries in the action array. These will be filtered out.
+     */
+    useFieldActions?: (props: AssistFieldActionProps) => (AssistFieldActionNode | undefined)[]
   }
 
   /**
