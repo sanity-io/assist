@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.2](https://github.com/sanity-io/assist/compare/v4.3.1...v4.3.2) (2025-06-23)
+
+### Bug Fixes
+
+- useFieldActions now filters out null and undefined values ([7f7f214](https://github.com/sanity-io/assist/commit/7f7f2146f5c4d1b6c48e1fafdf04c744df79a933))
+
 ## [4.3.1](https://github.com/sanity-io/assist/compare/v4.3.0...v4.3.1) (2025-06-19)
 
 ### Bug Fixes
