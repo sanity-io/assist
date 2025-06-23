@@ -56,6 +56,7 @@ export function useSummarizeDocument(props: AssistFieldActionProps) {
     }
 
     const lastSegment = path.slice(-1)[0]
+    console.log(lastSegment)
     if (
       typeof lastSegment !== 'string' ||
       !['summary', 'description'].some((contains) => lastSegment.toLowerCase().includes(contains))
@@ -64,7 +65,7 @@ export function useSummarizeDocument(props: AssistFieldActionProps) {
     }
 
     return defineAssistFieldAction({
-      title: 'Fill field',
+      title: 'Summarize document',
       icon: EditIcon,
       onAction: async () => {
         if (!getDocumentValue()?._createdAt) {
