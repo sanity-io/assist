@@ -8,9 +8,10 @@
   "license": "UNLICENSED",
   "main": "package.json",
   "scripts": {
+    "prebuild": "cd ../plugin && npm run build",
     "build": "sanity build",
     "compile": "tsc --noEmit",
-    "deploy": "sanity deploy",
+    "deploy": "npm run prebuild && sanity deploy",
     "dev": "concurrently 'cd ../plugin && npm run watch' 'sanity dev --port 3334'",
     "lint": "eslint ./src/**/* --ext .tsx,.ts",
     "start": "sanity start"
