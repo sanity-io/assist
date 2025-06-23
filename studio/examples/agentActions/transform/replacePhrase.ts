@@ -56,7 +56,7 @@ export function useReplacePhrases(props: AssistFieldActionProps) {
             'A user wants to replace words or phrases according to their instruction:',
             instruction,
             '---',
-          ].join('/n'),
+          ].join('\n'),
           // no need to send path for document actions
           target: path.length ? {path} : undefined,
           conditionalPaths: {paths: getConditionalPaths()},

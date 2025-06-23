@@ -56,7 +56,6 @@ export function useSummarizeDocument(props: AssistFieldActionProps) {
     }
 
     const lastSegment = path.slice(-1)[0]
-    console.log(lastSegment)
     if (
       typeof lastSegment !== 'string' ||
       !['summary', 'description'].some((contains) => lastSegment.toLowerCase().includes(contains))

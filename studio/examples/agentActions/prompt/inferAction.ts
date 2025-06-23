@@ -108,7 +108,7 @@ export function useInferAction(props: AssistFieldActionProps) {
                 'Transform the field according to the following instruction:',
                 inferredAction.intent,
                 '---',
-              ].join('/n'),
+              ].join('\n'),
               target: {path},
               conditionalPaths: {paths: getConditionalPaths()},
             })
@@ -121,7 +121,7 @@ export function useInferAction(props: AssistFieldActionProps) {
                 'Transform the image according to the following instruction:',
                 inferredAction.intent,
                 '---',
-              ].join('/n'),
+              ].join('\n'),
               target: {path: [...path, 'asset']},
               conditionalPaths: {paths: getConditionalPaths()},
             })

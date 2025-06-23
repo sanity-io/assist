@@ -63,7 +63,7 @@ export function useTransformImage(props: AssistFieldActionProps) {
             'Transform the image according to the following instruction:',
             instruction,
             '---',
-          ].join('/n'),
+          ].join('\n'),
           target: {path: [...path, 'asset']},
           conditionalPaths: {paths: getConditionalPaths()},
         })
