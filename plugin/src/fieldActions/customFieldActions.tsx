@@ -92,6 +92,8 @@ export interface AssistFieldActionProps {
    *   },
    *   //...
    * })
+   *
+   * ```
    */
   schemaId: string
 

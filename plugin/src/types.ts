@@ -74,7 +74,7 @@ export interface PresetInstruction {
 
   title?: string
   /**
-   * String key from @sanity/icons IconMap
+   * String key from `@sanity/icons` IconMap
    */
   icon?: string
 
