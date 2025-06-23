@@ -16,8 +16,9 @@ import {useClient} from 'sanity'
  *
  * ### Usage
  * ```ts
+ * import {useMemo} from 'react'
  * import {type AssistFieldActionProps} from '@sanity/assist'
- * import {useFillDocumentFromInput} from './generate/fillDocumentFromInput.ts'
+ * import {useFillDocumentFromInput} from './generate/fillDocumentFromInput'
  *
  * function useFieldActions(props: AssistFieldActionProps) {
  *   const fillDocumentFromInput = useFillDocumentFromInput(props)

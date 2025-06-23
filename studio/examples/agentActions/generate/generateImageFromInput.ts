@@ -19,8 +19,9 @@ import {useClient} from 'sanity'
  *
  * ### Usage
  * ```ts
+ * import {useMemo} from 'react'
  * import {type AssistFieldActionProps} from '@sanity/assist'
- * import {useGenerateImageFromInput} from './generate/generateImageFromInput.ts'
+ * import {useGenerateImageFromInput} from './generate/generateImageFromInput'
  *
  * function useFieldActions(props: AssistFieldActionProps) {
  *   const imageFromInput = useGenerateImageFromInput(props)

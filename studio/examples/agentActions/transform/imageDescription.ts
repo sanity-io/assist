@@ -70,8 +70,9 @@ declare module 'sanity' {
  *
  * ### Usage
  * ```ts
+ * import {useMemo} from 'react'
  * import {type AssistFieldActionProps} from '@sanity/assist'
- * import {useImageDescription} from './transform/useImageDescription.ts'
+ * import {useImageDescription} from './transform/useImageDescription'
  *
  * function useFieldActions(props: AssistFieldActionProps) {
  *   const imageDescriptionAction = useImageDescription(props)

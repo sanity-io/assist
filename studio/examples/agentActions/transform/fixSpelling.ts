@@ -10,8 +10,9 @@ import {useClient} from 'sanity'
  *
  * ### Usage
  * ```ts
+ * import {useMemo} from 'react'
  * import {type AssistFieldActionProps} from '@sanity/assist'
- * import {useFixSpelling} from './transform/useFixSpelling.ts'
+ * import {useFixSpelling} from './transform/useFixSpelling'
  *
  * function useFieldActions(props: AssistFieldActionProps) {
  *   const fixSpellingAction = useFixSpelling(props)

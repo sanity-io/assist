@@ -10,8 +10,9 @@ import {useClient} from 'sanity'
  *
  * ### Usage
  * ```ts
+ * import {useMemo} from 'react'
  * import {type AssistFieldActionProps} from '@sanity/assist'
- * import {useReplacePhrases} from './transform/useReplacePhrases.ts'
+ * import {useReplacePhrases} from './transform/useReplacePhrases'
  *
  * function useFieldActions(props: AssistFieldActionProps) {
  *   const replacePhrases = useReplacePhrases(props)

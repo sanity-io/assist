@@ -19,8 +19,9 @@ import {useToast} from '@sanity/ui'
  *
  * ### Usage
  * ```ts
+ * import {useMemo} from 'react'
  * import {type AssistFieldActionProps} from '@sanity/assist'
- * import {useSummarizeDocument} from './generate/useSummarizeDocument.ts'
+ * import {useSummarizeDocument} from './generate/useSummarizeDocument'
  *
  * function useFieldActions(props: AssistFieldActionProps) {
  *   const summarizeDocument = useSummarizeDocument(props)

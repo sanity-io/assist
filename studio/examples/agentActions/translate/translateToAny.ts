@@ -10,8 +10,9 @@ import {useClient} from 'sanity'
  *
  * ### Usage
  * ```ts
+ * import {useMemo} from 'react'
  * import {type AssistFieldActionProps} from '@sanity/assist'
- * import {useTranslateToAny} from './translate/useTranslateToAny.ts'
+ * import {useTranslateToAny} from './translate/useTranslateToAny'
  *
  * function useFieldActions(props: AssistFieldActionProps) {
  *   const translateToAny = useTranslateToAny(props)

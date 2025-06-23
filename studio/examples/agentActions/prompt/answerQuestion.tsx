@@ -17,8 +17,9 @@ import {useToast} from '@sanity/ui'
  *
  * ### Usage
  * ```ts
+ * import {useMemo} from 'react'
  * import {type AssistFieldActionProps} from '@sanity/assist'
- * import {useAnswerQuestion} from './prompt/useAnswerQuestion.ts'
+ * import {useAnswerQuestion} from './prompt/useAnswerQuestion'
  *
  * function useFieldActions(props: AssistFieldActionProps) {
  *   const answerQuestion = useAnswerQuestion(props)

@@ -12,8 +12,9 @@ import {useAutoFillFieldAction} from '../generate/autoFill'
  *
  * ### Usage
  * ```ts
+ * import {useMemo} from 'react'
  * import {type AssistFieldActionProps} from '@sanity/assist'
- * import {useInferAction} from './prompt/useInferAction.ts'
+ * import {useInferAction} from './prompt/useInferAction'
  *
  * function useFieldActions(props: AssistFieldActionProps) {
  *   const useInferAction = useInferAction(props)

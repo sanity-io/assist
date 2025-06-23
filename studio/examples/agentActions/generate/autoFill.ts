@@ -17,8 +17,9 @@ import {pathToString, useClient} from 'sanity'
  *
  * ### Usage
  * ```ts
+ * import {useMemo} from 'react'
  * import {type AssistFieldActionProps} from '@sanity/assist'
- * import {useAutoFillFieldAction} from './generate/autoFillFieldAction.ts'
+ * import {useAutoFillFieldAction} from './generate/autoFillFieldAction'
  *
  * function useFieldActions(props: AssistFieldActionProps) {
  *   const autoFillFieldAction = useAutoFillFieldAction(props)
