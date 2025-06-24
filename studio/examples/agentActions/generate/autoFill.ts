@@ -76,7 +76,8 @@ export function useAutoFillFieldAction(props: AssistFieldActionProps) {
             lang: {type: 'field', path: ['language']},
           },
           target: {
-            // mixed: Append to array-like fields, set non-array fields. Change to 'set' as needed
+            // `mixed` will append on array-like fields and set on non-array fields (the default option).
+            // Optionally change this to `set` or `append` to force patch behavior across all field types.
             operation: 'mixed',
             path,
           },
