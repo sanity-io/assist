@@ -142,6 +142,16 @@ export interface AssistFieldActionProps {
    * ```
    */
   schemaType: SchemaType
+
+  /**
+   * Schema type of the parent field or array item holding this field.
+   *
+   * This can be undefined if the action was unable to resolve the parent type is excluded from AI Assist.
+   *
+   * @see schemaType
+   * @see documentSchemaType
+   */
+  parentSchemaType?: SchemaType
 }
 
 export type AssistFieldActionNode =

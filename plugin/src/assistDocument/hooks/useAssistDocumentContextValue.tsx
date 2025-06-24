@@ -2,7 +2,7 @@ import {useCallback, useEffect, useMemo, useState} from 'react'
 import {getDraftId, getVersionId, type ObjectSchemaType, useSchema} from 'sanity'
 import {useDocumentPane} from 'sanity/structure'
 
-import {useAiPaneRouter} from '../../assistInspector/helpers'
+import {asFieldRefsByTypePath, getFieldRefs, useAiPaneRouter} from '../../assistInspector/helpers'
 import {fieldPathParam, InstructionTask} from '../../types'
 import type {AssistDocumentContextValue} from '../AssistDocumentContext'
 import {isDocAssistable} from '../RequestRunInstructionProvider'
@@ -53,6 +53,10 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
   })
   const {syntheticTasks, addSyntheticTask, removeSyntheticTask} =
     useSyntheticTasks(assistableDocumentId)
+
+  const fieldRefs = getFieldRefs(documentSchemaType)
+  const fieldRefsByTypePath = asFieldRefsByTypePath(fieldRefs)
+
   const value: AssistDocumentContextValue = useMemo(() => {
     const base = {
       assistableDocumentId,
@@ -67,6 +71,8 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
       syntheticTasks,
       addSyntheticTask,
       removeSyntheticTask,
+      fieldRefs,
+      fieldRefsByTypePath,
     }
     if (!assistDocument) {
       return {...base, loading: true, assistDocument: undefined}
