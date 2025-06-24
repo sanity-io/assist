@@ -2,6 +2,7 @@ import {createContext, useContext} from 'react'
 import {DocumentInspector, ObjectSchemaType, PatchEvent} from 'sanity'
 
 import {InstructionTask, StudioAssistDocument} from '../types'
+import {FieldRef} from '../assistInspector/helpers'
 
 export type AssistDocumentContextValue = (
   | {assistDocument: StudioAssistDocument; loading: false}
@@ -32,6 +33,9 @@ export type AssistDocumentContextValue = (
   syntheticTasks?: InstructionTask[]
   addSyntheticTask: (syntheticTask: InstructionTask) => void
   removeSyntheticTask: (syntheticTask: InstructionTask) => void
+
+  fieldRefs: FieldRef[]
+  fieldRefsByTypePath: Record<string, FieldRef | undefined>
 }
 
 export const AssistDocumentContext = createContext<AssistDocumentContextValue | undefined>(

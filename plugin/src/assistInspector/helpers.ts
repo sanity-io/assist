@@ -57,6 +57,14 @@ export function getTypeIcon(schemaType: SchemaType) {
   return DocumentIcon
 }
 
+export function asFieldRefsByTypePath(fieldRefs: FieldRef[]): Record<string, FieldRef | undefined> {
+  const lookup: Record<string, FieldRef | undefined> = fieldRefs.reduce(
+    (acc, ref) => ({...acc, [ref.key]: ref}),
+    {},
+  )
+  return lookup
+}
+
 export function getFieldRefsWithDocument(schemaType: ObjectSchemaType): FieldRef[] {
   const fields = getFieldRefs(schemaType)
   return [

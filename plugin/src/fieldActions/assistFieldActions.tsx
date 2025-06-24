@@ -4,6 +4,7 @@ import {
   type DocumentFieldAction,
   type DocumentFieldActionGroup,
   type DocumentFieldActionItem,
+  pathToString,
   stringToPath,
   typed,
   useCurrentUser,
@@ -14,7 +15,7 @@ import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {getIcon} from '../assistDocument/components/instruction/appearance/IconInput'
 import {useRequestRunInstruction} from '../assistDocument/RequestRunInstructionProvider'
 import {aiInspectorId} from '../assistInspector/constants'
-import {useSelectedField, useTypePath} from '../assistInspector/helpers'
+import {getTypePath, useSelectedField, useTypePath} from '../assistInspector/helpers'
 import {pluginTitleShort} from '../constants'
 import {isSchemaAssistEnabled} from '../helpers/assistSupported'
 import {getConditionalMembers} from '../helpers/conditionalMembers'
@@ -48,6 +49,7 @@ export const assistFieldActions: DocumentFieldAction = {
       documentSchemaType,
       selectedPath,
       assistableDocumentId,
+      fieldRefsByTypePath,
     } = useAssistDocumentContext()
 
     const {value: docValue, formState} = useDocumentPane()
@@ -204,6 +206,17 @@ export const assistFieldActions: DocumentFieldAction = {
       )
     }, [])
 
+    const parentSchemaType = useMemo(() => {
+      if (!props.path.length) {
+        return undefined
+      } else if (props.path.length === 1) {
+        return documentSchemaType
+      }
+      const parentPath = props.path.slice(0, -1)
+      const typePath = getTypePath(docValueRef.current, pathToString(parentPath))
+      return typePath ? fieldRefsByTypePath[typePath]?.schemaType : undefined
+    }, [fieldRefsByTypePath, props.path, documentSchemaType])
+
     const customActions = useCustomFieldActions({
       actionType: props.path.length ? 'field' : 'document',
       documentIdForAction: assistableDocumentId,
@@ -212,6 +225,7 @@ export const assistFieldActions: DocumentFieldAction = {
       path: props.path,
       getDocumentValue,
       getConditionalPaths,
+      parentSchemaType,
     })
 
     const manageInstructionsItem = useMemo(
