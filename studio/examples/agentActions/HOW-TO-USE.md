@@ -29,4 +29,4 @@ See the TSDocs of each example action.
   - [Translate to any language](translate/translateToAny.ts) – uses `useUserInput` to get the language to translate to
 - [Prompt](https://github.com/sanity-io/client?tab=readme-ov-file#prompt-the-llm) examples
   - [Answer question](prompt/answerQuestion.tsx) – document action where the user can ask questions about the document
-  - [Infer action](prompt/inferAction.ts) – exemplifies how to use prompt to infer user intent, then run a customized action based it
+  - [Infer action](prompt/inferAction.ts) – uses `useUserImput` to get a prompt to run, infers which action to run (generate or transform) and then runs it
