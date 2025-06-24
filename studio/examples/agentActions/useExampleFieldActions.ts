@@ -6,7 +6,8 @@ import {useGenerateImageFromInput} from './generate/generateImageFromInput'
 import {useSummarizeDocument} from './generate/summarizeDocument'
 import {useAnswerQuestion} from './prompt/answerQuestion'
 import {useFixSpelling} from './transform/fixSpelling'
-import {useImageDescription} from './transform/imageDescription'
+import {useImageDescriptionWithFieldNames} from './transform/imageDescriptionWithFieldName'
+import {useImageDescriptionWithOptions} from './transform/imageDescriptionWithOptions'
 import {useReplacePhrases} from './transform/replacePhrase'
 import {useTransformImage} from './transform/transformImage'
 import {useTranslateToAny} from './translate/translateToAny'
@@ -25,7 +26,8 @@ export function useExampleFieldActions(props: AssistFieldActionProps) {
   const answerQuestion = useAnswerQuestion(props)
 
   const fixSpelling = useFixSpelling(props)
-  const imageDescription = useImageDescription(props)
+  const imageDescriptionWithFieldNames = useImageDescriptionWithFieldNames(props)
+  const imageDescriptionWithOptions = useImageDescriptionWithOptions(props)
   const replacePhrases = useReplacePhrases(props)
   const transformImage = useTransformImage(props)
 
@@ -42,7 +44,13 @@ export function useExampleFieldActions(props: AssistFieldActionProps) {
 
       defineAssistFieldActionGroup({
         title: 'Transform',
-        children: [fixSpelling, imageDescription, replacePhrases, transformImage],
+        children: [
+          fixSpelling,
+          imageDescriptionWithFieldNames,
+          imageDescriptionWithOptions,
+          replacePhrases,
+          transformImage,
+        ],
       }),
 
       defineAssistFieldActionGroup({
@@ -62,7 +70,8 @@ export function useExampleFieldActions(props: AssistFieldActionProps) {
       summarizeDocument,
       answerQuestion,
       fixSpelling,
-      imageDescription,
+      imageDescriptionWithFieldNames,
+      imageDescriptionWithOptions,
       replacePhrases,
       transformImage,
       translateToAny,
