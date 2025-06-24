@@ -26,7 +26,7 @@ See the TSDocs of each example action.
   - [Replace words or phrases](transform/replacePhrase.ts) – Fixes spelling on the field (and sub fields / array items) it is invoked for
   - [Transform image](transform/fixSpelling.ts) – uses `useUserInput` to get how the image should be transformed
 - [Translate](https://github.com/sanity-io/client?tab=readme-ov-file#translating-documents) examples
-  - [Translate to any language](translate/translateToAny.ts) – uses `useUserInput` to get language to translate to
+  - [Translate to any language](translate/translateToAny.ts) – uses `useUserInput` to get the language to translate to
 - [Prompt](https://github.com/sanity-io/client?tab=readme-ov-file#prompt-the-llm) examples
   - [Answer question](prompt/answerQuestion.tsx) – document action where the user can ask questions about the document
   - [Infer action](prompt/inferAction.ts) – exemplifies how to use prompt to infer user intent, then run a customized action based it
