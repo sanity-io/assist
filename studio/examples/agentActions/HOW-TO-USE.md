@@ -23,7 +23,7 @@ See the TSDocs of each example action.
 - [Transform](https://github.com/sanity-io/client?tab=readme-ov-file#transforming-documents) examples
   - [Fix spelling](transform/fixSpelling.ts) – Fixes spelling on the field (and sub fields / array items) it is invoked for
   - [Image description](transform/imageDescription.ts) – Adds a image description action to fields with `options.imageDescription`. See examples for config details.
-  - [Replace words or phrases](transform/replacePhrase.ts) – Fixes spelling on the field (and sub fields / array items) it is invoked for
+  - [Replace words or phrases](transform/replacePhrase.ts) – Replace words or phrases on the current document or field (and any nested fields / array items)
   - [Transform image](transform/fixSpelling.ts) – uses `useUserInput` to get how the image should be transformed
 - [Translate](https://github.com/sanity-io/client?tab=readme-ov-file#translating-documents) examples
   - [Translate to any language](translate/translateToAny.ts) – uses `useUserInput` to get the language to translate to
