@@ -22,7 +22,7 @@ See the TSDocs of each example action.
   - [Summarize document](generate/summarizeDocument.ts) – adds an action to field name containing summary or description that will populate it with a document summary
 - [Transform](https://github.com/sanity-io/client?tab=readme-ov-file#transforming-documents) examples
   - [Fix spelling](transform/fixSpelling.ts) – Fixes spelling on the current field (and any nested fields / array items)
-  - [Image description](transform/imageDescription.ts) – Adds a image description action to fields with `options.imageDescription`. See examples for config details.
+  - [Image description](transform/imageDescription.ts) – Adds a image description action to fields with `options.imageDescription`.
   - [Replace words or phrases](transform/replacePhrase.ts) – Replace words or phrases on the current document or field (and any nested fields / array items)
   - [Transform image](transform/fixSpelling.ts) – uses `useUserInput` to get how the image should be transformed
 - [Translate](https://github.com/sanity-io/client?tab=readme-ov-file#translating-documents) examples
