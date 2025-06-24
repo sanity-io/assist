@@ -34,7 +34,6 @@ export function useSummarizeDocument(props: AssistFieldActionProps) {
   const {
     actionType,
     documentIdForAction,
-    documentSchemaType,
     getConditionalPaths,
     getDocumentValue,
     path,
@@ -108,7 +107,6 @@ export function useSummarizeDocument(props: AssistFieldActionProps) {
     actionType,
     client,
     documentIdForAction,
-    documentSchemaType,
     getConditionalPaths,
     getDocumentValue,
     path,

@@ -137,5 +137,16 @@ export function useInferAction(props: AssistFieldActionProps) {
         }
       },
     })
-  }, [client, documentIdForAction, getConditionalPaths, path, schemaId, getUserInput, autoFill])
+  }, [
+    client,
+    documentIdForAction,
+    getConditionalPaths,
+    path,
+    schemaId,
+    getUserInput,
+    autoFill,
+    actionType,
+    pushToast,
+    schemaType,
+  ])
 }

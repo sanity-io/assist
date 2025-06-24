@@ -34,9 +34,7 @@ export function useFillDocumentFromInput(props: AssistFieldActionProps) {
     documentSchemaType,
     getConditionalPaths,
     getDocumentValue,
-    path,
     schemaId,
-    schemaType,
   } = props
 
   const client = useClient({apiVersion: 'vX'})
@@ -47,7 +45,7 @@ export function useFillDocumentFromInput(props: AssistFieldActionProps) {
       return undefined
     }
     return defineAssistFieldAction({
-      title: 'Create document content...',
+      title: 'Fill document...',
       icon: ComposeIcon,
       onAction: async () => {
         const userInput = await getUserInput({
@@ -87,7 +85,6 @@ export function useFillDocumentFromInput(props: AssistFieldActionProps) {
                      `,
           target: {
             operation: 'set',
-            path,
           },
           conditionalPaths: {
             paths: getConditionalPaths(),
@@ -103,8 +100,6 @@ export function useFillDocumentFromInput(props: AssistFieldActionProps) {
     getConditionalPaths,
     getDocumentValue,
     getUserInput,
-    path,
     schemaId,
-    schemaType,
   ])
 }
