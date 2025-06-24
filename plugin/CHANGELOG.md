@@ -5,6 +5,16 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.0](https://github.com/sanity-io/assist/compare/v4.3.2...v4.4.0) (2025-06-24)
+
+### Features
+
+- useFieldActions now receive parentSchemaType as a prop when available ([#75](https://github.com/sanity-io/assist/issues/75)) ([8c0eb4a](https://github.com/sanity-io/assist/commit/8c0eb4af738dbd67eb74de93fcb11e4c35327c3c))
+
+### Bug Fixes
+
+- **docs:** adds copy-pastable examples of using useFieldActions with Agent Actions ([#74](https://github.com/sanity-io/assist/issues/74)) ([d85e0d2](https://github.com/sanity-io/assist/commit/d85e0d2de0a8b7db7d2e977fc4204696a62d589e))
+
 ## [4.3.2](https://github.com/sanity-io/assist/compare/v4.3.1...v4.3.2) (2025-06-23)
 
 ### Bug Fixes
