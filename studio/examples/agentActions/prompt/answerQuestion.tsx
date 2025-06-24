@@ -1,6 +1,6 @@
 import {type AssistFieldActionProps, defineAssistFieldAction, useUserInput} from '@sanity/assist'
 import {useMemo} from 'react'
-import {EditIcon, HelpCircleIcon} from '@sanity/icons'
+import {HelpCircleIcon} from '@sanity/icons'
 import {useClient} from 'sanity'
 import {useToast} from '@sanity/ui'
 
