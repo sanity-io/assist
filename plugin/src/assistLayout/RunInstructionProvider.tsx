@@ -75,6 +75,7 @@ export function RunInstructionProvider(props: PropsWithChildren<{}>) {
       message: input.title,
       description: input.description,
     }))
+
     if (!userInputBlocks.length) {
       return undefined
     }

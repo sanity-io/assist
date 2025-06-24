@@ -311,6 +311,10 @@ export const mockArticle = defineType({
         list: languages.map(({id, title}) => ({value: id, title})),
       },
     }),
+    defineField({
+      name: 'summary',
+      type: 'text',
+    }),
     /*    defineField({
       type: 'reference',
       name: 'ref',

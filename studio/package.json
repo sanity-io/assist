@@ -8,10 +8,11 @@
   "license": "UNLICENSED",
   "main": "package.json",
   "scripts": {
+    "prebuild": "cd ../plugin && npm run build",
     "build": "sanity build",
     "compile": "tsc --noEmit",
-    "deploy": "sanity deploy",
-    "dev": "sanity dev --port 3334",
+    "deploy": "npm run prebuild && sanity deploy",
+    "dev": "concurrently 'cd ../plugin && npm run watch' 'sanity dev --port 3334'",
     "lint": "eslint ./src/**/* --ext .tsx,.ts",
     "start": "sanity start"
   },
@@ -23,6 +24,7 @@
   },
   "dependencies": {
     "@portabletext/types": "^2.0.12",
+    "@sanity/assist": "^4.3.2",
     "@sanity/client": "^7.5.0",
     "@sanity/code-input": "^5.1.2",
     "@sanity/document-internationalization": "^3.3.1",
@@ -30,19 +32,20 @@
     "@sanity/icons": "^3.7.0",
     "@sanity/language-filter": "^4.0.4",
     "@sanity/ui": "^2.15.18",
-    "@sanity/vision": "^3.91.0",
+    "@sanity/vision": "^3.93.0",
     "husky": "^9.1.7",
     "react": "^18.2.0",
     "react-animate-height": "^3.2.3",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
-    "sanity": "^3.91.0",
+    "sanity": "^3.93.0",
     "sanity-plugin-internationalized-array": "^2.0.0",
     "sanity-plugin-media": "^3.0.3",
     "styled-components": "^6.1.16"
   },
   "devDependencies": {
     "@sanity/eslint-config-studio": "^4.0.0",
+    "concurrently": "^9.2.0",
     "typescript": "^5.7.2"
   }
 }

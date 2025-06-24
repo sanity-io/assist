@@ -1,16 +1,11 @@
-import {defineConfig, isKeySegment, pathToString, useClient} from 'sanity'
+import {defineConfig, isKeySegment} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemas'
 import {codeInput} from '@sanity/code-input'
 
 import {apiHost, dataset, pluginApiHost, projectId} from './env'
-import {
-  assist,
-  defineAssistFieldAction,
-  defineAssistFieldActionGroup,
-  defineFieldActionDivider,
-} from '../plugin/src'
+import {assist, defineAssistFieldAction, defineAssistFieldActionGroup} from '@sanity/assist'
 import {embeddingsIndexDashboard} from '@sanity/embeddings-index-ui'
 import {defaultLanguages, languages, translatedDocTypes} from './src/lang/languages'
 import {documentInternationalization} from '@sanity/document-internationalization'
@@ -19,11 +14,10 @@ import {internationalizedArray} from 'sanity-plugin-internationalized-array'
 import {featureProduct, languageArticle} from './schemas/languageArticle'
 import {mockArticle} from './schemas/mockArticle'
 import {brokenTypeName} from './schemas/brokenTypeName'
-import {CloseIcon, EditIcon, ErrorOutlineIcon, TranslateIcon, UserIcon} from '@sanity/icons'
+import {CloseIcon, ErrorOutlineIcon} from '@sanity/icons'
 import {useMemo} from 'react'
-import {useUserInput} from '../plugin/src/fieldActions/useUserInput'
 import {SanityClient} from '@sanity/client'
-import {useToast} from '@sanity/ui'
+import {useExampleFieldActions} from './examples/agentActions/useExampleFieldActions'
 
 export default defineConfig({
   name: 'default',
@@ -91,223 +85,31 @@ export default defineConfig({
 
       fieldActions: {
         useFieldActions: (props) => {
-          const {
-            documentSchemaType,
-            actionType,
-            schemaId,
-            getDocumentValue,
-            getConditionalPaths,
-            documentIdForAction,
-            path,
-            schemaType,
-          } = props
-          const client = useClient({apiVersion: 'vX'})
-          const {push: pushToast} = useToast()
-          const getUserInput = useUserInput()
+          const exampleActions = useExampleFieldActions(props)
           return useMemo(() => {
-            if (actionType === 'field') {
-              return [
-                defineAssistFieldActionGroup({
-                  title: 'Generate',
-                  children: [
-                    defineAssistFieldAction({
-                      title: 'Fill field',
-                      icon: EditIcon,
-                      onAction: async () => {
-                        await client.agent.action.generate({
-                          schemaId,
-                          targetDocument: {
-                            operation: 'createIfNotExists',
-                            _id: documentIdForAction,
-                            _type: documentSchemaType.name,
-                            initialValues: getDocumentValue(),
-                          },
-                          instruction: `
-                        We are generating a new value for a document field.
-                        The document type is ${documentSchemaType.name}, and the document type title is ${documentSchemaType.title}
-                        The document language is: "$lang" (use en-US if unspecified)
-                        The document value is:
-                        $doc
-                        ---
-                        We are in the following field:
-                        JSON-path: ${pathToString(path)}
-                        Title: ${schemaType.title}
-                        Value: $field (consider it empty if undefined)
-                        ---
-                        Generate a new field value. The new value should be relevant to the document type and context.
-                        Keep it interesting. Generate using the document language.
-                     `,
-                          instructionParams: {
-                            doc: {type: 'document'},
-                            field: {type: 'field', path},
-                            lang: {type: 'field', path: ['language']},
-                          },
-                          target: {
-                            path,
-                          },
-                          conditionalPaths: {
-                            paths: getConditionalPaths(),
-                          },
-                        })
-                      },
-                    }),
-                  ],
-                }),
-
-                defineAssistFieldAction({
-                  title: 'Fix spelling',
-                  icon: TranslateIcon,
-                  onAction: async () => {
-                    await client.agent.action.transform({
-                      schemaId,
-                      documentId: documentIdForAction,
-                      instruction: 'Fix any spelling mistakes',
-                      instructionParams: {field: {type: 'field', path}},
-                      // no need to send path for document actions
-                      target: path.length ? {path} : undefined,
-                      conditionalPaths: {paths: getConditionalPaths()},
-                    })
-                  },
-                }),
-
-                defineAssistFieldActionGroup({
-                  title: 'Test actions',
-                  children: [
-                    defineAssistFieldAction({
-                      title: 'Throws',
-                      icon: ErrorOutlineIcon,
-                      onAction: () => {
-                        throw new Error('cant touch this')
-                      },
-                    }),
-                    defineAssistFieldAction({
-                      title: 'Async Throws',
-                      icon: ErrorOutlineIcon,
-                      onAction: () => {
-                        throw new Error('cant touch this')
-                      },
-                    }),
-                    defineFieldActionDivider(),
-                    defineAssistFieldAction({
-                      title: 'Log user input',
-                      icon: UserIcon,
-                      onAction: async () => {
-                        const inputResult = await getUserInput({
-                          title: 'What do you want to do?',
-                          inputs: [
-                            {
-                              id: 'topic',
-                              title: 'Topic',
-                            },
-                            {
-                              id: 'facts',
-                              title: 'Facts',
-                              description:
-                                'Provide additional facts that will be used by the action',
-                            },
-                          ],
-                        })
-                        if (!inputResult) {
-                          return // user closed the dialog
-                        }
-
-                        //use the result from each input
-                        const [{result: topic}, {result: facts}] = inputResult
-                        console.log(inputResult)
-                      },
-                    }),
-                  ],
-                }),
-              ]
-            }
             return [
-              defineAssistFieldAction({
-                title: 'Populate document about...',
-                icon: UserIcon,
-                onAction: async () => {
-                  const input = await getUserInput({
-                    title: 'Topic',
-                    inputs: [{id: 'about', title: 'What should the article be about?'}],
-                  })
-                  if (!input) return // user canceled input
-
-                  const topic = input[0].result
-                  pushToast({
-                    title: 'Preparing and outline',
-                    description: 'This may take a while...',
-                  })
-                  const outline = await getApiClient(client).agent.action.prompt({
-                    instruction: `
-                        Create an detailed outline for a document about the following topic:
-                        $topic
-                        ---
-                     `,
-                    instructionParams: {topic},
-                    temperature: 0.5,
-                  })
-
-                  console.log(outline)
-                  pushToast({
-                    title: 'Creating additional material',
-                    description: 'This may take a while...',
-                  })
-                  const moreDetails = await getApiClient(client).agent.action.prompt({
-                    instruction: `
-                        Given the following outline:
-                        $outline
-                        ---
-                        Create at least 2 paragraphs of text for each outline item (don't repeat the outline)
-                     `,
-                    instructionParams: {outline},
-                    temperature: 0.5,
-                  })
-                  console.log(moreDetails)
-                  await getApiClient(client).agent.action.generate({
-                    schemaId,
-                    targetDocument: {
-                      operation: 'createIfNotExists',
-                      _id: documentIdForAction,
-                      _type: documentSchemaType.name,
-                      initialValues: getDocumentValue(),
+              ...exampleActions,
+              defineAssistFieldActionGroup({
+                title: 'Errors',
+                children: [
+                  defineAssistFieldAction({
+                    title: 'Throws',
+                    icon: ErrorOutlineIcon,
+                    onAction: () => {
+                      throw new Error('cant touch this')
                     },
-                    instruction: `
-                        Given the following outline:
-                        $outline.
-                        ---
-                        And these additional details:
-                        $moreDetails
-                        ---
-                        Create a document about $topic.
-                        Use the outline and additional material as inspiration, but write new text and structure
-                        so it forms a coherent whole.
-
-                        The text should read well and headings should not be generic.
-                        Make the text engaging, the outline should NOT bleed into the content, it is only to here to show you the beats to include.
-                        Make the document interesting and engaging.
-
-                        Make the text come alive with plentiful use of images.
-                        ---
-                     `,
-                    instructionParams: {topic, outline, moreDetails},
-                    conditionalPaths: {paths: getConditionalPaths()},
-                    target: {types: {exclude: ['reference']}, operation: 'set'},
-                  })
-                },
+                  }),
+                  defineAssistFieldAction({
+                    title: 'Async Throws',
+                    icon: ErrorOutlineIcon,
+                    onAction: () => {
+                      throw new Error('cant touch this')
+                    },
+                  }),
+                ],
               }),
             ]
-          }, [
-            client,
-            documentSchemaType,
-            schemaId,
-            getDocumentValue,
-            getConditionalPaths,
-            documentIdForAction,
-            getUserInput,
-            actionType,
-            path,
-            schemaType,
-            pushToast,
-          ])
+          }, [exampleActions])
         },
       },
 
