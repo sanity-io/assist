@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.1](https://github.com/sanity-io/assist/compare/v4.4.0...v4.4.1) (2025-07-02)
+
+### Bug Fixes
+
+- assist actions are now enabled for images without custom fieldsto allow attaching custom actions ([#77](https://github.com/sanity-io/assist/issues/77)) ([7387650](https://github.com/sanity-io/assist/commit/738765080d9bf45a56a4c11fcb711f44f5583e6f))
+
 ## [4.4.0](https://github.com/sanity-io/assist/compare/v4.3.2...v4.4.0) (2025-06-24)
 
 ### Features
