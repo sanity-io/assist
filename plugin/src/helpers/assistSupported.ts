@@ -23,7 +23,11 @@ export function isAssistSupported(type: SchemaType) {
 
   if (type.jsonType === 'object') {
     const unsupportedObject = type.fields.every((field) => isDisabled(field.type))
-    return !unsupportedObject
+    return (
+      !unsupportedObject ||
+      /* to allow attaching custom actions on fieldless images */
+      isType(type, 'image')
+    )
   }
   return true
 }

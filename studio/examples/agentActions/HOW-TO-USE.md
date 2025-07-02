@@ -25,7 +25,7 @@ See the TSDocs of each example action.
   - [Image description (configure by field name)](transform/imageDescriptionWithFieldName.ts) – Adds a image description action to image fields with `alt` or `description` in their field name.
   - [Image description (configure by options)](transform/imageDescriptionWithOptions.ts) – Adds a image description action to fields with `options.addImageDescriptionAction`.
   - [Replace words or phrases](transform/replacePhrase.ts) – Replace words or phrases on the current document or field (and any nested fields / array items)
-  - [Transform image](transform/fixSpelling.ts) – uses `useUserInput` to get how the image should be transformed
+  - [Transform image](transform/transformImage.ts) – uses `useUserInput` to get how the image should be transformed
 - [Translate](https://github.com/sanity-io/client?tab=readme-ov-file#translating-documents) examples
   - [Translate to any language](translate/translateToAny.ts) – uses `useUserInput` to get the language to translate to
 - [Prompt](https://github.com/sanity-io/client?tab=readme-ov-file#prompt-the-llm) examples
