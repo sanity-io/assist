@@ -123,7 +123,7 @@ describe('serializeSchema', () => {
     expect(serializedTypes).toEqual([])
   })
 
-  test('should not serialize excluded fields or types or types with every member excluded', () => {
+  test('should not serialize excluded fields or types or types with every member excluded (except images)', () => {
     const options: AssistOptions = {aiAssist: {exclude: true}}
 
     const schema = Schema.compile({
@@ -131,7 +131,7 @@ describe('serializeSchema', () => {
       types: [
         {
           type: 'document',
-          name: 'allFieldsExcluded',
+          name: 'mostFieldsExcluded',
           fields: [
             defineField({type: 'string', name: 'title', options}),
             defineField({
@@ -148,7 +148,7 @@ describe('serializeSchema', () => {
               of: [{type: 'object', name: 'remove', options}, {type: 'excluded'}],
               options: {aiAssist: {exclude: true}},
             }),
-            //image without extra fields should be excluded
+            //image without extra fields should NOT be excluded
             defineField({type: 'image', name: 'image'}),
             defineField({type: 'file', name: 'file'}),
             defineField({type: 'reference', name: 'reference', to: [{type: 'excluded'}]}),
@@ -174,7 +174,21 @@ describe('serializeSchema', () => {
     const serializedTypes = serializeSchema(schema, {leanFormat: true})
 
     //everything excluded directly or indirectly
-    expect(serializedTypes).toEqual([])
+    expect(serializedTypes).toEqual([
+      {
+        fields: [
+          {
+            fields: [],
+            name: 'image',
+            title: 'Image',
+            type: 'image',
+          },
+        ],
+        name: 'mostFieldsExcluded',
+        title: 'Most Fields Excluded',
+        type: 'document',
+      },
+    ])
   })
 
   test('should serialize opt-in inline object using custom typeName', () => {

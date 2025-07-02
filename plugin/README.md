@@ -1000,7 +1000,7 @@ prop can be used to parameterize Agent Actions on sanity client.
 #### Agent Action examples
 
 Below are some examples of agent action integration.
-For more, see [HOW-TO_USE](../studio/examples/agentActions/HOW-TO-USE.md)
+For more, see [HOW-TO-USE](../studio/examples/agentActions/HOW-TO-USE.md)
 
 ##### Fix spelling
 

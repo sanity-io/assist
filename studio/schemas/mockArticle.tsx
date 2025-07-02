@@ -374,6 +374,11 @@ export const mockArticle = defineType({
       },
     }),
     defineField({
+      type: 'image',
+      name: 'fieldlessImage',
+      title: 'Just an image',
+    }),
+    defineField({
       type: 'reference',
       name: 'category',
       title: 'Category',
