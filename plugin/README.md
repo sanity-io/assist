@@ -1,7 +1,5 @@
 # @sanity/assist
 
-> This is a **Sanity Studio v3** plugin.
-
 ## Table of contents
 
 - [Table of contents](#table-of-contents)
