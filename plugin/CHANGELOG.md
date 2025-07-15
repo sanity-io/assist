@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.4](https://github.com/sanity-io/assist/compare/v4.4.3...v4.4.4) (2025-07-15)
+
+### Bug Fixes
+
+- fixes a performance regression introduced by useFieldActions where field metadata was not correctly memoized ([62f4a37](https://github.com/sanity-io/assist/commit/62f4a37c728f1eee0e710d6ee020ef58ff41c6e0))
+
 ## [4.4.3](https://github.com/sanity-io/assist/compare/v4.4.2...v4.4.3) (2025-07-15)
 
 ### Bug Fixes
