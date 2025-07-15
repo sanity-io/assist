@@ -1,11 +1,13 @@
 import {Card, Stack, Text} from '@sanity/ui'
 import {useContext, useEffect, useMemo, useRef} from 'react'
 import {
+  FieldError,
   FormCallbacksProvider,
   FormCallbacksValue,
   FormInput,
   insert,
   KeyedSegment,
+  MemberFieldError,
   ObjectInputProps,
   ObjectSchemaType,
   PatchEvent,
@@ -127,6 +129,16 @@ function AssistDocumentFormEditable(props: ObjectInputProps) {
     }
   }, [activePath, instruction, onPathOpen])
 
+  const fieldError = useMemo(() => {
+    const fieldError = props.members.find(
+      (m): m is FieldError => m.kind === 'error' && m.fieldName === 'fields',
+    )
+    if (fieldError) {
+      return <MemberFieldError member={fieldError} />
+    }
+    return undefined
+  }, [props.members])
+
   return (
     <SelectedFieldContextProvider value={context}>
       <Stack space={5}>
@@ -140,13 +152,15 @@ function AssistDocumentFormEditable(props: ObjectInputProps) {
         />
         {instruction && <BackToInstructionListLink />}
 
-        {activePath && (
+        {activePath && !fieldError && (
           <FormCallbacksProvider {...newCallbacks}>
             <div style={{lineHeight: '1.25em'}}>
               <FormInput {...props} absolutePath={activePath} />
             </div>
           </FormCallbacksProvider>
         )}
+
+        {fieldError}
 
         {!activePath && props.renderDefault(props)}
       </Stack>
