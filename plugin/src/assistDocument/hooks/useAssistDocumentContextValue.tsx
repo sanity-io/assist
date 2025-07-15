@@ -19,6 +19,15 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
     return schemaType
   }, [documentType, schema])
 
+  const {fieldRefs, fieldRefsByTypePath} = useMemo(() => {
+    const fieldRefs = getFieldRefs(documentSchemaType)
+    const fieldRefsByTypePath = asFieldRefsByTypePath(fieldRefs)
+    return {
+      fieldRefs,
+      fieldRefsByTypePath,
+    }
+  }, [documentSchemaType])
+
   const {
     openInspector,
     closeInspector,
@@ -53,9 +62,6 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
   })
   const {syntheticTasks, addSyntheticTask, removeSyntheticTask} =
     useSyntheticTasks(assistableDocumentId)
-
-  const fieldRefs = getFieldRefs(documentSchemaType)
-  const fieldRefsByTypePath = asFieldRefsByTypePath(fieldRefs)
 
   const value: AssistDocumentContextValue = useMemo(() => {
     const base = {
@@ -96,6 +102,8 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
     syntheticTasks,
     addSyntheticTask,
     removeSyntheticTask,
+    fieldRefs,
+    fieldRefsByTypePath,
   ])
 
   return value
