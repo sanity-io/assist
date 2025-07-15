@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.3](https://github.com/sanity-io/assist/compare/v4.4.2...v4.4.3) (2025-07-15)
+
+### Bug Fixes
+
+- show array member error as a fallback if fields array is corrupted ([#81](https://github.com/sanity-io/assist/issues/81)) ([9c5577b](https://github.com/sanity-io/assist/commit/9c5577b4967a7f908338d2910702408e2fc7c180))
+
 ## [4.4.2](https://github.com/sanity-io/assist/compare/v4.4.1...v4.4.2) (2025-07-09)
 
 ### Bug Fixes
