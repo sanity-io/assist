@@ -1,13 +1,13 @@
 import type {SanityClient} from '@sanity/client'
 import {useToast} from '@sanity/ui'
 import {useCallback, useMemo, useState} from 'react'
-import {Path, pathToString, useClient, useCurrentUser, useSchema} from 'sanity'
+import {Path, pathToString, useClient, useCurrentUser} from 'sanity'
 
 import {useAiAssistanceConfig} from './assistLayout/AiAssistanceConfigContext'
 import {ConditionalMemberState} from './helpers/conditionalMembers'
-import {serializeSchema} from './schemas/serialize/serializeSchema'
 import {FieldLanguageMap} from './translate/paths'
 import {documentRootKey} from './types'
+import {useSerializedTypes} from './assistDocument/hooks/useAssistDocumentContextValue'
 
 export interface UserTextInstance {
   blockKey: string
@@ -58,8 +58,7 @@ export function useApiClient(customApiClient?: (defaultClient: SanityClient) => 
 export function useTranslate(apiClient: SanityClient) {
   const [loading, setLoading] = useState(false)
   const user = useCurrentUser()
-  const schema = useSchema()
-  const types = useMemo(() => serializeSchema(schema, {leanFormat: true}), [schema])
+  const types = useSerializedTypes()
   const toast = useToast()
 
   const translate = useCallback(
@@ -126,8 +125,7 @@ export function useTranslate(apiClient: SanityClient) {
 export function useGenerateCaption(apiClient: SanityClient) {
   const [loading, setLoading] = useState(false)
   const user = useCurrentUser()
-  const schema = useSchema()
-  const types = useMemo(() => serializeSchema(schema, {leanFormat: true}), [schema])
+  const types = useSerializedTypes()
   const toast = useToast()
 
   const generateCaption = useCallback(
@@ -179,8 +177,7 @@ export function useGenerateCaption(apiClient: SanityClient) {
 export function useGenerateImage(apiClient: SanityClient) {
   const [loading, setLoading] = useState(false)
   const user = useCurrentUser()
-  const schema = useSchema()
-  const types = useMemo(() => serializeSchema(schema, {leanFormat: true}), [schema])
+  const types = useSerializedTypes()
   const toast = useToast()
 
   const generateImage = useCallback(
@@ -280,8 +277,7 @@ export function useRunInstructionApi(apiClient: SanityClient) {
   const toast = useToast()
   const [loading, setLoading] = useState(false)
   const user = useCurrentUser()
-  const schema = useSchema()
-  const types = useMemo(() => serializeSchema(schema, {leanFormat: true}), [schema])
+  const types = useSerializedTypes()
 
   const {
     config: {assist: assistConfig},

@@ -1,7 +1,7 @@
 import {createContext, useContext} from 'react'
 import {DocumentInspector, ObjectSchemaType, PatchEvent} from 'sanity'
 
-import {InstructionTask, StudioAssistDocument} from '../types'
+import {InstructionTask, SerializedSchemaType, StudioAssistDocument} from '../types'
 import {FieldRef} from '../assistInspector/helpers'
 
 export type AssistDocumentContextValue = (
@@ -36,6 +36,8 @@ export type AssistDocumentContextValue = (
 
   fieldRefs: FieldRef[]
   fieldRefsByTypePath: Record<string, FieldRef | undefined>
+
+  serializedTypes: SerializedSchemaType[]
 }
 
 export const AssistDocumentContext = createContext<AssistDocumentContextValue | undefined>(
