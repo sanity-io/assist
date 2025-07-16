@@ -3,11 +3,10 @@ import {useToast} from '@sanity/ui'
 import {useCallback, useMemo, useState} from 'react'
 import {Path, pathToString, useClient, useCurrentUser} from 'sanity'
 
-import {useAiAssistanceConfig} from './assistLayout/AiAssistanceConfigContext'
+import {useAiAssistanceConfig, useSerializedTypes} from './assistLayout/AiAssistanceConfigContext'
 import {ConditionalMemberState} from './helpers/conditionalMembers'
 import {FieldLanguageMap} from './translate/paths'
 import {documentRootKey} from './types'
-import {useSerializedTypes} from './assistDocument/hooks/useAssistDocumentContextValue'
 
 export interface UserTextInstance {
   blockKey: string

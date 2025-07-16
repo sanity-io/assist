@@ -10,6 +10,9 @@ import {
 
 import {AssistPluginConfig} from '../plugin'
 import {InstructStatus, useApiClient, useGetInstructStatus, useInitInstruct} from '../useApiClient'
+import {SerializedSchemaType} from '../types'
+import {serializeSchema} from '../schemas/serialize/serializeSchema'
+import {useSchema} from 'sanity'
 
 export interface AiAssistanceConfigContextValue {
   config: AssistPluginConfig
@@ -18,6 +21,7 @@ export interface AiAssistanceConfigContextValue {
   initLoading: boolean
   init: () => void
   error?: Error
+  serializedTypes: SerializedSchemaType[]
 }
 
 export const AiAssistanceConfigContext = createContext<AiAssistanceConfigContextValue>({} as any)
@@ -30,6 +34,10 @@ export function useAiAssistanceConfig() {
   return context
 }
 
+export function useSerializedTypes() {
+  return useAiAssistanceConfig().serializedTypes
+}
+
 export function AiAssistanceConfigProvider(props: {
   children?: ReactNode
   config: AssistPluginConfig
@@ -40,6 +48,9 @@ export function AiAssistanceConfigProvider(props: {
   const apiClient = useApiClient(props.config?.__customApiClient)
   const {getInstructStatus, loading: statusLoading} = useGetInstructStatus(apiClient)
   const {initInstruct, loading: initLoading} = useInitInstruct(apiClient)
+
+  const schema = useSchema()
+  const serializedTypes = useMemo(() => serializeSchema(schema, {leanFormat: true}), [schema])
 
   useEffect(() => {
     getInstructStatus()
@@ -71,8 +82,9 @@ export function AiAssistanceConfigProvider(props: {
       init,
       initLoading,
       error,
+      serializedTypes,
     }
-  }, [config, status, init, statusLoading, initLoading, error])
+  }, [config, status, init, statusLoading, initLoading, error, serializedTypes])
 
   return (
     <AiAssistanceConfigContext.Provider value={context}>
