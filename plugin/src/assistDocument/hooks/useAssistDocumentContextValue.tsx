@@ -4,9 +4,14 @@ import {useDocumentPane} from 'sanity/structure'
 
 import {asFieldRefsByTypePath, getFieldRefs, useAiPaneRouter} from '../../assistInspector/helpers'
 import {fieldPathParam, InstructionTask} from '../../types'
-import type {AssistDocumentContextValue} from '../AssistDocumentContext'
+import {AssistDocumentContextValue, useAssistDocumentContext} from '../AssistDocumentContext'
 import {isDocAssistable} from '../RequestRunInstructionProvider'
 import {useStudioAssistDocument} from './useStudioAssistDocument'
+import {serializeSchema} from '../../schemas/serialize/serializeSchema'
+
+export function useSerializedTypes() {
+  return useAssistDocumentContext().serializedTypes
+}
 
 export function useAssistDocumentContextValue(documentId: string, documentType: string) {
   const schema = useSchema()
@@ -18,6 +23,8 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
     }
     return schemaType
   }, [documentType, schema])
+
+  const serializedTypes = useMemo(() => serializeSchema(schema, {leanFormat: true}), [schema])
 
   const {fieldRefs, fieldRefsByTypePath} = useMemo(() => {
     const fieldRefs = getFieldRefs(documentSchemaType)
@@ -79,6 +86,7 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
       removeSyntheticTask,
       fieldRefs,
       fieldRefsByTypePath,
+      serializedTypes,
     }
     if (!assistDocument) {
       return {...base, loading: true, assistDocument: undefined}
@@ -104,6 +112,7 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
     removeSyntheticTask,
     fieldRefs,
     fieldRefsByTypePath,
+    serializedTypes,
   ])
 
   return value
