@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.7](https://github.com/sanity-io/assist/compare/v4.4.6...v4.4.7) (2025-07-16)
+
+### Bug Fixes
+
+- improves performance when initially loading documents ([3e2e7b6](https://github.com/sanity-io/assist/commit/3e2e7b6d6e56f28d8db30b074b125553e25fe6ff))
+
 ## [4.4.6](https://github.com/sanity-io/assist/compare/v4.4.5...v4.4.6) (2025-07-16)
 
 ### Bug Fixes
