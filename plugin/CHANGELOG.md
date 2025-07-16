@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.5](https://github.com/sanity-io/assist/compare/v4.4.4...v4.4.5) (2025-07-16)
+
+### Bug Fixes
+
+- improves performance when rendering ai assisted fields ([#82](https://github.com/sanity-io/assist/issues/82)) ([e0d65fa](https://github.com/sanity-io/assist/commit/e0d65faaf86ea064d5cdd44429036b991ee2601f))
+
 ## [4.4.4](https://github.com/sanity-io/assist/compare/v4.4.3...v4.4.4) (2025-07-15)
 
 ### Bug Fixes
