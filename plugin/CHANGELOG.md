@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.6](https://github.com/sanity-io/assist/compare/v4.4.5...v4.4.6) (2025-07-16)
+
+### Bug Fixes
+
+- corrects missing context value regression introduced in 4.4.5 ([5c936d4](https://github.com/sanity-io/assist/commit/5c936d42083daecf8fa7a54bf4e2c45465b93692))
+
 ## [4.4.5](https://github.com/sanity-io/assist/compare/v4.4.4...v4.4.5) (2025-07-16)
 
 ### Bug Fixes
