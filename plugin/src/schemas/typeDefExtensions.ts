@@ -1,3 +1,4 @@
+import 'sanity'
 /* eslint-disable no-unused-vars */
 export interface AssistOptions {
   aiAssist?: {

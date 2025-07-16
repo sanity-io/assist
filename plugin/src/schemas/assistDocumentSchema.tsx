@@ -24,7 +24,6 @@ import {InstructionOutputInput} from '../assistDocument/components/instruction/I
 import {PromptInput} from '../assistDocument/components/instruction/PromptInput'
 import {InstructionsArrayField} from '../assistDocument/components/InstructionsArrayField'
 import {InstructionsArrayInput} from '../assistDocument/components/InstructionsArrayInput'
-import {getFieldRefsWithDocument} from '../assistInspector/helpers'
 import {instructionGuideUrl} from '../constants'
 import {getInstructionTitle} from '../helpers/misc'
 import {
@@ -43,6 +42,8 @@ import {
 } from '../types'
 import {contextDocumentSchema} from './contextDocumentSchema'
 
+import {createFieldRefCache} from '../assistLayout/fieldRefCache'
+
 export const fieldReference = defineType({
   type: 'object',
   name: fieldReferenceTypeName,
@@ -57,8 +58,9 @@ export const fieldReference = defineType({
       components: {
         input: FieldRefPathInput,
       },
-      validation: (rule) =>
-        rule.custom((value, context) => {
+      validation: (rule) => {
+        const getForSchemaType = createFieldRefCache()
+        return rule.custom((value, context) => {
           if (!value) {
             return 'Please select a field'
           }
@@ -72,8 +74,8 @@ export const fieldReference = defineType({
             if (!schema) {
               return `Field reference cannot be used outside document inspector context. Could not resolve schema: ${targetDocType}`
             }
-            const refs = getFieldRefsWithDocument(schema as ObjectSchemaType)
-            const fieldRef = refs.find((r) => r.key === value)
+            const {fieldRefs} = getForSchemaType(schema as ObjectSchemaType)
+            const fieldRef = fieldRefs.find((r) => r.key === value)
             if (!fieldRef) {
               return `Field with path "${value}" does not exist in the schema.`
             }
@@ -82,7 +84,8 @@ export const fieldReference = defineType({
             console.error('Failed to resolve field reference', e)
             return 'Invalid field reference.'
           }
-        }),
+        })
+      },
     }),
   ],
   preview: {

@@ -8,7 +8,7 @@ import {
   StringIcon,
 } from '@sanity/icons'
 import {extractWithPath} from '@sanity/mutator'
-import {type ComponentType, useContext, useMemo} from 'react'
+import {type ComponentType, useMemo} from 'react'
 import {
   type ArraySchemaType,
   isKeySegment,
@@ -21,11 +21,10 @@ import {
   stringToPath,
 } from 'sanity'
 import {type PaneRouterContextValue, usePaneRouter} from 'sanity/structure'
-
-import {SelectedFieldContext} from '../assistDocument/components/SelectedFieldContext'
 import {isAssistSupported} from '../helpers/assistSupported'
 import {isPortableTextArray, isType} from '../helpers/typeUtils'
-import {type AssistInspectorRouteParams, documentRootKey, fieldPathParam} from '../types'
+import {type AssistInspectorRouteParams, documentRootKey} from '../types'
+import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 
 export interface FieldRef {
   key: string
@@ -65,19 +64,14 @@ export function asFieldRefsByTypePath(fieldRefs: FieldRef[]): Record<string, Fie
   return lookup
 }
 
-export function getFieldRefsWithDocument(schemaType: ObjectSchemaType): FieldRef[] {
-  const fields = getFieldRefs(schemaType)
-  return [
-    {
-      key: documentRootKey,
-      icon: schemaType.icon ?? DocumentIcon,
-      title: `The entire document`,
-      path: [],
-      schemaType: schemaType,
-    },
-
-    ...fields,
-  ]
+export function getDocumentFieldRef(schemaType: ObjectSchemaType) {
+  return {
+    key: documentRootKey,
+    icon: schemaType.icon ?? DocumentIcon,
+    title: `The entire document`,
+    path: [],
+    schemaType: schemaType,
+  }
 }
 
 export function getFieldRefs(
@@ -182,24 +176,19 @@ export function useSelectedField(
   documentSchemaType?: SchemaType,
   path?: string,
 ): FieldRef | undefined {
+  const {getFieldRefs} = useAiAssistanceConfig()
+
   const selectableFields = useMemo(
     () =>
       documentSchemaType && isObjectSchemaType(documentSchemaType)
-        ? getFieldRefsWithDocument(documentSchemaType)
+        ? [getDocumentFieldRef(documentSchemaType), ...getFieldRefs(documentSchemaType.name)]
         : [],
-    [documentSchemaType],
+    [documentSchemaType, getFieldRefs],
   )
 
   return useMemo(() => {
     return path ? selectableFields?.find((f) => f.key === path) : undefined
   }, [selectableFields, path])
-}
-
-export function useSelectedFieldTitle() {
-  const {params} = useAiPaneRouter()
-  const {documentSchema} = useContext(SelectedFieldContext) ?? {}
-  const selectedField = useSelectedField(documentSchema, params[fieldPathParam])
-  return getFieldTitle(selectedField)
 }
 
 export function getFieldTitle(field?: FieldRef) {

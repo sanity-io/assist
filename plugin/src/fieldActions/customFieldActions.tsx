@@ -4,10 +4,11 @@ import {
   DocumentFieldActionItem,
   DocumentFieldActionNode,
   ObjectSchemaType,
+  Path,
   SanityDocumentLike,
+  SchemaType,
   useWorkspaceSchemaId,
 } from 'sanity'
-import {Path, SchemaType} from '@sanity/types'
 import {useMemo} from 'react'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 import {ToastParams, useToast} from '@sanity/ui'

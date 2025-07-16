@@ -8,8 +8,8 @@ import {AssistPluginConfig} from '../plugin'
 import {FieldTranslationProvider} from '../translate/FieldTranslationProvider'
 import {StudioInstruction} from '../types'
 import {RunInstructionRequest} from '../useApiClient'
-import {AiAssistanceConfigProvider} from './AiAssistanceConfigContext'
 import {RunInstructionProvider} from './RunInstructionProvider'
+import {AiAssistanceConfigProvider} from './AiAssistanceConfigProvider'
 
 export interface AIStudioLayoutProps extends LayoutProps {
   config: AssistPluginConfig

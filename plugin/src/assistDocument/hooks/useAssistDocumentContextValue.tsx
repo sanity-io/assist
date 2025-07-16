@@ -1,16 +1,17 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {getDraftId, getVersionId, type ObjectSchemaType, useSchema} from 'sanity'
 import {useDocumentPane} from 'sanity/structure'
-
-import {asFieldRefsByTypePath, getFieldRefs, useAiPaneRouter} from '../../assistInspector/helpers'
 import {fieldPathParam, InstructionTask} from '../../types'
 import {AssistDocumentContextValue} from '../AssistDocumentContext'
 import {isDocAssistable} from '../RequestRunInstructionProvider'
 import {useStudioAssistDocument} from './useStudioAssistDocument'
+import {useAiAssistanceConfig} from '../../assistLayout/AiAssistanceConfigContext'
+import {useAiPaneRouter} from '../../assistInspector/helpers'
 
 export function useAssistDocumentContextValue(documentId: string, documentType: string) {
   const schema = useSchema()
 
+  const {getFieldRefs, getFieldRefsByTypePath} = useAiAssistanceConfig()
   const documentSchemaType = useMemo(() => {
     const schemaType = schema.get(documentType) as ObjectSchemaType | undefined
     if (!schemaType) {
@@ -20,13 +21,11 @@ export function useAssistDocumentContextValue(documentId: string, documentType: 
   }, [documentType, schema])
 
   const {fieldRefs, fieldRefsByTypePath} = useMemo(() => {
-    const fieldRefs = getFieldRefs(documentSchemaType)
-    const fieldRefsByTypePath = asFieldRefsByTypePath(fieldRefs)
     return {
-      fieldRefs,
-      fieldRefsByTypePath,
+      fieldRefs: getFieldRefs(documentType),
+      fieldRefsByTypePath: getFieldRefsByTypePath(documentType),
     }
-  }, [documentSchemaType])
+  }, [getFieldRefs, getFieldRefsByTypePath, documentType])
 
   const {
     openInspector,

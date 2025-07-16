@@ -4,7 +4,8 @@ import {createElement, useCallback, useMemo} from 'react'
 import {ObjectSchemaType} from 'sanity'
 
 import {isType} from '../helpers/typeUtils'
-import {FieldRef, getFieldRefs, getFieldRefsWithDocument} from './helpers'
+import {FieldRef, getDocumentFieldRef} from './helpers'
+import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
 
 interface FieldSelectorProps {
   id: string
@@ -18,12 +19,16 @@ interface FieldSelectorProps {
 export function FieldAutocomplete(props: FieldSelectorProps) {
   const {id, schemaType, fieldPath, onSelect, includeDocument, filter} = props
 
+  const {getFieldRefs} = useAiAssistanceConfig()
+
   const fieldRefs = useMemo(() => {
+    const refs = getFieldRefs(schemaType.name)
     if (includeDocument) {
-      return getFieldRefsWithDocument(schemaType)
+      return [getDocumentFieldRef(schemaType), ...refs]
     }
-    return getFieldRefs(schemaType)
-  }, [schemaType, includeDocument])
+    return refs
+  }, [schemaType, includeDocument, getFieldRefs])
+
   const currentField = useMemo(
     () => fieldRefs.find((f) => f.key === fieldPath),
     [fieldPath, fieldRefs],
