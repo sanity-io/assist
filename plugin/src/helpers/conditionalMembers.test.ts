@@ -227,6 +227,49 @@ describe('conditionalMembers', () => {
     ])
   })
 
+  test('should include field with conditional state inside fieldset', () => {
+    const docSchema: ObjectSchemaType = Schema.compile({
+      name: 'test',
+      types: [
+        defineType({
+          type: 'document',
+          name: 'article',
+          fieldsets: [{name: 'set'}],
+          fields: [{type: 'string', fieldset: 'set', name: 'title', hidden: () => false}],
+        }),
+      ],
+    }).get('article')
+
+    const docState = {
+      path: [],
+      schemaType: docSchema,
+      members: [
+        {
+          kind: 'fieldSet',
+          fieldSet: {
+            name: 'set',
+            path: ['set'],
+            members: [
+              {
+                kind: 'field',
+                field: {path: [docSchema.fields[0].name], schemaType: docSchema.fields[0].type},
+              },
+            ],
+          },
+        },
+      ],
+    } as any
+    const conditionalMembers = getConditionalMembers(docState)
+
+    expect(conditionalMembers).toEqual([
+      {
+        path: 'title',
+        hidden: false,
+        readOnly: false,
+      },
+    ])
+  })
+
   test('should respect max-depth', () => {
     const docSchema: ObjectSchemaType = Schema.compile({
       name: 'test',
