@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.4.8](https://github.com/sanity-io/assist/compare/v4.4.7...v4.4.8) (2025-08-12)
+
+### Bug Fixes
+
+- includes visible conditional fields in non-conditional fieldsets ([#84](https://github.com/sanity-io/assist/issues/84)) ([f65b887](https://github.com/sanity-io/assist/commit/f65b887e87921f7b69986f0d07b728b43677f81a))
+
 ## [4.4.7](https://github.com/sanity-io/assist/compare/v4.4.6...v4.4.7) (2025-07-16)
 
 ### Bug Fixes
