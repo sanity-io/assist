@@ -67,8 +67,8 @@ function conditionalState(memberState: {
 }): ConditionalMemberInnerState {
   return {
     path: pathToString(memberState.path),
-    readOnly: !!memberState.readOnly,
-    hidden: false, // if its in members, its not hidden
+    readOnly: !!memberState.readOnly, // Use actual form state readOnly value
+    hidden: false, // If it's in form state members, it's not hidden
     conditional: isConditional(memberState.schemaType),
   }
 }
@@ -124,7 +124,7 @@ function extractConditionalPaths(
       const innerFields = extractConditionalPaths(member.fieldSet, maxDepth).map((f) => ({
         ...f,
         // if fieldset is conditional, visible fields must also be considered conditional
-        conditional: conditionalFieldset ?? f.conditional,
+        conditional: conditionalFieldset || f.conditional,
       }))
       return [...acc, ...innerFields]
     }
