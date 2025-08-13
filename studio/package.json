@@ -26,7 +26,7 @@
     "@portabletext/types": "^2.0.12",
     "@sanity/assist": "^4.3.2",
     "@sanity/client": "^7.5.0",
-    "@sanity/code-input": "^5.1.3",
+    "@sanity/code-input": "^6.0.0",
     "@sanity/document-internationalization": "^3.3.3",
     "@sanity/embeddings-index-ui": "^2.1.1",
     "@sanity/icons": "^3.7.4",
