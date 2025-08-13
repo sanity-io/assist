@@ -40,7 +40,7 @@
     "react-is": "^18.2.0",
     "sanity": "^4.0.0",
     "sanity-plugin-internationalized-array": "^3.1.4",
-    "sanity-plugin-media": "^3.0.4",
+    "sanity-plugin-media": "^4.0.0",
     "styled-components": "^6.1.16"
   },
   "devDependencies": {
