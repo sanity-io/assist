@@ -31,7 +31,7 @@
     "@sanity/embeddings-index-ui": "^2.1.1",
     "@sanity/icons": "^3.7.4",
     "@sanity/language-filter": "^4.0.5",
-    "@sanity/ui": "^2.16.7",
+    "@sanity/ui": "^3.0.6",
     "@sanity/vision": "^4.0.0",
     "husky": "^9.1.7",
     "react": "^18.2.0",
