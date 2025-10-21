@@ -27,7 +27,7 @@
     "@sanity/assist": "^4.3.2",
     "@sanity/client": "^7.5.0",
     "@sanity/code-input": "^6.0.0",
-    "@sanity/document-internationalization": "^3.3.3",
+    "@sanity/document-internationalization": "^4.1.0",
     "@sanity/embeddings-index-ui": "^3.0.0",
     "@sanity/icons": "^3.7.4",
     "@sanity/language-filter": "^4.0.5",
