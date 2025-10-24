@@ -167,7 +167,7 @@ export const promptContext = defineType({
   ],
   preview: {
     select: {
-      ref: 'reference._ref',
+      ref: 'reference._id',
       title: 'reference.title',
       context: 'reference.context',
     },
