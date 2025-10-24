@@ -5,6 +5,15 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/sanity-io/assist/compare/v5.0.0...v5.0.1) (2025-10-24)
+
+### Bug Fixes
+
+- ai context inline block should now correctly preview the selected document again ([e6669d7](https://github.com/sanity-io/assist/commit/e6669d7dfec2909935a9911346e42e2b2ea30705))
+- **deps:** Update dependency @sanity/code-input to v6 ([#85](https://github.com/sanity-io/assist/issues/85)) ([9c9a43c](https://github.com/sanity-io/assist/commit/9c9a43cd432080ca25f726195a08871b413ae8d1))
+- **deps:** Update dependency @sanity/embeddings-index-ui to v3 ([#87](https://github.com/sanity-io/assist/issues/87)) ([db72317](https://github.com/sanity-io/assist/commit/db72317ae7fe941e4d6a5b4dc7cc75463701f328))
+- **deps:** Update dependency sanity-plugin-media to v4 ([#88](https://github.com/sanity-io/assist/issues/88)) ([c0880b3](https://github.com/sanity-io/assist/commit/c0880b3fbfb427bd1965b8510257d5e73634e4f3))
+
 ## [5.0.0](https://github.com/sanity-io/assist/compare/v4.4.8...v5.0.0) (2025-08-13)
 
 ### ⚠ BREAKING CHANGES
