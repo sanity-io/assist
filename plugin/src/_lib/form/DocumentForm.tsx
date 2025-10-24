@@ -152,6 +152,7 @@ export function DocumentForm(
             schemaType={formState.schemaType}
             validation={validation}
             value={formState.value as any}
+            hasUpstreamVersion={false}
           />
         )
       ) : (
