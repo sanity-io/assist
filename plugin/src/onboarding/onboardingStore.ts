@@ -1,7 +1,6 @@
 import {useCallback, useState} from 'react'
 
 export const inspectorOnboardingKey = 'sanityStudio:assist:inspector:onboarding:dismissed'
-export const fieldOnboardingKey = 'sanityStudio:assist:field:onboarding:dismissed'
 
 export function isFeatureOnboardingDismissed(featureKey: string): boolean {
   if (typeof localStorage === 'undefined') {

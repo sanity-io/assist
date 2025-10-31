@@ -24,7 +24,6 @@ import {giveFeedbackUrl, pluginTitle, releaseAnnouncementUrl, salesUrl} from '..
 import {getConditionalMembers} from '../helpers/conditionalMembers'
 import {assistDocumentId} from '../helpers/ids'
 import {InspectorOnboarding} from '../onboarding/InspectorOnboarding'
-import {inspectorOnboardingKey, useOnboardingFeature} from '../onboarding/onboardingStore'
 import {assistDocumentTypeName, fieldPathParam, instructionParam} from '../types'
 import {FieldTitle} from './FieldAutocomplete'
 import {
@@ -35,6 +34,7 @@ import {
   useTypePath,
 } from './helpers'
 import {InstructionTaskHistoryButton} from './InstructionTaskHistoryButton'
+import {inspectorOnboardingKey, useOnboardingFeature} from '../onboarding/onboardingStore'
 
 const CardWithShadowBelow = styled(Card)`
   position: relative;
