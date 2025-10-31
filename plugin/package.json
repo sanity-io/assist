@@ -1,6 +1,6 @@
 {
   "name": "@sanity/assist",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "type": "module",
   "description": "You create the instructions; Sanity AI Assist does the rest.",
   "keywords": [

@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.2](https://github.com/sanity-io/assist/compare/v5.0.1...v5.0.2) (2025-10-31)
+
+### Bug Fixes
+
+- the plugin no longer shows an onboarding popover on field actions for fist-time users ([#92](https://github.com/sanity-io/assist/issues/92)) ([18206ab](https://github.com/sanity-io/assist/commit/18206ab8b4920eaf2e4bc755ce7c1e66c7116eb8))
+
 ## [5.0.1](https://github.com/sanity-io/assist/compare/v5.0.0...v5.0.1) (2025-10-24)
 
 ### Bug Fixes
