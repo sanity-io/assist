@@ -18,7 +18,7 @@ Follow [the instructions in the Sanity docs][docs].
 
 ## Third party sub-processors
 
-This version of the feature uses OpenAI.com as a third-party sub-processor. Sanity's security team has vetted their security posture, and approved for use.
+[Read more about third-party sub-processors in Sanity's AI Terms of Service.](https://www.sanity.io/legal/tos-ai)
 
 ## Local development
 
