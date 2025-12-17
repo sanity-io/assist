@@ -5,6 +5,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.3](https://github.com/sanity-io/assist/compare/v5.0.2...v5.0.3) (2025-12-17)
+
+### Bug Fixes
+
+- **deps:** make peer dependencies include sanity 5.x ([#96](https://github.com/sanity-io/assist/issues/96)) ([1dbffe6](https://github.com/sanity-io/assist/commit/1dbffe619baca232d552d800a12f29c4bcb2dc6d))
+- **docs:** typo in `inferAction` description ([#78](https://github.com/sanity-io/assist/issues/78)) ([e5ee66f](https://github.com/sanity-io/assist/commit/e5ee66f840bfefcf2c4f65a1956cf51b5d1f258e))
+
 ## [5.0.2](https://github.com/sanity-io/assist/compare/v5.0.1...v5.0.2) (2025-10-31)
 
 ### Bug Fixes
