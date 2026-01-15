@@ -37,7 +37,7 @@ export interface FieldRef {
 
 const maxDepth = 6
 
-export function getTypeIcon(schemaType: SchemaType) {
+export function getTypeIcon(schemaType: SchemaType): ComponentType {
   let t: SchemaType | undefined = schemaType
 
   while (t) {
@@ -64,7 +64,7 @@ export function asFieldRefsByTypePath(fieldRefs: FieldRef[]): Record<string, Fie
   return lookup
 }
 
-export function getDocumentFieldRef(schemaType: ObjectSchemaType) {
+export function getDocumentFieldRef(schemaType: ObjectSchemaType): FieldRef {
   return {
     key: documentRootKey,
     icon: schemaType.icon ?? DocumentIcon,
