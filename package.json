@@ -8,15 +8,15 @@
     "studio"
   ],
   "scripts": {
-    "compile": "npm run compile --workspaces --if-present",
-    "deploy": "cd studio && npm run deploy",
-    "dev": "cd studio && npm run dev",
+    "compile": "pnpm -r run compile",
+    "deploy": "pnpm --filter sanity-assist-test-studio deploy",
+    "dev": "pnpm --filter sanity-assist-test-studio dev",
     "format": "prettier --write --cache --ignore-unknown .",
-    "lint": "npm run lint --workspaces",
+    "lint": "pnpm -r run lint",
     "prepare": "husky",
-    "prepublishOnly": "npm run prepublishOnly --workspaces --if-present",
-    "release": "npm run release --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present"
+    "prepublishOnly": "pnpm -r run prepublishOnly",
+    "release": "pnpm --filter @sanity/assist release",
+    "test": "pnpm -r run test"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.2.1",
