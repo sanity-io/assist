@@ -5,6 +5,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.4](https://github.com/sanity-io/assist/compare/v5.0.3...v5.0.4) (2026-01-16)
+
+### Bug Fixes
+
+- incorrect permissions error & back to instruction navigation ([#97](https://github.com/sanity-io/assist/issues/97)) ([2b18e26](https://github.com/sanity-io/assist/commit/2b18e265d41b7d0907dfa5ef2f501de5cc7961dc))
+- use pnpm commands instead of npm in root scripts ([1c2aae9](https://github.com/sanity-io/assist/commit/1c2aae94ac86f73b1c1e41d244cab819fa5836dd))
+- use workspaces-update=false instead of workspaces=false ([52bc1f3](https://github.com/sanity-io/assist/commit/52bc1f3748ab1d78d12a3e95a26359785d788977)), closes [#495](https://github.com/sanity-io/assist/issues/495) [#512](https://github.com/sanity-io/assist/issues/512)
+
 ## [5.0.3](https://github.com/sanity-io/assist/compare/v5.0.2...v5.0.3) (2025-12-17)
 
 ### Bug Fixes
