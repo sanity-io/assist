@@ -8,11 +8,11 @@
   "license": "UNLICENSED",
   "main": "package.json",
   "scripts": {
-    "prebuild": "cd ../plugin && npm run build",
+    "prebuild": "pnpm --filter @sanity/assist build",
     "build": "sanity build",
     "compile": "tsc --noEmit",
-    "deploy": "npm run prebuild && sanity deploy",
-    "dev": "concurrently 'cd ../plugin && npm run watch' 'sanity dev --port 3334'",
+    "deploy": "pnpm prebuild && sanity deploy",
+    "dev": "sanity dev --port 3334",
     "lint": "eslint ./src/**/* --ext .tsx,.ts",
     "start": "sanity start"
   },
@@ -23,9 +23,10 @@
     "singleQuote": true
   },
   "dependencies": {
-    "@sanity/assist": "^5.0.3",
+    "@sanity/assist": "workspace:*",
     "@sanity/client": "^7.14.0",
     "@sanity/code-input": "^7.0.5",
+    "@sanity/color": "^3.0.6",
     "@sanity/document-internationalization": "^4.1.1",
     "@sanity/embeddings-index-ui": "^3.0.1",
     "@sanity/icons": "^3.7.4",
@@ -45,6 +46,7 @@
   "devDependencies": {
     "@portabletext/types": "^4.0.1",
     "@sanity/eslint-config-studio": "^4.0.0",
+    "@types/react": "^19.2.8",
     "concurrently": "^9.2.0",
     "typescript": "^5.9.3"
   }

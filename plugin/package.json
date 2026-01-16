@@ -50,6 +50,9 @@
     "release": "semantic-release"
   },
   "dependencies": {
+    "@portabletext/types": "^4.0.1",
+    "@sanity/client": "^7.14.0",
+    "@sanity/color": "^3.0.6",
     "@sanity/icons": "^3.7.4",
     "@sanity/incompatible-plugin": "^1.0.4",
     "@sanity/ui": "^3.1.11",
