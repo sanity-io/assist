@@ -1,6 +1,6 @@
 import {createContext, useEffect, useMemo, useState} from 'react'
-import {getPublishedId, type InputProps, pathToString, useSyncState} from 'sanity'
-import {useDocumentPane, usePaneRouter} from 'sanity/structure'
+import {getPublishedId, type InputProps, pathToString, usePerspective, useSyncState} from 'sanity'
+import {usePaneRouter} from 'sanity/structure'
 
 import {useAssistDocumentContext} from '../assistDocument/AssistDocumentContext'
 import {useAiAssistanceConfig} from '../assistLayout/AiAssistanceConfigContext'
@@ -18,7 +18,7 @@ export const ImageContext = createContext<ImageContextValue>({})
 export function ImageContextProvider(props: InputProps) {
   const {schemaType, path, value, readOnly} = props
   const assetRef = (value as any)?.asset?._ref
-  const {selectedReleaseId} = useDocumentPane()
+  const {selectedReleaseId} = usePerspective()
   const [assetRefState, setAssetRefState] = useState<string | undefined>(assetRef)
 
   const {assistableDocumentId, documentSchemaType} = useAssistDocumentContext()

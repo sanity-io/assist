@@ -1,5 +1,5 @@
 import {defineConfig, isKeySegment} from 'sanity'
-import {structureTool} from 'sanity/structure'
+import {type ListItemBuilder, type StructureBuilder, structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemas'
 import {codeInput} from '@sanity/code-input'
@@ -29,11 +29,11 @@ export default defineConfig({
 
   plugins: [
     structureTool({
-      structure: (S) => {
+      structure: (S: StructureBuilder) => {
         return S.list({
           id: 'root',
           title: 'Document types',
-          items: S.documentTypeListItems().map((item) => {
+          items: S.documentTypeListItems().map((item: ListItemBuilder) => {
             // some Studios use type names that will otherwise crash the structure tool, by assigning a custom id to them (without illegal chars)
             // we include one such type here, for testing
             if (item.getId() === brokenTypeName.name) {
@@ -41,7 +41,7 @@ export default defineConfig({
                 id: 'fixed-type',
                 icon: CloseIcon,
                 title: 'Renamed type name',
-                //@ts-expect-error this works but gives errors, broken typings?
+                // @ts-expect-error this works but gives errors, broken typings?
                 child: S.documentTypeList({
                   schemaType: brokenTypeName.name,
                   id: 'broken_type',

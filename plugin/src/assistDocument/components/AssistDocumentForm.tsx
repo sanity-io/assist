@@ -114,7 +114,6 @@ function AssistDocumentFormEditable(props: ObjectInputProps) {
               [instructionParam]: (path[3] as KeyedSegment)?._key,
             }) as Record<keyof AssistInspectorRouteParams, string | undefined>,
           )
-          onPathOpen([])
         } else {
           setTimeout(() => onPathOpen(path), 0)
         }
@@ -123,9 +122,11 @@ function AssistDocumentFormEditable(props: ObjectInputProps) {
     [formCallbacks, onPathOpen, params, setParams, instruction],
   )
 
+  // When showing the instruction list (no specific instruction selected),
+  // tell the form to focus on the field path to close any open modals
   useEffect(() => {
     if (activePath && !instruction) {
-      onPathOpen([])
+      onPathOpen(activePath)
     }
   }, [activePath, instruction, onPathOpen])
 
