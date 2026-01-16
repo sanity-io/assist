@@ -117,8 +117,12 @@ jobs:
         with:
           cache: pnpm
           node-version: lts/*
+          registry-url: 'https://registry.npmjs.org'
+      # npm 11.5.1+ required for OIDC trusted publishing
+      - run: npm install -g npm@latest
       - run: pnpm install --frozen-lockfile
         # Branches that will release new versions are defined in .releaserc.json
+        # Publishing uses OIDC trusted publishing - no NPM_TOKEN needed
       - run: pnpm release
         # Don't allow interrupting the release step if the job is cancelled, as it can lead to an inconsistent state
         # e.g. git tags were pushed but it exited before `npm publish`
@@ -126,11 +130,9 @@ jobs:
         env:
           NPM_CONFIG_PROVENANCE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         # Re-run semantic release with rich logs if it failed to publish for easier debugging
       - run: pnpm release --dry-run --debug
         if: failure()
         env:
           NPM_CONFIG_PROVENANCE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
