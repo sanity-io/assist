@@ -12,7 +12,7 @@
     "build": "sanity build",
     "compile": "tsc --noEmit",
     "deploy": "pnpm prebuild && sanity deploy",
-    "dev": "sanity dev --port 3334",
+    "dev": "concurrently \"pnpm --filter @sanity/assist watch\" \"sanity dev --port 3334\"",
     "lint": "eslint ./src/**/* --ext .tsx,.ts",
     "start": "sanity start"
   },
